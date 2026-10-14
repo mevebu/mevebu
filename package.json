@@ -1,6 +1,6 @@
 {
   "name": "mevebu",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Small tools that run in your browser. No accounts, no uploads, no tracking.",
   "license": "MIT",
   "type": "module",
@@ -16,7 +16,8 @@
   "scripts": {
     "icons": "node scripts/vendor-icons.mjs",
     "dev": "node bin/mevebu.js --port 5173",
-    "start": "node bin/mevebu.js"
+    "start": "node bin/mevebu.js",
+    "ship": "node scripts/ship.js"
   },
   "keywords": [
     "tools",
@@ -25,18 +26,24 @@
     "qr",
     "password",
     "uuid",
-    "jwt"
+    "jwt",
+    "cli",
+    "no-tracking"
   ],
+  "homepage": "https://github.com/mevebu/mevebu#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mevebu/mevebu.git"
+    "url": "git+https://github.com/mevebu/mevebu.git"
   },
-  "dependencies": {
-    "jsqr": "^1.4.0",
-    "lucide": "^1.57.0",
-    "qrcode-generator": "^2.0.4"
+  "bugs": {
+    "url": "https://github.com/mevebu/mevebu/issues"
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "jsqr": "^1.4.0",
+    "lucide": "^1.57.0",
+    "qrcode-generator": "^2.0.4"
   }
 }

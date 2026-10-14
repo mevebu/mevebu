@@ -3,6 +3,7 @@
 // prints the address, and opens the default browser.
 //
 // Usage: mevebu [--port 8080] [--no-open] [--dir ./mevebu]
+//        mevebu --version
 
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
@@ -14,6 +15,25 @@ import { exec } from "node:child_process";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_DIR = resolve(here, "..", "mevebu");
+
+// The version lives in package.json; keep one source of truth.
+const pkg = JSON.parse(await readFile(resolve(here, "..", "package.json"), "utf8"));
+const VERSION = pkg.version;
+
+const HELP = `mevebu ${VERSION}
+
+Serve the offline tools on localhost. No accounts, no uploads, no tracking.
+
+Usage:
+  mevebu [options]
+
+Options:
+  -p, --port <number>   Port to listen on. Defaults to a free port.
+  -d, --dir <path>      Folder to serve. Defaults to the bundled tools.
+      --no-open         Do not open the browser.
+  -v, --version         Print the version and exit.
+  -h, --help            Print this help and exit.`;
+
 
 const TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -35,8 +55,11 @@ function args(argv) {
     if (flag === "--no-open") out.open = false;
     else if ((flag === "--port" || flag === "-p") && argv[i + 1]) out.port = Number(argv[++i]);
     else if ((flag === "--dir" || flag === "-d") && argv[i + 1]) out.dir = resolve(argv[++i]);
-    else if (flag === "--help" || flag === "-h") {
-      console.log("Usage: mevebu [--port 8080] [--no-open] [--dir ./mevebu]");
+    else if (flag === "--version" || flag === "-v" || flag === "version") {
+      console.log(VERSION);
+      process.exit(0);
+    } else if (flag === "--help" || flag === "-h" || flag === "help") {
+      console.log(HELP);
       process.exit(0);
     }
   }

@@ -11,6 +11,13 @@ AGENTS.md
 DESIGN.md
 antislop-ui-copy-analyzer.md
 
+# local reference project, not part of mevebu
+01-My-Own-AntiSlop-AI-Skills/
+z-update-info.md
+
+# private maintainer tool, not published
+scripts/ship.js
+
 # misc
 .DS_Store
 *.log
