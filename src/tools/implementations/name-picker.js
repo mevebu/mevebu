@@ -1,5 +1,5 @@
 // Pick a Random Name — draw N winners from a list
-import { el, icon, toast, copyText, cryptoShuffle } from "../../lib/dom.js";
+import { el, icon, toast, copyText, cryptoShuffle, cryptoRandomInt, debounce } from "../../lib/dom.js";
 
 export function mount(container) {
   const ta = el("textarea", { class: "tinput ttextarea", rows: 8, spellcheck: "false", placeholder: "Paste names — one per line (or comma separated)…" });
@@ -16,15 +16,27 @@ export function mount(container) {
     return raw.map((s) => s.trim()).filter(Boolean);
   }
 
-  drawBtn.addEventListener("click", () => {
+  function draw() {
     const list = entries();
-    if (!list.length) return toast("Add some entries first.");
-    const n = Math.max(1, Math.min(list.length, parseInt(count.value || "1", 10)));
-    const picked = cryptoShuffle(list).slice(0, n);
+    if (!list.length) {
+      out.innerHTML = "—";
+      out.dataset.value = "";
+      return;
+    }
+    const wants = Math.max(1, parseInt(count.value || "1", 10) || 1);
+    const n = dedupe.checked ? Math.min(wants, list.length) : Math.min(wants, 500);
+    const picked = dedupe.checked
+      ? cryptoShuffle(list).slice(0, n)
+      : Array.from({ length: n }, () => list[cryptoRandomInt(list.length)]);
     out.innerHTML = "";
     picked.forEach((p, i) => out.append(el("span", { class: `pick__chip pick__chip--${i % 6}` }, p)));
     out.dataset.value = picked.join(", ");
-  });
+  }
+
+  drawBtn.addEventListener("click", draw);
+  ta.addEventListener("input", debounce(draw, 200));
+  count.addEventListener("input", draw);
+  dedupe.addEventListener("change", draw);
 
   out.addEventListener("dblclick", async () => {
     if (out.dataset.value) { await copyText(out.dataset.value) && toast("Copied ✓"); }
@@ -40,6 +52,7 @@ export function mount(container) {
       drawBtn,
       el("label", { class: "tfield" }, el("span", { class: "tfield__label" }, "Result (double-click to copy)"), out))
   ));
+  draw();
 
   return {};
 }

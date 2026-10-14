@@ -2,10 +2,14 @@
 node_modules/
 dist/
 
-# taste-skill: private design reference only, do NOT commit/publish
+# private agent assets, do not commit/publish
 .design/
 .skills/
+.kilo/
 skills/
+AGENTS.md
+DESIGN.md
+antislop-ui-copy-analyzer.md
 
 # misc
 .DS_Store

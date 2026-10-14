@@ -1,5 +1,5 @@
 // JWT Generator — HS256 via Web Crypto, fully local
-import { el, icon, toast, copyText } from "../../lib/dom.js";
+import { el, icon, toast, copyText, debounce } from "../../lib/dom.js";
 
 const b64urlFromBytes = (bytes) => {
   let bin = "";
@@ -38,6 +38,10 @@ export function mount(container) {
     tokenOut.value = `${msg}.${b64urlFromBytes(sig)}`;
   }
 
+  const liveSign = debounce(sign, 200);
+  header.addEventListener("input", liveSign);
+  payload.addEventListener("input", liveSign);
+  secret.addEventListener("input", liveSign);
   signBtn.addEventListener("click", sign);
   copyBtn.addEventListener("click", async () => {
     if (!tokenOut.value) return toast("Sign a token first.");

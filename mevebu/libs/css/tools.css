@@ -1,0 +1,155 @@
+/* Objects a tool renders itself. Everything here starts with mvb-. */
+
+/* ---------- wheel ---------- */
+
+.mvb-wheel { width: min(320px, 100%); height: auto; }
+
+.mvb-wheel__status { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
+
+.mvb-wheel__history { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; max-width: 340px; }
+
+.mvb-wheel__chip {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: var(--mvb-deck);
+  border: 1px solid var(--mvb-orbit);
+  border-radius: 999px;
+}
+
+/* ---------- coin ---------- */
+
+.mvb-coin {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  background: var(--mvb-comet);
+  color: var(--mvb-on-comet);
+  display: grid;
+  place-items: center;
+  font-size: 44px;
+  font-weight: 700;
+  user-select: none;
+}
+
+.mvb-coin.mvb-toss { animation: mvb-toss 450ms ease; }
+
+@keyframes mvb-toss {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.12) rotate(180deg); }
+  100% { transform: scale(1) rotate(360deg); }
+}
+
+.mvb-flip__result { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+.mvb-flip__tally { font-size: 14px; color: var(--mvb-ink-3); font-variant-numeric: tabular-nums; }
+
+/* ---------- dice ---------- */
+
+.mvb-faces { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+.mvb-die {
+  min-width: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  background: var(--mvb-deck);
+  border: 1px solid var(--mvb-orbit-hard);
+  border-radius: var(--mvb-r1);
+  font-family: var(--mvb-mono);
+  font-size: 20px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- meter ---------- */
+
+.mvb-meter { height: 8px; border-radius: 999px; background: var(--mvb-deck-2); overflow: hidden; }
+
+.mvb-meter__fill { height: 100%; width: 0%; border-radius: 999px; background: var(--mvb-orbit-hard); transition: width 150ms ease, background 150ms ease; }
+
+.mvb-meter__fill.mvb-weak { background: var(--mvb-danger); }
+.mvb-meter__fill.mvb-ok { background: var(--mvb-comet); }
+.mvb-meter__fill.mvb-strong { background: var(--mvb-aurora); }
+
+/* ---------- swatch and picker ---------- */
+
+.mvb-swatch { height: 56px; border-radius: var(--mvb-r1); border: 1px solid var(--mvb-orbit-hard); background: var(--mvb-deck-2); }
+
+.mvb-pick {
+  width: 52px;
+  height: 40px;
+  flex: none;
+  border: 1px solid var(--mvb-orbit);
+  border-radius: var(--mvb-r1);
+  background: var(--mvb-deck);
+  padding: 2px;
+  cursor: pointer;
+}
+
+/* ---------- case list ---------- */
+
+.mvb-cases { display: grid; gap: 4px; }
+
+.mvb-case {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 12px;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--mvb-r1);
+  cursor: pointer;
+  text-align: start;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.mvb-case:hover { background: var(--mvb-deck-2); }
+.mvb-case.mvb-on { background: var(--mvb-nebula); border-color: var(--mvb-comet); }
+
+.mvb-case__name { font-size: 13px; font-weight: 600; color: var(--mvb-ink-2); flex: none; }
+.mvb-case.mvb-on .mvb-case__name { color: var(--mvb-ink); }
+.mvb-case__value { font-family: var(--mvb-mono); font-size: 14px; overflow-wrap: anywhere; text-align: end; }
+
+/* ---------- dropzone and camera ---------- */
+
+.mvb-drop {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 28px 16px;
+  border: 1px dashed var(--mvb-orbit-hard);
+  border-radius: var(--mvb-r2);
+  color: var(--mvb-ink-3);
+  font-size: 15px;
+  cursor: pointer;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.mvb-drop:hover,
+.mvb-drop.mvb-drag { border-color: var(--mvb-comet); background: var(--mvb-nebula); }
+
+.mvb-qrview { width: min(420px, 100%); border-radius: var(--mvb-r2); border: 1px solid var(--mvb-orbit-hard); background: #000; }
+
+.mvb-qrcode { width: min(300px, 100%); height: auto; image-rendering: pixelated; }
+
+/* ---------- tables ---------- */
+
+.mvb-scroll { max-height: 320px; overflow: auto; }
+
+.mvb-ttable { width: 100%; border-collapse: collapse; font-size: 14px; font-family: var(--mvb-mono); }
+
+.mvb-ttable th,
+.mvb-ttable td { text-align: start; padding: 8px 10px; border-bottom: 1px solid var(--mvb-orbit); overflow-wrap: anywhere; }
+
+.mvb-ttable th { font-family: var(--mvb-sans); font-size: 13px; font-weight: 600; color: var(--mvb-ink-2); }
+
+.mvb-ttable tbody tr:last-child th,
+.mvb-ttable tbody tr:last-child td { border-bottom: 0; }
+
+/* ---------- secrets ---------- */
+
+.mvb-secret { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }

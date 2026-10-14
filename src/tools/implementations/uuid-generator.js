@@ -28,6 +28,7 @@ export function mount(container) {
   const saveFile = el("button", { class: "btn btn--ghost", type: "button" }, icon("download"), ".txt");
 
   genBtn.onclick = gen;
+  count.addEventListener("input", gen);
   upper.onchange = gen;
   copyAll.onclick = async () => current.length && ((await copyText(out.textContent)) && toast(`${current.length} UUIDs copied ✓`));
   asJson.onclick = async () => current.length && ((await copyText(JSON.stringify(current, null, 2))) && toast("JSON array copied ✓"));

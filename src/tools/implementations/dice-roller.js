@@ -5,24 +5,28 @@ export function mount(container) {
   let sides = 6;
   const chips = chipGroup(
     [4, 6, 8, 10, 12, 20].map((n) => ({ value: n, label: `d${n}` })),
-    { value: 6, onChange: (v) => { sides = v; } }
+    { value: 6, onChange: (v) => { sides = v; roll(); } }
   );
   const count = el("input", { class: "tinput tnum", type: "number", min: "1", max: "50", value: "3" });
   const rollBtn = el("button", { class: "btn btn--accent", type: "button" }, icon("dices"), "Roll");
   const faces = el("div", { class: "dice__faces" });
   const total = el("div", { class: "dice__total" }, "");
 
-  rollBtn.addEventListener("click", () => {
-    const n = Math.max(1, Math.min(50, parseInt(count.value || "1", 10)));
+  function roll() {
+    const n = Math.max(1, Math.min(50, parseInt(count.value || "1", 10) || 1));
     const rolls = Array.from({ length: n }, () => 1 + cryptoRandomInt(sides));
     faces.innerHTML = "";
     rolls.forEach((r) => faces.append(el("span", { class: "die" }, String(r))));
     total.textContent = `${n} × d${sides} → [${rolls.join(", ")}] · total ${rolls.reduce((a, b) => a + b, 0)}`;
-  });
+  }
+
+  rollBtn.addEventListener("click", roll);
+  count.addEventListener("input", roll);
 
   container.append(el("div", { class: "center-col tstack" },
     el("div", { class: "trow" }, chips, el("label", { class: "tfield" }, el("span", { class: "tfield__label" }, "# of dice"), count)),
     rollBtn, faces, total));
+  roll();
   return {};
 }
 export default { mount };

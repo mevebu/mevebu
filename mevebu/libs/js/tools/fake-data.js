@@ -1,0 +1,107 @@
+// Fake people and addresses for testing. Names and places come from bundled
+// lists, emails always use the reserved example domain, and cards are masked.
+import { el, toast, copyText, download, randomInt, chipRow, numberInput, button, bench, stack, panel, output, actions, toolcard } from "../core.js";
+
+const FIRST = ["Ana", "Budi", "Citra", "Dimas", "Elena", "Fajar", "Gita", "Hendra", "Ingrid", "Joko", "Kira", "Lina", "Marco", "Nadia", "Omar", "Putri", "Quinn", "Rani", "Sandro", "Tara"];
+const LAST = ["Ortega", "Wijaya", "Santos", "Kimura", "Novak", "Haddad", "Silva", "Andersen", "Costa", "Pratama", "Rossi", "Meyer", "Fernandez", "Yusuf", "Kowalski"];
+const PLACES = [
+  ["Jakarta", "ID", "+62"], ["Bandung", "ID", "+62"], ["Madrid", "ES", "+34"], ["Barcelona", "ES", "+34"],
+  ["Austin", "US", "+1"], ["Seattle", "US", "+1"], ["Berlin", "DE", "+49"], ["Munich", "DE", "+49"],
+  ["Osaka", "JP", "+81"], ["Tokyo", "JP", "+81"], ["Recife", "BR", "+55"], ["Lagos", "NG", "+234"],
+];
+const pick = (list) => list[randomInt(list.length)];
+
+function person(id) {
+  const first = pick(FIRST);
+  const last = pick(LAST);
+  const [city, country, code] = pick(PLACES);
+  const handle = `${first}.${last}`.toLowerCase().replace(/[^a-z]/g, "") + (10 + randomInt(90));
+  return {
+    id,
+    name: `${first} ${last}`,
+    email: `${handle}@example.test`,
+    phone: `${code} ${700 + randomInt(300)} ${1000000 + randomInt(8999999)}`,
+    city,
+    country,
+    card: `4${String(randomInt(1000)).padStart(3, "0")} … ${1000 + randomInt(9000)}`,
+  };
+}
+
+export function mount(slot) {
+  let format = "json";
+  const countField = numberInput({ value: "5", min: "1", max: "200", "aria-label": "How many records" });
+  const chips = chipRow(
+    [
+      { value: "json", label: "JSON" },
+      { value: "csv", label: "CSV" },
+      { value: "table", label: "Table" },
+    ],
+    { value: "json", label: "Format", onChange: (value) => { format = value; render(); } }
+  );
+  const text = output({ rows: 14 });
+  const table = el("div", { class: "mvb-scroll" });
+  let rows = [];
+
+  function totalCount() {
+    return Math.max(1, Math.min(200, parseInt(countField.value || "1", 10) || 1));
+  }
+
+  function render() {
+    const total = totalCount();
+    rows = Array.from({ length: total }, (_, i) => person(i + 1));
+    const columns = Object.keys(rows[0]);
+    text.hidden = format === "table";
+    table.hidden = format !== "table";
+    if (format === "json") {
+      text.write(JSON.stringify(rows, null, 2));
+    } else if (format === "csv") {
+      const escape = (value) => `"${String(value).replaceAll('"', '""')}"`;
+      text.write([columns.join(","), ...rows.map((row) => columns.map((key) => escape(row[key])).join(","))].join("\n"));
+    } else {
+      const body = el("tbody");
+      for (const record of rows) {
+        const line = el("tr");
+        for (const key of columns) line.append(el("td", {}, String(record[key])));
+        body.append(line);
+      }
+      const head = el("tr");
+      for (const key of columns) head.append(el("th", {}, key));
+      table.replaceChildren(el("table", { class: "mvb-ttable" }, el("thead", {}, head), body));
+    }
+  }
+
+  const againButton = button("Make new set", { icon: "refresh-cw", kind: "fill" });
+  const copyButton = button("Copy", { icon: "copy" });
+  const saveButton = button("Download", { icon: "download" });
+
+  againButton.addEventListener("click", () => {
+    countField.value = String(totalCount());
+    render();
+  });
+  countField.addEventListener("input", render);
+  countField.addEventListener("change", () => {
+    countField.value = String(totalCount());
+  });
+  copyButton.addEventListener("click", async () => {
+    const text = format === "table" ? JSON.stringify(rows) : text.textContent;
+    toast((await copyText(text)) ? "Copied" : "Copy failed");
+  });
+  saveButton.addEventListener("click", () => {
+    if (format === "csv") download("test-data.csv", text.textContent, "text/csv");
+    else download("test-data.json", format === "json" ? text.textContent : JSON.stringify(rows, null, 2), "application/json");
+  });
+
+  const card = toolcard({
+    body: bench(
+      stack(panel("Format", chips), panel("Records", countField)),
+      el("div", { class: "mvb-scroll" }, text, table)
+    ),
+    foot: actions(copyButton, saveButton, againButton),
+  });
+  slot.append(card.node);
+  render();
+
+  return {};
+}
+
+export default { mount };

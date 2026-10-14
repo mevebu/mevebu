@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>mevebu, small tools that run in your browser</title>
+    <meta name="description" content="16 small tools that run in your browser. Passwords, QR codes, random draws, text and encoding. No accounts, no tracking." />
+    <link rel="icon" type="image/png" href="./icon.png" />
+    <link rel="stylesheet" href="./app/mevebu.css" />
+    <link rel="stylesheet" href="./libs/css/tools.css" />
+    <script type="module">
+      import { getTheme } from "./libs/js/core.js";
+      document.documentElement.dataset.theme = getTheme();
+    </script>
+  </head>
+  <body>
+    <noscript><p style="padding:24px">mevebu needs JavaScript. Every tool runs in this page.</p></noscript>
+    <div id="app"></div>
+    <script type="module" src="./app/mevebu.js"></script>
+  </body>
+</html>
