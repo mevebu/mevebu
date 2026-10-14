@@ -1,6 +1,6 @@
 // QR Generator — pure-JS QR encoder (byte mode, EC level M), renders to canvas/SVG
 import { el, icon, toast, copyText, download } from "../../lib/dom.js";
-import { qrcode } from "../vendor/qr.js";
+import { qrcode } from "./qr-encoder.js";
 
 export function mount(container) {
   const src = el("textarea", { class: "tinput ttextarea", rows: 4, spellcheck: "false", placeholder: "Text or URL to encode…" });

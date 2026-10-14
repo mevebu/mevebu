@@ -30,19 +30,19 @@ export function loadToolImpl(id) {
 }
 
 // ---------- registrations (dynamic import keeps initial bundle small) ----------
-registerTool("spin-wheel", () => import("./implementations/spin-wheel.js"));
-registerTool("name-picker", () => import("./implementations/name-picker.js"));
-registerTool("coin-flip", () => import("./implementations/coin-flip.js"));
-registerTool("dice-roller", () => import("./implementations/dice-roller.js"));
-registerTool("jwt-generator", () => import("./implementations/jwt-generator.js"));
-registerTool("uuid-generator", () => import("./implementations/uuid-generator.js"));
-registerTool("hash-generator", () => import("./implementations/hash-generator.js"));
-registerTool("color-converter", () => import("./implementations/color-converter.js"));
-registerTool("base64", () => import("./implementations/base64.js"));
-registerTool("url-encoder", () => import("./implementations/url-encoder.js"));
-registerTool("lorem-ipsum", () => import("./implementations/lorem-ipsum.js"));
-registerTool("case-converter", () => import("./implementations/case-converter.js"));
-registerTool("password-generator", () => import("./implementations/password-generator.js"));
-registerTool("fake-data", () => import("./implementations/fake-data.js"));
-registerTool("qr-generator", () => import("./implementations/qr-generator.js"));
-registerTool("qr-scanner", () => import("./implementations/qr-scanner.js"));
+registerTool("spin-wheel", () => import("./spin-wheel.js"));
+registerTool("name-picker", () => import("./name-picker.js"));
+registerTool("coin-flip", () => import("./coin-flip.js"));
+registerTool("dice-roller", () => import("./dice-roller.js"));
+registerTool("jwt-generator", () => import("./jwt-generator.js"));
+registerTool("uuid-generator", () => import("./uuid-generator.js"));
+registerTool("hash-generator", () => import("./hash-generator.js"));
+registerTool("color-converter", () => import("./color-converter.js"));
+registerTool("base64", () => import("./base64.js"));
+registerTool("url-encoder", () => import("./url-encoder.js"));
+registerTool("lorem-ipsum", () => import("./lorem-ipsum.js"));
+registerTool("case-converter", () => import("./case-converter.js"));
+registerTool("password-generator", () => import("./password-generator.js"));
+registerTool("fake-data", () => import("./fake-data.js"));
+registerTool("qr-generator", () => import("./qr-generator.js"));
+registerTool("qr-scanner", () => import("./qr-scanner.js"));
