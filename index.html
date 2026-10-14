@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mevebu — free offline tools in your browser</title>
+    <meta
+      name="description"
+      content="mevebu is a collection of tiny, privacy-first tools that run entirely in your browser. Spin wheels, name pickers, JWT generators, QR codes and more. No accounts, no tracking, works offline."
+    />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧰</text></svg>" />
+    <link rel="stylesheet" href="/src/styles/mevebu.css" />
+  </head>
+  <body>
+    <!-- ======= TOP NAVBAR ======= -->
+    <header class="topbar" id="topbar">
+      <div class="topbar__inner">
+        <a class="brand" href="#/" data-nav>
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__name">mevebu</span>
+          <span class="brand__tag">offline tools</span>
+        </a>
+
+        <button class="search" id="searchTrigger" type="button" aria-label="Search tools (Ctrl+K)">
+          <i data-lucide="search" class="icon-sm"></i>
+          <span class="search__placeholder">Search tools…</span>
+          <kbd class="search__kbd">Ctrl K</kbd>
+        </button>
+
+        <nav class="topnav" aria-label="Primary">
+          <a href="#/favorites" data-nav class="topnav__link"><i data-lucide="star" class="icon-sm"></i><span class="topnav__label">Favorites</span></a>
+          <a href="#/categories" data-nav class="topnav__link"><i data-lucide="layout-grid" class="icon-sm"></i><span class="topnav__label">Categories</span></a>
+          <a href="#/about" data-nav class="topnav__link"><i data-lucide="info" class="icon-sm"></i><span class="topnav__label">About</span></a>
+        </nav>
+
+        <div class="topbar__actions">
+          <div class="lang" id="langWrap">
+            <button class="iconbtn" id="langBtn" type="button" aria-label="Change language" aria-haspopup="true" aria-expanded="false">
+              <i data-lucide="globe" class="icon-sm"></i>
+            </button>
+            <div class="dropdown" id="langMenu" hidden>
+              <button class="dropdown__item" data-lang="en" type="button">🇬🇧 English</button>
+              <button class="dropdown__item" data-lang="id" type="button">🇮🇩 Bahasa Indonesia</button>
+              <button class="dropdown__item" data-lang="es" type="button">🇪🇸 Español</button>
+            </div>
+          </div>
+
+          <button class="iconbtn" id="themeBtn" type="button" aria-label="Toggle theme">
+            <i data-lucide="moon" class="icon-sm theme-moon"></i>
+            <i data-lucide="sun" class="icon-sm theme-sun"></i>
+          </button>
+
+          <a
+            class="btn btn--ghost btn--star"
+            href="https://github.com/fastro/mevebu"
+            target="_blank"
+            rel="noopener"
+          >
+            <i data-lucide="star" class="icon-sm"></i>
+            <span>Star</span>
+            <span class="btn__count" id="starCount">—</span>
+          </a>
+
+          <a
+            class="btn btn--accent btn--donate"
+            href="https://buymeacoffee.com/fastro"
+            target="_blank"
+            rel="noopener"
+          >
+            <i data-lucide="coffee" class="icon-sm"></i>
+            <span>Buy me a coffee</span>
+          </a>
+
+          <button class="iconbtn topbar__burger" id="burgerBtn" type="button" aria-label="Open menu">
+            <i data-lucide="menu" class="icon-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- mobile slide-down nav -->
+      <nav class="mobilenav" id="mobileNav" hidden aria-label="Mobile">
+        <a href="#/favorites" data-nav><i data-lucide="star" class="icon-sm"></i> Favorites</a>
+        <a href="#/categories" data-nav><i data-lucide="layout-grid" class="icon-sm"></i> Categories</a>
+        <a href="#/about" data-nav><i data-lucide="info" class="icon-sm"></i> About</a>
+        <a href="https://github.com/fastro/mevebu" target="_blank" rel="noopener"><i data-lucide="github" class="icon-sm"></i> GitHub</a>
+        <a href="https://buymeacoffee.com/fastro" target="_blank" rel="noopener" class="mobilenav__donate"><i data-lucide="coffee" class="icon-sm"></i> Buy me a coffee</a>
+      </nav>
+    </header>
+
+    <!-- ======= SEARCH MODAL ======= -->
+    <div class="modal" id="searchModal" hidden>
+      <div class="modal__backdrop" data-close-search></div>
+      <div class="modal__panel searchbox" role="dialog" aria-modal="true" aria-label="Search tools">
+        <div class="searchbox__input">
+          <i data-lucide="search" class="icon-sm"></i>
+          <input type="text" id="searchInput" placeholder="Search tools, categories…" autocomplete="off" spellcheck="false" />
+          <kbd>Esc</kbd>
+        </div>
+        <ul class="searchbox__results" id="searchResults"></ul>
+        <div class="searchbox__foot">
+          <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+          <span><kbd>↵</kbd> open</span>
+          <span>everything runs locally 🔒</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= MAIN ======= -->
+    <main class="page" id="app">
+      <!-- HERO (home only) -->
+      <section class="hero" id="hero">
+        <p class="hero__kicker"><i data-lucide="shield-check" class="icon-sm"></i> private by design · zero network calls · works fully offline</p>
+        <h1 class="hero__title">Tiny tools that<br /><span class="hero__title-accent">just work.</span></h1>
+        <p class="hero__sub">
+          A growing toolbox that lives in your browser. No sign-ups, no uploads, no ads.
+          Open a tool, do the thing, close the tab. That's it.
+        </p>
+        <div class="hero__cta">
+          <button class="btn btn--accent" id="heroSearchBtn" type="button"><i data-lucide="search" class="icon-sm"></i> Browse tools</button>
+          <a class="btn btn--ghost" href="#/categories" data-nav><i data-lucide="layout-grid" class="icon-sm"></i> All categories</a>
+        </div>
+      </section>
+
+      <!-- TOOL GRID (rendered by JS from registry) -->
+      <section class="section" id="catalog">
+        <div class="section__head">
+          <h2 class="section__title" id="catalogTitle">All tools</h2>
+          <span class="section__count" id="catalogCount"></span>
+        </div>
+        <div class="grid" id="toolGrid"><!-- cards injected here --></div>
+        <div class="empty" id="emptyState" hidden>
+          <i data-lucide="package-open" class="icon-lg"></i>
+          <p>Nothing here yet. Try another category or search for something.</p>
+        </div>
+      </section>
+
+      <!-- SPACER TEMPLATE: kategori/tool siap pakai (kosong) -->
+      <section class="section toolpage" id="toolPage" hidden>
+        <nav class="crumbs" id="toolCrumbs" aria-label="Breadcrumb"></nav>
+        <header class="toolpage__head">
+          <div class="toolpage__icon" id="toolIcon"></div>
+          <div class="toolpage__meta">
+            <h1 id="toolTitle">Tool name</h1>
+            <p id="toolTagline">Short description goes here.</p>
+          </div>
+          <button class="favbtn" id="toolFavBtn" type="button" aria-label="Add to favorites" aria-pressed="false">
+            <i data-lucide="star" class="icon-sm"></i>
+          </button>
+        </header>
+
+        <!-- workspace kosong — tiap tool nanti isi di sini -->
+        <div class="workspace" id="toolWorkspace">
+          <div class="workspace__placeholder">
+            <i data-lucide="wrench" class="icon-lg"></i>
+            <p>Tool workspace — empty template, ready to be wired up.</p>
+          </div>
+        </div>
+
+        <!-- docs: fungsi / cara pakai / contoh / FAQ -->
+        <div class="docs" id="toolDocs">
+          <article class="docs__block">
+            <h2><i data-lucide="compass" class="icon-sm"></i> What it does</h2>
+            <p class="docs__body" id="docPurpose">—</p>
+          </article>
+          <article class="docs__block">
+            <h2><i data-lucide="list-ordered" class="icon-sm"></i> How to use</h2>
+            <ol class="docs__steps" id="docHowTo"></ol>
+          </article>
+          <article class="docs__block">
+            <h2><i data-lucide="flask-conical" class="icon-sm"></i> Example</h2>
+            <div class="docs__example" id="docExample">—</div>
+          </article>
+          <article class="docs__block">
+            <h2><i data-lucide="help-circle" class="icon-sm"></i> FAQ</h2>
+            <div class="faq" id="docFaq"></div>
+          </article>
+        </div>
+
+        <div class="toolpage__foot">
+          <a class="backlink" href="#/" data-nav><i data-lucide="arrow-left" class="icon-sm"></i> Back to all tools</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- ======= FOOTER ======= -->
+    <footer class="footer">
+      <div class="footer__inner">
+        <div class="footer__col footer__col--brand">
+          <a class="brand brand--footer" href="#/" data-nav>
+            <span class="brand__mark" aria-hidden="true"></span>
+            <span class="brand__name">mevebu</span>
+          </a>
+          <p class="footer__blurb">Free utilities that run 100% in your browser. Nothing leaves your machine, nothing is stored.</p>
+          <p class="footer__privacy"><i data-lucide="wifi-off" class="icon-sm"></i> Works offline · <i data-lucide="lock" class="icon-sm"></i> No tracking</p>
+        </div>
+
+        <nav class="footer__col" aria-label="Explore">
+          <h3 class="footer__title">Explore</h3>
+          <a href="#/categories" data-nav>All categories</a>
+          <a href="#/favorites" data-nav>Favorites</a>
+          <a href="#/about" data-nav>About</a>
+        </nav>
+
+        <nav class="footer__col" aria-label="Project">
+          <h3 class="footer__title">Project</h3>
+          <a href="https://github.com/fastro/mevebu" target="_blank" rel="noopener">GitHub</a>
+          <a href="#/about" data-nav>Privacy</a>
+          <a href="#/about" data-nav>Changelog</a>
+        </nav>
+
+        <div class="footer__col footer__col--support">
+          <h3 class="footer__title">Support</h3>
+          <div class="donate-card">
+            <h4 class="donate-card__title">Thanks for stopping by</h4>
+            <p>Hope something here saved you a bit of time. If it did, and you feel like buying me a coffee, that would be lovely. If not, no worries at all, everything stays free either way.</p>
+            <p>Every tool runs in your browser and nothing is stored. Any support you give simply helps me keep this project going. Thanks either way. 😁</p>
+            <a class="btn btn--accent btn--block" href="https://buymeacoffee.com/fastro" target="_blank" rel="noopener">
+              <i data-lucide="coffee" class="icon-sm"></i> Buy me a coffee
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span>© <span id="year"></span> mevebu · built with ☕ and vanilla web tech</span>
+        <span class="footer__bottom-right">
+          <a href="https://github.com/fastro/mevebu" target="_blank" rel="noopener"><i data-lucide="github" class="icon-sm"></i> Star on GitHub</a>
+          <span class="dot-sep">·</span>
+          <a href="https://buymeacoffee.com/fastro" target="_blank" rel="noopener"><i data-lucide="heart" class="icon-sm"></i> Donate</a>
+        </span>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
