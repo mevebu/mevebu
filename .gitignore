@@ -1,0 +1,12 @@
+# deps & build output — never publish these
+node_modules/
+dist/
+
+# taste-skill: private design reference only, do NOT commit/publish
+.design/
+.skills/
+skills/
+
+# misc
+.DS_Store
+*.log
