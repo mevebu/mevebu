@@ -70,24 +70,6 @@ export const TOOLS = [
     keywords: "random toss decide heads tails",
     load: () => import("./tools/coin-flip.js"),
   },
-  {
-    id: "dice-roller",
-    category: "random",
-    name: "Dice Roller",
-    icon: "dices",
-    note: "Roll d4 to d20, one die or fifty.",
-    about: "Pick a die, set how many to roll, and see each result.",
-    tutorial: {
-      intro: "Roll polyhedral dice from d4 to d20, one or many at a time.",
-      steps: [
-        "Pick a die with the chips (d4 to d20).",
-        "Set how many dice to roll, between 1 and 50.",
-        "The dice roll as you change a setting. Press Roll for a fresh throw.",
-      ],
-    },
-    keywords: "random dice d6 d20 roll tabletop rpg",
-    load: () => import("./tools/dice-roller.js"),
-  },
 
   {
     id: "password-generator",

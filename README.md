@@ -31,11 +31,11 @@ The tools open in your default browser. Press `Ctrl+C` in the terminal to stop.
 
 ## Tools
 
-16 tools, each with its own page. Most update as you type, with no submit button.
+15 tools, each with its own page. Most update as you type, with no submit button.
 
 | Category | Tools |
 | :--- | :--- |
-| Random | Spin the Wheel, Name Picker, Coin Flip, Dice Roller |
+| Random | Spin the Wheel, Name Picker, Coin Flip |
 | Passwords and keys | Password Generator, JWT Generator, Hash Generator |
 | Developer | UUID Generator, Color Converter |
 | Convert | Base64, URL Encoder, Case Converter |

@@ -962,6 +962,28 @@ textarea.mvb-out { resize: vertical; }
 .mvb-modal__body p { margin-top: 8px; color: var(--mvb-ink-2); font-size: 15.5px; text-wrap: pretty; }
 .mvb-modal__actions { margin-top: 20px; display: grid; gap: 8px; }
 
+/* version readout inside the update modal */
+.mvb-vers { margin-top: 18px; border: 1px solid var(--mvb-orbit); border-radius: var(--mvb-r2); overflow: hidden; }
+.mvb-vers__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; }
+.mvb-vers__row + .mvb-vers__row { border-top: 1px solid var(--mvb-orbit); }
+.mvb-vers__label { font-size: 14px; color: var(--mvb-ink-3); }
+.mvb-vers__val { font-family: var(--mvb-mono); font-size: 15px; font-weight: 600; }
+.mvb-vers__row--new .mvb-vers__val { color: var(--mvb-comet); }
+.mvb-vers__hint { margin-top: 14px !important; font-size: 14px !important; }
+
+.mvb-cmd {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: var(--mvb-deck-2);
+  border: 1px solid var(--mvb-orbit);
+  border-radius: var(--mvb-r2);
+  padding: 10px 10px 10px 16px;
+}
+.mvb-cmd__text { flex: 1 1 auto; min-width: 0; font-family: var(--mvb-mono); font-size: 14px; overflow-wrap: anywhere; }
+
 /* ---------- command palette ---------- */
 
 .mvb-veil--pal { padding: clamp(60px, 12vh, 140px) 20px 20px; }
@@ -1104,6 +1126,29 @@ textarea.mvb-out { resize: vertical; }
 .mvb-foot__legal { font-size: 13.5px; color: var(--mvb-ink-3); display: flex; align-items: center; gap: 7px; }
 .mvb-foot__count { font-variant-numeric: tabular-nums; }
 .mvb-foot__count:empty { display: none; }
+
+/* version chip in the footer; turns into an update button when npm has a newer one */
+.mvb-version {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  min-height: 28px;
+  font: inherit;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--mvb-ink-3);
+  background: transparent;
+  border: 1px solid var(--mvb-orbit);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color var(--mvb-t) var(--mvb-ease), border-color var(--mvb-t) var(--mvb-ease), background var(--mvb-t) var(--mvb-ease);
+}
+.mvb-version:hover { color: var(--mvb-ink); border-color: var(--mvb-orbit-hard); }
+.mvb-version:focus-visible { outline: 2px solid var(--mvb-comet); outline-offset: 2px; }
+.mvb-version--new { color: var(--mvb-comet); border-color: var(--mvb-comet); background: var(--mvb-nebula); font-weight: 600; }
+.mvb-version--new:hover { color: var(--mvb-on-comet); background: var(--mvb-comet); }
+.mvb-version .mvb-ico { width: 15px; height: 15px; }
 
 @media (max-width: 720px) {
   .mvb-foot__top { grid-template-columns: 1fr; }

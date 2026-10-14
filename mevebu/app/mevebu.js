@@ -6,6 +6,7 @@ import { route, start, match, currentPath, go } from "../libs/js/router.js";
 import {
   $, $$, el, icon, getFavorites, isFavorite, toggleFavorite, setTheme,
   modal, button, copyButton, openPalette, shuffle, toolcard,
+  VERSION, PACKAGE_NAME, checkForUpdate, updateCommand, compareVersions,
 } from "../libs/js/core.js";
 
 const DONATE_URL = "https://buymeacoffee.com/fastro";
@@ -137,6 +138,79 @@ function openDonate() {
   });
 }
 
+// `latest` is the published version, or null when the check could not run.
+function openUpdate(latest) {
+  const updatable = latest && compareVersions(latest, VERSION) > 0;
+  const command = updateCommand();
+
+  const commandBox = el(
+    "div",
+    { class: "mvb-cmd" },
+    el("code", { class: "mvb-cmd__text" }, command),
+    copyButton(() => command, "Copy command", "fill")
+  );
+
+  modal({
+    label: "Update mevebu",
+    body: [
+      el("div", { class: "mvb-modal__art" }, el("img", { src: "./icon.png", alt: "", width: "72", height: "72" })),
+      el("h2", { class: "mvb-modal__title" }, updatable ? `mevebu ${latest} is out` : "mevebu is up to date"),
+      updatable
+        ? el("p", {}, "A newer version is published. Update your global install, then run ", el("code", {}, PACKAGE_NAME), " again.")
+        : el("p", {}, "You are on the latest version. Nothing to do."),
+      el("div", { class: "mvb-vers" },
+        el("div", { class: "mvb-vers__row" },
+          el("span", { class: "mvb-vers__label" }, "Installed"),
+          el("span", { class: "mvb-vers__val" }, VERSION)),
+        el("div", { class: "mvb-vers__row" + (updatable ? " mvb-vers__row--new" : "") },
+          el("span", { class: "mvb-vers__label" }, "Latest"),
+          el("span", { class: "mvb-vers__val" }, latest ?? "—"))),
+      updatable ? el("p", { class: "mvb-vers__hint" }, "Copy the command below and run it in your terminal.") : null,
+      updatable ? commandBox : null,
+    ],
+    actions: updatable
+      ? [el("a", { class: "mvb-btn", href: `https://www.npmjs.com/package/${PACKAGE_NAME}/v/${latest}`, target: "_blank", rel: "noopener" }, "What changed")]
+      : [],
+    veilClass: "mvb-veil--help",
+  });
+}
+
+// ---------- version ----------
+
+// The footer chip shows the current version. When npm reports a newer one, the
+// chip turns into an "update" button and the modal explains how to upgrade.
+async function startVersionChip() {
+  const chip = $("#mvb-version");
+  if (!chip) return;
+  chip.textContent = `v${VERSION}`;
+
+  let latest = null;
+  try {
+    const result = await checkForUpdate();
+    latest = result?.latest ?? null;
+  } catch {
+    /* offline: keep the plain version label */
+  }
+
+  const outdated = latest && compareVersions(latest, VERSION) > 0;
+  if (outdated) {
+    chip.classList.add("mvb-version--new");
+    chip.setAttribute("aria-label", `Update available: version ${latest}`);
+    chip.replaceChildren(icon("circle-arrow-up"), el("span", {}, `Update to v${latest}`));
+  }
+
+  chip.addEventListener("click", (event) => {
+    event.preventDefault();
+    openUpdate(latest);
+  });
+  chip.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openUpdate(latest);
+    }
+  });
+}
+
 function footer() {
   const donate = button("Donate", {
     icon: "coffee",
@@ -197,6 +271,16 @@ function footer() {
           "Source: ",
           el("a", { href: REPO_URL, target: "_blank", rel: "noopener" }, "github.com/mevebu/mevebu"),
           el("span", { class: "mvb-foot__count", id: "mvb-starcount" })
+        ),
+        el(
+          "p",
+          { class: "mvb-foot__legal" },
+          el("button", {
+            class: "mvb-version",
+            id: "mvb-version",
+            type: "button",
+            title: "Check for updates",
+          }, "—")
         )
       )
     )
@@ -727,4 +811,5 @@ function globalKeys() {
 mountShell();
 globalKeys();
 startStarCount();
+startVersionChip();
 start(render);

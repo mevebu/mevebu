@@ -590,4 +590,52 @@ export function blank(iconName, text) {
   );
 }
 
+// ---------- version ----------
+
+// Kept in one place. The CLI reads the same value from package.json.
+export const VERSION = "0.2.1";
+export const PACKAGE_NAME = "mevebu";
+export const REPO_SLUG = "mevebu/mevebu";
+
+/** Compare two X.Y.Z strings. Returns 1, 0, or -1 for a > b, a == b, a < b. */
+export function compareVersions(a, b) {
+  const left = String(a).split(".").map((part) => parseInt(part, 10) || 0);
+  const right = String(b).split(".").map((part) => parseInt(part, 10) || 0);
+  for (let i = 0; i < 3; i++) {
+    if ((left[i] ?? 0) > (right[i] ?? 0)) return 1;
+    if ((left[i] ?? 0) < (right[i] ?? 0)) return -1;
+  }
+  return 0;
+}
+
+/**
+ * Asks the npm registry for the latest published version. Fails silently when
+ * offline, so the app never blocks on the network. Resolves to
+ * `{ latest, current, outdated }` or null when the check did not complete.
+ */
+export async function checkForUpdate({ timeout = 5000 } = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeout);
+  try {
+    const response = await fetch(`https://registry.npmjs.org/${PACKAGE_NAME}/latest`, {
+      signal: controller.signal,
+      headers: { accept: "application/json" },
+    });
+    clearTimeout(timer);
+    if (!response.ok) return null;
+    const data = await response.json();
+    const latest = data?.version;
+    if (!latest) return null;
+    return { latest, current: VERSION, outdated: compareVersions(latest, VERSION) > 0 };
+  } catch {
+    clearTimeout(timer);
+    return null;
+  }
+}
+
+/** The command that updates an existing global install. */
+export function updateCommand() {
+  return `npm install -g ${PACKAGE_NAME}`;
+}
+
 export { hasIcon };

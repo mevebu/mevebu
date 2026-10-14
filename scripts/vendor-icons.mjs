@@ -10,18 +10,18 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const ICONS = [
   // shell
   "search", "menu", "x", "sun", "moon", "star", "arrow-left", "coffee",
-  "external-link", "corner-down-left", "info", "circle-question-mark",
+  "external-link", "corner-down-left", "info", "circle-question-mark", "circle-arrow-up",
   // categories
   "shuffle", "shield-check", "terminal", "repeat", "file-text", "qr-code",
   // tools
-  "circle-dashed", "users", "coins", "dices", "key-round", "signature",
+  "circle-dashed", "users", "coins", "key-round", "signature",
   "hash", "fingerprint-pattern", "binary", "link", "palette",
   "case-sensitive", "pilcrow", "database", "scan-line",
   // shared tool controls
   "copy", "check", "refresh-cw", "rotate-cw", "download", "upload",
   "arrow-left-right", "trash", "plus", "minus", "camera", "video-off",
   "image-up", "clipboard", "eye", "eye-off", "circle-alert", "triangle-alert",
-  "loader", "play", "lock", "dice-5",
+  "loader", "play", "lock",
 ];
 
 const src = join(root, "node_modules", "lucide", "dist", "esm", "icons");

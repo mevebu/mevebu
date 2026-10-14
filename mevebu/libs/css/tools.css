@@ -43,26 +43,6 @@
 .mvb-flip__result { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
 .mvb-flip__tally { font-size: 14px; color: var(--mvb-ink-3); font-variant-numeric: tabular-nums; }
 
-/* ---------- dice ---------- */
-
-.mvb-faces { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-
-.mvb-die {
-  min-width: 56px;
-  height: 56px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 10px;
-  background: var(--mvb-deck);
-  border: 1px solid var(--mvb-orbit-hard);
-  border-radius: var(--mvb-r1);
-  font-family: var(--mvb-mono);
-  font-size: 20px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-
 /* ---------- meter ---------- */
 
 .mvb-meter { height: 8px; border-radius: 999px; background: var(--mvb-deck-2); overflow: hidden; }

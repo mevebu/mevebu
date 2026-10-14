@@ -11,13 +11,21 @@ AGENTS.md
 DESIGN.md
 antislop-ui-copy-analyzer.md
 
+# npm auth token, never commit
+.npmrc
+.npmrc.local
+*.npmrc
+
 # local reference project, not part of mevebu
 01-My-Own-AntiSlop-AI-Skills/
 z-update-info.md
 
 # private maintainer tool, not published
 scripts/ship.js
+SHIP_GUIDE.md
 
+# local debug screenshots (keep the shipped icons)
+/*.png
 
 # misc
 .DS_Store
