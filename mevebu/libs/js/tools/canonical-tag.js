@@ -6,15 +6,15 @@ const esc = (value) =>
   String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const source = textInput({ value: "https://example.com/blog/post/?utm_source=news#comments", "aria-label": "Page URL" });
   const result = output({ rows: 2 });
   const error = notice("error");
-  const normalized = el("span", { class: "mvb-kv__v" }, "-");
-  const length = el("span", { class: "mvb-kv__v" }, "-");
-  const kv = el("div", { class: "mvb-kv" }, kvRow("Canonical URL", normalized), kvRow("Length", length));
+  const normalized = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const length = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const kv = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" }, kvRow("Canonical URL", normalized), kvRow("Length", length));
   let canonical = "";
 
   function clear() {
@@ -52,8 +52,7 @@ export function mount(slot) {
     foot: actions(
       copyButton(() => canonical, "Copy URL"),
       copyButton(() => result.textContent, "Copy tag", "fill")
-    ),
-  });
+    )});
   slot.append(card.node);
   run();
 

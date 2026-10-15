@@ -12,17 +12,17 @@ function parseNumbers(text) {
 }
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const source = textArea({ rows: 6, value: "2, 5, 8, 11", "aria-label": "Numbers", placeholder: "2, 5, 8, 11" });
   const error = notice("error");
 
-  const terms = el("span", { class: "mvb-kv__v" }, "-");
-  const differences = el("span", { class: "mvb-kv__v" }, "-");
-  const pattern = el("span", { class: "mvb-kv__v" }, "-");
-  const next = el("span", { class: "mvb-kv__v" }, "-");
-  const kv = el("div", { class: "mvb-kv" },
+  const terms = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const differences = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const pattern = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const next = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const kv = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("Terms", terms),
     kvRow("Differences", differences),
     kvRow("Pattern", pattern),
@@ -79,8 +79,7 @@ export function mount(slot) {
       stack(panel("Numbers", source), error),
       stack(panel("Analysis", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

@@ -8,18 +8,18 @@ export function mount(slot) {
   const width = numberInput({ value: 1920, min: "1", "aria-label": "Width" });
   const height = numberInput({ value: 1080, min: "1", "aria-label": "Height" });
 
-  const ratioValue = el("span", { class: "mvb-kv__v" }, "-");
-  const decimalValue = el("span", { class: "mvb-kv__v" }, "-");
+  const ratioValue = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const decimalValue = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
   const list = el(
     "div",
-    { class: "mvb-kv" },
-    el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, "Ratio"), ratioValue),
-    el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, "Decimal"), decimalValue)
+    { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
+    el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, "Ratio"), ratioValue),
+    el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, "Decimal"), decimalValue)
   );
 
   const newWidth = numberInput({ value: 800, min: "1", "aria-label": "New width" });
   const newHeight = numberInput({ value: 450, min: "1", "aria-label": "New height" });
-  const box = el("div", { class: "mvb-preview__box" });
+  const box = el("div", { class: "grid h-[120px] w-[min(200px,100%)] place-items-center bg-jade text-2xs text-on-jade" });
   const code = output();
   let ratioText = "16 / 9";
 
@@ -68,10 +68,9 @@ export function mount(slot) {
   const card = toolcard({
     body: bench(
       stack(panel("Width", width), panel("Height", height), list),
-      stack(el("div", { class: "mvb-preview" }, box), panel("New width", newWidth), panel("New height", newHeight), code)
+      stack(el("div", { class: "grid min-h-40 place-items-center overflow-hidden rounded-r1 border border-orbit bg-deck-2 p-[22px]" }, box), panel("New width", newWidth), panel("New height", newHeight), code)
     ),
-    foot: actions(copyButton(() => `aspect-ratio: ${ratioText};`, "Copy CSS", "fill")),
-  });
+    foot: actions(copyButton(() => `aspect-ratio: ${ratioText};`, "Copy CSS", "fill"))});
   slot.append(card.node);
   update();
 

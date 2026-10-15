@@ -12,8 +12,8 @@ function parseNumbers(text) {
 }
 
 function tile(label) {
-  const value = el("span", { class: "mvb-stat__v" }, "-");
-  const node = el("div", { class: "mvb-stat" }, value, el("span", { class: "mvb-stat__k" }, label));
+  const value = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "-");
+  const node = el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, value, el("span", { class: "text-2xs font-semibold text-ink-3" }, label));
   node.set = (text) => { value.textContent = text; };
   return node;
 }
@@ -24,7 +24,7 @@ export function mount(slot) {
   const weighted = tile("Weighted average");
   const totalWeight = tile("Total weight");
   const count = tile("Count");
-  const stats = el("div", { class: "mvb-stats" }, weighted, totalWeight, count);
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, weighted, totalWeight, count);
   const error = notice("error");
   let text = "";
 
@@ -75,8 +75,7 @@ export function mount(slot) {
       stack(panel("Values", values), panel("Weights", weights), error),
       stack(stats)
     ),
-    foot: actions(copyButton(() => text, "Copy summary", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy summary", "fill"))});
   slot.append(card.node);
   run();
 

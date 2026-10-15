@@ -4,12 +4,11 @@ import { bench, stack, panel, textArea, toggleRow, copyButton, actions, toolcard
 
 export function mount(slot) {
   const source = textArea({ rows: 12, "aria-label": "Text", placeholder: "Paste your text" });
-  const result = textArea({ rows: 12, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Result" });
+  const result = textArea({ rows: 12, readonly: true, "aria-label": "Result" });
   const options = toggleRow([
     { value: "collapse", label: "Collapse spaces", checked: true },
     { value: "trim", label: "Trim lines", checked: true },
-    { value: "blank", label: "Remove blank lines", checked: false },
-  ]);
+    { value: "blank", label: "Remove blank lines", checked: false }]);
 
   function run() {
     const text = source.value;
@@ -30,8 +29,7 @@ export function mount(slot) {
       stack(panel("Text", source), options),
       stack(panel("Result", result))
     ),
-    foot: actions(copyButton(() => result.value, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => result.value, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

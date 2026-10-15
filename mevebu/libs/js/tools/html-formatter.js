@@ -8,11 +8,9 @@ const tagName = (token) => (token.match(/^<\s*\/?\s*([a-zA-Z0-9:-]+)/) || [])[1]
 export function mount(slot) {
   const source = textArea({
     rows: 12,
-    class: "mvb-in mvb-in--area mvb-in--mono",
     "aria-label": "HTML",
-    value: "<div class=\"card\"><h1>Title</h1><p>Text <strong>bold</strong></p><br></div>",
-  });
-  const result = textArea({ rows: 12, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Formatted HTML" });
+    value: "<div class=\"card\"><h1>Title</h1><p>Text <strong>bold</strong></p><br></div>"});
+  const result = textArea({ rows: 12, readonly: true, "aria-label": "Formatted HTML" });
   const warn = notice("warn");
   let size = "2";
 
@@ -61,8 +59,7 @@ export function mount(slot) {
       stack(panel("Indent", chips), panel("HTML", source), warn),
       stack(panel("Formatted", result))
     ),
-    foot: actions(copyButton(() => result.value, "Copy markup", "fill")),
-  });
+    foot: actions(copyButton(() => result.value, "Copy markup", "fill"))});
   slot.append(card.node);
   run();
 

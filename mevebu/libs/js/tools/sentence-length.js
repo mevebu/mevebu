@@ -8,15 +8,15 @@ const splitSentences = (text) => text.trim()
 const countWords = (text) => text.trim() ? text.trim().split(/\s+/).length : 0;
 
 function tile(label) {
-  const value = el("span", { class: "mvb-stat__v" }, "0");
-  const node = el("div", { class: "mvb-stat" }, value, el("span", { class: "mvb-stat__k" }, label));
+  const value = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "0");
+  const node = el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, value, el("span", { class: "text-2xs font-semibold text-ink-3" }, label));
   node.set = (text) => { value.textContent = text; };
   return node;
 }
 
-const kvRow = (key, value) => el("div", { class: "mvb-kv__row" },
-  el("span", { class: "mvb-kv__k" }, key),
-  el("span", { class: "mvb-kv__v" }, value));
+const kvRow = (key, value) => el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" },
+  el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key),
+  el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const source = textArea({ rows: 12, "aria-label": "Text", placeholder: "Type or paste text" });
@@ -26,9 +26,9 @@ export function mount(slot) {
   const shortestTile = tile("Shortest");
   const longestTile = tile("Longest");
   const averageTile = tile("Average");
-  const stats = el("div", { class: "mvb-stats" }, sentencesTile, shortestTile, longestTile, averageTile);
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, sentencesTile, shortestTile, longestTile, averageTile);
 
-  const listWrap = el("div", { class: "mvb-scroll" });
+  const listWrap = el("div", { class: "max-h-80 overflow-auto" });
   const note = notice("note");
 
   let longText = "";
@@ -56,7 +56,7 @@ export function mount(slot) {
     if (!long.length) {
       listWrap.replaceChildren(blank("text-align-start", "No sentence runs past the threshold."));
     } else {
-      listWrap.replaceChildren(el("div", { class: "mvb-kv" },
+      listWrap.replaceChildren(el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
         ...long.map((sentence) => kvRow(`${countWords(sentence)} words`, sentence))));
     }
   }
@@ -69,8 +69,7 @@ export function mount(slot) {
       stack(panel("Text", source), panel("Flag past", threshold, "Words")),
       stack(stats, note, panel("Long sentences", listWrap))
     ),
-    foot: actions(copyButton(() => longText, "Copy long sentences", "fill")),
-  });
+    foot: actions(copyButton(() => longText, "Copy long sentences", "fill"))});
   slot.append(card.node);
   run();
 

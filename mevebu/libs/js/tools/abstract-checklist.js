@@ -6,12 +6,11 @@ const PARTS = [
   { value: "aim", label: "Aim" },
   { value: "method", label: "Method" },
   { value: "results", label: "Results" },
-  { value: "conclusion", label: "Conclusion" },
-];
+  { value: "conclusion", label: "Conclusion" }];
 
 function tile(label) {
-  const value = el("span", { class: "mvb-stat__v" }, "0");
-  const node = el("div", { class: "mvb-stat" }, value, el("span", { class: "mvb-stat__k" }, label));
+  const value = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "0");
+  const node = el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, value, el("span", { class: "text-2xs font-semibold text-ink-3" }, label));
   node.set = (text) => { value.textContent = text; };
   return node;
 }
@@ -23,7 +22,7 @@ export function mount(slot) {
   const parts = toggleRow(PARTS.map((part) => ({ ...part, checked: false })));
   const wordsTile = tile("Words");
   const tickedTile = tile("Ticked");
-  const stats = el("div", { class: "mvb-stats" }, wordsTile, tickedTile);
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, wordsTile, tickedTile);
   const note = notice("note");
   note.write("This checks structure only, not quality.");
   let summary = "";
@@ -43,8 +42,7 @@ export function mount(slot) {
       stack(panel("Abstract", source), note),
       stack(stats, panel("Parts found", parts))
     ),
-    foot: actions(copyButton(() => summary, "Copy checklist", "fill")),
-  });
+    foot: actions(copyButton(() => summary, "Copy checklist", "fill"))});
   slot.append(card.node);
   run();
 

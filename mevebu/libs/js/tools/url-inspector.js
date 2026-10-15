@@ -4,23 +4,23 @@ import { el, textInput, notice, copyButton, bench, stack, panel, actions, toolca
 const IPV4 = /^\d{1,3}(\.\d{1,3}){3}$/;
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const source = textInput({ value: "https://example.com/login?next=/home", "aria-label": "URL" });
-  const scheme = el("span", { class: "mvb-kv__v" }, "-");
-  const host = el("span", { class: "mvb-kv__v" }, "-");
-  const port = el("span", { class: "mvb-kv__v" }, "-");
-  const path = el("span", { class: "mvb-kv__v" }, "-");
+  const scheme = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const host = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const port = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const path = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
   const kv = el(
     "div",
-    { class: "mvb-kv" },
+    { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("Scheme", scheme),
     kvRow("Host", host),
     kvRow("Port", port),
     kvRow("Path", path)
   );
-  const flags = el("div", { class: "mvb-stack" });
+  const flags = el("div", { class: "grid content-start gap-4" });
   const error = notice("error");
   let summary = "";
 
@@ -86,8 +86,7 @@ export function mount(slot) {
       ),
       stack(kv, panel("Checks", flags))
     ),
-    foot: actions(copyButton(() => summary, "Copy host", "fill")),
-  });
+    foot: actions(copyButton(() => summary, "Copy host", "fill"))});
   slot.append(card.node);
   run();
 

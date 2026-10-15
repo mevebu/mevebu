@@ -27,7 +27,7 @@ function decode(text) {
 
 export function mount(slot) {
   const plain = textArea({ rows: 7, value: "hello mevebu", "aria-label": "Plain text" });
-  const coded = textArea({ rows: 7, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Base64" });
+  const coded = textArea({ rows: 7, "aria-label": "Base64" });
   const urlSafeBox = checkbox("URL-safe, no padding", { checked: false });
   const error = notice("error");
   let guard = false;
@@ -71,8 +71,7 @@ export function mount(slot) {
     foot: actions(
       copyButton(() => plain.value, "Copy text"),
       copyButton(() => coded.value, "Copy Base64", "fill"),
-    ),
-  });
+    )});
   slot.append(card.node);
   refresh();
 

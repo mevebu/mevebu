@@ -5,8 +5,7 @@ const OPTIONS = [
   { value: ",", label: "Comma" },
   { value: ";", label: "Semicolon" },
   { value: "\t", label: "Tab" },
-  { value: "|", label: "Pipe" },
-];
+  { value: "|", label: "Pipe" }];
 
 function parseDelimited(text, delimiter) {
   const rows = [];
@@ -68,7 +67,7 @@ function stringifyCSV(rows, delimiter) {
 }
 
 export function mount(slot) {
-  const source = textArea({ rows: 12, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Data", placeholder: "Paste delimited data here" });
+  const source = textArea({ rows: 12, "aria-label": "Data", placeholder: "Paste delimited data here" });
   const from = selectInput([{ value: "auto", label: "Auto" }, ...OPTIONS], { value: "auto", "aria-label": "Current delimiter" });
   const to = selectInput(OPTIONS, { value: ";", "aria-label": "New delimiter" });
   const result = output({ rows: 12 });
@@ -98,8 +97,7 @@ export function mount(slot) {
       stack(panel("Data", source), panel("From", from), panel("To", to), error),
       stack(panel("Result", result))
     ),
-    foot: actions(copyButton(() => current, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => current, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

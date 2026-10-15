@@ -6,7 +6,7 @@ const ALGORITHMS = ["SHA-1", "SHA-256", "SHA-384", "SHA-512"];
 export function mount(slot) {
   const source = textArea({ value: "mevebu", rows: 5, "aria-label": "Text to hash", placeholder: "Type or paste text" });
   const result = output();
-  const digest = el("p", { class: "mvb-note" });
+  const digest = el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" });
   const error = notice("error");
 
   let algorithm = "SHA-256";
@@ -17,8 +17,7 @@ export function mount(slot) {
     onChange: (value) => {
       algorithm = value;
       run();
-    },
-  });
+    }});
 
   async function run() {
     error.write("");
@@ -45,8 +44,7 @@ export function mount(slot) {
       stack(panel("Algorithm", chips), panel("Text", source)),
       stack(panel("Hash", result), digest, error)
     ),
-    foot: actions(copy),
-  });
+    foot: actions(copy)});
   slot.append(card.node);
   run();
 

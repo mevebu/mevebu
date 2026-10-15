@@ -5,8 +5,7 @@ const UNITS = [
   { value: "days", label: "Days" },
   { value: "weeks", label: "Weeks" },
   { value: "months", label: "Months" },
-  { value: "years", label: "Years" },
-];
+  { value: "years", label: "Years" }];
 
 const pad = (n) => String(n).padStart(2, "0");
 
@@ -24,7 +23,7 @@ function parseDate(value) {
 const iso = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const date = textInput({ type: "date", value: "2026-01-01", "aria-label": "Start date" });
@@ -35,12 +34,12 @@ export function mount(slot) {
     [{ value: "add", label: "Add" }, { value: "subtract", label: "Subtract" }],
     { value: "add", label: "Direction", onChange: (value) => { mode = value; run(); } }
   );
-  const result = el("span", { class: "mvb-stat__v" }, "-");
-  const tile = el("div", { class: "mvb-stat" }, result, el("span", { class: "mvb-stat__k" }, "Result"));
-  const stats = el("div", { class: "mvb-stats" }, tile);
-  const isoOut = el("span", { class: "mvb-kv__v" }, "-");
-  const weekday = el("span", { class: "mvb-kv__v" }, "-");
-  const kv = el("div", { class: "mvb-kv" }, kvRow("ISO date", isoOut), kvRow("Weekday", weekday));
+  const result = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "-");
+  const tile = el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, result, el("span", { class: "text-2xs font-semibold text-ink-3" }, "Result"));
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, tile);
+  const isoOut = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const weekday = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const kv = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" }, kvRow("ISO date", isoOut), kvRow("Weekday", weekday));
   const error = notice("error");
   let text = "";
 
@@ -94,8 +93,7 @@ export function mount(slot) {
       ),
       stack(stats, panel("Result", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

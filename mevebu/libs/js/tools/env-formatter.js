@@ -23,11 +23,9 @@ function parse(text) {
 export function mount(slot) {
   const source = textArea({
     rows: 12,
-    class: "mvb-in mvb-in--area mvb-in--mono",
     "aria-label": "Environment variables",
     placeholder: "KEY=value",
-    value: "API_URL=https://example.com\n# a note\nPORT=3000\nAPI_URL=https://other.com",
-  });
+    value: "API_URL=https://example.com\n# a note\nPORT=3000\nAPI_URL=https://other.com"});
   const result = output({ rows: 12 });
   const warn = notice("warn");
   let sort = true;
@@ -58,11 +56,10 @@ export function mount(slot) {
 
   const card = toolcard({
     body: bench(
-      stack(panel("Options", el("div", { class: "mvb-stack" }, sortSwitch, commentSwitch)), panel("Input", source), warn),
+      stack(panel("Options", el("div", { class: "grid content-start gap-4" }, sortSwitch, commentSwitch)), panel("Input", source), warn),
       stack(panel("Tidied", result))
     ),
-    foot: actions(copyButton(() => result.textContent, "Copy list", "fill")),
-  });
+    foot: actions(copyButton(() => result.textContent, "Copy list", "fill"))});
   slot.append(card.node);
   run();
 

@@ -8,7 +8,7 @@ export function mount(slot) {
   const listField = textArea({ value: saved.entries ?? "", rows: 8, "aria-label": "Entries, one per line", placeholder: "One entry per line" });
   const countField = numberInput({ value: saved.winners ?? "1", min: "1", max: "500", "aria-label": "How many to draw" });
   const uniqueBox = checkbox("No repeats", { checked: saved.unique !== false });
-  const notify = el("p", { class: "mvb-note" });
+  const notify = el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" });
 
   const drawButton = button("Draw", { icon: "play", kind: "fill" });
   const copyButton = button("Copy", { icon: "copy" });
@@ -58,8 +58,7 @@ export function mount(slot) {
       stack(panel("Entries", listField), panel("Winners", countField), panel(null, uniqueBox)),
       stack(panel("Drawn", result), notify)
     ),
-    foot: actions(copyButton, drawButton),
-  });
+    foot: actions(copyButton, drawButton)});
   slot.append(card.node);
   draw();
 

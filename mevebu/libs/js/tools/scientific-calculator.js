@@ -51,8 +51,7 @@ const FUNCTIONS = {
   ln: (x) => Math.log(x),
   sqrt: (x) => Math.sqrt(x),
   abs: (x) => Math.abs(x),
-  exp: (x) => Math.exp(x),
-};
+  exp: (x) => Math.exp(x)};
 
 function evaluate(src, degrees) {
   const tokens = tokenize(src);
@@ -146,20 +145,18 @@ export function mount(slot) {
   const input = textInput({ value: "sin(30) + 2^3", "aria-label": "Expression", placeholder: "sin(30) + 2^3" });
   const display = output({ rows: 2 });
   const error = notice("error");
-  const history = el("div", { class: "mvb-kv" });
+  const history = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" });
   const chips = chipRow(
     [
       { value: "deg", label: "Degrees" },
-      { value: "rad", label: "Radians" },
-    ],
+      { value: "rad", label: "Radians" }],
     {
       value: "deg",
       label: "Angle unit",
       onChange: (value) => {
         degrees = value === "deg";
         run();
-      },
-    }
+      }}
   );
   const recent = [];
   let degrees = true;
@@ -169,9 +166,9 @@ export function mount(slot) {
     history.replaceChildren();
     for (const entry of recent) {
       history.append(
-        el("div", { class: "mvb-kv__row" },
-          el("span", { class: "mvb-kv__k" }, entry.expression),
-          el("span", { class: "mvb-kv__v" }, entry.result))
+        el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" },
+          el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, entry.expression),
+          el("span", { class: "wrap-anywhere font-mono text-2xs" }, entry.result))
       );
     }
   }
@@ -219,9 +216,9 @@ export function mount(slot) {
     run();
   }
 
-  const keypad = el("div", { class: "mvb-chips" });
+  const keypad = el("div", { class: "flex flex-wrap gap-1.5" });
   for (const key of KEYS) {
-    keypad.append(el("button", { class: "mvb-chip", type: "button", onclick: () => insert(key) }, key));
+    keypad.append(el("button", { class: "min-h-[var(--ctl)] cursor-pointer rounded-r1 border border-orbit bg-deck px-[13px] text-sm font-medium text-ink-2 transition-colors duration-150 hover:border-orbit-hard hover:text-ink data-[on]:border-jade data-[on]:bg-jade-soft data-[on]:text-ink", type: "button", onclick: () => insert(key) }, key));
   }
 
   input.addEventListener("input", run);
@@ -236,8 +233,7 @@ export function mount(slot) {
       ),
       stack(display, error, panel("History", history))
     ),
-    foot: actions(copyButton(() => current, "Copy result"), evaluateButton),
-  });
+    foot: actions(copyButton(() => current, "Copy result"), evaluateButton)});
   slot.append(card.node);
   run();
 

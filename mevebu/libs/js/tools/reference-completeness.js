@@ -4,8 +4,8 @@ import { el, bench, stack, panel, textArea, notice, copyButton, actions, toolcar
 const PARTS = ["Author", "Year", "Title", "Source"];
 
 function kvRow(key) {
-  const value = el("span", { class: "mvb-kv__v" }, "-");
-  const row = el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), value);
+  const value = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const row = el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), value);
   return { row, value };
 }
 
@@ -14,15 +14,14 @@ function check(text) {
   return {
     Author: /^[A-Z][A-Za-z'’.-]+,/.test(t) || /\b(and|&)\s+[A-Z]/.test(t),
     Year: /\b(1[5-9]\d{2}|20\d{2})\b/.test(t),
-    Title: /["“][^"”]{2,}["”]/.test(t) || t.replace(/^[^.]*\./, "").trim().length > 8,
-    Source: /https?:\/\/|www\.|\bIn\b|\b(Journal|Press|Publishing|Publishers|University|vol\.|pp\.|ed\.)\b/i.test(t),
-  };
+    Title: /["“][^"”]{2}["”]/.test(t) || t.replace(/^[^.]*\./, "").trim().length > 8,
+    Source: /https?:\/\/|www\.|\bIn\b|\b(Journal|Press|Publishing|Publishers|University|vol\.|pp\.|ed\.)\b/i.test(t)};
 }
 
 export function mount(slot) {
   const source = textArea({ rows: 6, "aria-label": "Reference", placeholder: "Paste one reference" });
   const rows = {};
-  const kv = el("div", { class: "mvb-kv" });
+  const kv = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" });
   for (const key of PARTS) {
     rows[key] = kvRow(key);
     kv.append(rows[key].row);
@@ -51,8 +50,7 @@ export function mount(slot) {
       stack(panel("Reference", source), note),
       stack(panel("Parts", kv), status)
     ),
-    foot: actions(copyButton(() => summary, "Copy check", "fill")),
-  });
+    foot: actions(copyButton(() => summary, "Copy check", "fill"))});
   slot.append(card.node);
   run();
 

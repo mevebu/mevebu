@@ -16,11 +16,11 @@ export function mount(slot) {
   );
   const result = output({ rows: 8 });
 
-  const titleCount = el("span", { class: "mvb-stat__v" }, "0");
-  const descCount = el("span", { class: "mvb-stat__v" }, "0");
-  const stats = el("div", { class: "mvb-stats" },
-    el("div", { class: "mvb-stat" }, titleCount, el("span", { class: "mvb-stat__k" }, "Title chars")),
-    el("div", { class: "mvb-stat" }, descCount, el("span", { class: "mvb-stat__k" }, "Description chars"))
+  const titleCount = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "0");
+  const descCount = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "0");
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" },
+    el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, titleCount, el("span", { class: "text-2xs font-semibold text-ink-3" }, "Title chars")),
+    el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, descCount, el("span", { class: "text-2xs font-semibold text-ink-3" }, "Description chars"))
   );
 
   function build() {
@@ -51,8 +51,7 @@ export function mount(slot) {
       ),
       stack(stats, panel("Meta tags", result))
     ),
-    foot: actions(copyButton(() => result.textContent, "Copy tags", "fill")),
-  });
+    foot: actions(copyButton(() => result.textContent, "Copy tags", "fill"))});
   slot.append(card.node);
   build();
 

@@ -13,7 +13,7 @@ const isUrl = (value) => {
 
 export function mount(slot) {
   const base = textInput({ value: "https://example.com/search", "aria-label": "Base URL" });
-  const params = textArea({ rows: 8, class: "mvb-in mvb-in--area mvb-in--mono", value: "q=hello world\npage=2", placeholder: "q=hello world\npage=2", "aria-label": "Parameters" });
+  const params = textArea({ rows: 8, value: "q=hello world\npage=2", placeholder: "q=hello world\npage=2", "aria-label": "Parameters" });
   const encode = checkbox("Encode values", { checked: true });
   const result = output({ rows: 4 });
   const error = notice("error");
@@ -60,8 +60,7 @@ export function mount(slot) {
       stack(panel("Base URL", base), panel("Parameters", params), encode, error),
       stack(panel("URL", result))
     ),
-    foot: actions(copyButton(() => result.textContent, "Copy URL", "fill")),
-  });
+    foot: actions(copyButton(() => result.textContent, "Copy URL", "fill"))});
   slot.append(card.node);
   build();
 

@@ -62,7 +62,7 @@ function coerce(value) {
 }
 
 export function mount(slot) {
-  const source = textArea({ rows: 12, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "CSV", placeholder: "name,role\nAda,engineer" });
+  const source = textArea({ rows: 12, "aria-label": "CSV", placeholder: "name,role\nAda,engineer" });
   const typedBox = checkbox("Typed values", { checked: true });
   const result = output({ rows: 12 });
   const error = notice("error");
@@ -103,8 +103,7 @@ export function mount(slot) {
       stack(panel("CSV", source), panel(null, typedBox), error),
       stack(panel("JSON", result))
     ),
-    foot: actions(copyButton(() => current, "Copy JSON", "fill")),
-  });
+    foot: actions(copyButton(() => current, "Copy JSON", "fill"))});
   slot.append(card.node);
   run();
 

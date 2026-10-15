@@ -17,7 +17,7 @@ function fmt(n) {
 }
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const ratioInput = textInput({ value: "12:18:24", "aria-label": "Ratio" });
@@ -25,12 +25,12 @@ export function mount(slot) {
   const b = numberInput({ placeholder: "B", "aria-label": "Second term" });
   const c = numberInput({ placeholder: "C", "aria-label": "Third term" });
   const d = numberInput({ placeholder: "D", "aria-label": "Fourth term" });
-  const simplified = el("span", { class: "mvb-kv__v" }, "-");
-  const decimal = el("span", { class: "mvb-kv__v" }, "-");
-  const missing = el("span", { class: "mvb-kv__v" }, "-");
+  const simplified = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const decimal = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const missing = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
   const kv = el(
     "div",
-    { class: "mvb-kv" },
+    { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("Simplified ratio", simplified),
     kvRow("Decimal", decimal),
     kvRow("Missing term", missing)
@@ -87,13 +87,12 @@ export function mount(slot) {
     body: bench(
       stack(
         panel("Ratio", ratioInput),
-        panel("Proportion", el("div", { class: "mvb-row" }, a, b, c, d)),
+        panel("Proportion", el("div", { class: "flex min-w-0 flex-wrap items-center gap-2" }, a, b, c, d)),
         error
       ),
       stack(panel("Result", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

@@ -13,7 +13,7 @@ function decode(text) {
 
 export function mount(slot) {
   const source = textArea({ rows: 6, value: "<a href=\"/x\">Tom & Jerry</a>", "aria-label": "Input" });
-  const result = textArea({ rows: 6, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Result" });
+  const result = textArea({ rows: 6, readonly: true, "aria-label": "Result" });
   const error = notice("error");
   let mode = "encode";
 
@@ -38,8 +38,7 @@ export function mount(slot) {
       stack(panel("Direction", chips), panel("Input", source), error),
       stack(panel("Result", result))
     ),
-    foot: actions(copyButton(() => result.value, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => result.value, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

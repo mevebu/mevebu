@@ -9,11 +9,11 @@ function hexToRgb(hex) {
 
 function slider(label, { min, max, value, unit = "px" }) {
   const input = rangeInput({ min, max, value, "aria-label": label });
-  const val = el("span", { class: "mvb-slider__val" }, `${value}${unit}`);
+  const val = el("span", { class: "text-end font-mono text-2xs text-ink-2" }, `${value}${unit}`);
   const node = el(
     "div",
-    { class: "mvb-slider" },
-    el("span", { class: "mvb-slider__label" }, label),
+    { class: "grid items-center gap-2.5 [grid-template-columns:88px_minmax(0,1fr)_62px] max-[45rem]:[grid-template-columns:minmax(0,1fr)_62px]" },
+    el("span", { class: "text-2xs font-semibold text-ink-2 max-[45rem]:col-span-2" }, label),
     input,
     val
   );
@@ -31,7 +31,7 @@ export function mount(slot) {
   const opacity = slider("Opacity", { min: 0, max: 100, value: 35, unit: "%" });
   const picker = colorInput({ value: "#1b1b1f", "aria-label": "Shadow color" });
   const inset = switchControl("Inset", {});
-  const previewBox = el("div", { class: "mvb-preview__box" });
+  const previewBox = el("div", { class: "grid h-[120px] w-[min(200px,100%)] place-items-center bg-jade text-2xs text-on-jade" });
   const code = output();
 
   function css() {
@@ -58,10 +58,9 @@ export function mount(slot) {
   const card = toolcard({
     body: bench(
       stack(x, y, blur, spread, opacity, panel("Color", picker), inset),
-      stack(el("div", { class: "mvb-preview" }, previewBox), code)
+      stack(el("div", { class: "grid min-h-40 place-items-center overflow-hidden rounded-r1 border border-orbit bg-deck-2 p-[22px]" }, previewBox), code)
     ),
-    foot: actions(copyButton(() => `box-shadow: ${css()};`, "Copy CSS", "fill")),
-  });
+    foot: actions(copyButton(() => `box-shadow: ${css()};`, "Copy CSS", "fill"))});
   slot.append(card.node);
   update();
 

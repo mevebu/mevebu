@@ -40,7 +40,7 @@ function blocks(source) {
   const isBlockStart = (index) => {
     const line = lines[index];
     return !line.trim() || /^```/.test(line) || /^#{1,6}\s/.test(line) || /^\s*>/.test(line) ||
-      /^\s*([-*+]|\d+[.)])\s+/.test(line) || /^\s*([-*_])(\s*\1){2,}\s*$/.test(line) || isTableStart(index);
+      /^\s*([-*+]|\d+[.)])\s+/.test(line) || /^\s*([-*_])(\s*\1){2}\s*$/.test(line) || isTableStart(index);
   };
 
   while (i < lines.length) {
@@ -64,7 +64,7 @@ function blocks(source) {
       continue;
     }
 
-    if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(line)) {
+    if (/^\s*([-*_])(\s*\1){2}\s*$/.test(line)) {
       nodes.push(el("hr"));
       i++;
       continue;
@@ -115,11 +115,9 @@ function blocks(source) {
 export function mount(slot) {
   const source = textArea({
     rows: 16,
-    class: "mvb-in mvb-in--area mvb-in--mono",
     "aria-label": "Markdown",
-    value: "# Title\n\nSome **bold**, *italic* and `code`.\n\n- one\n- two\n\n> A quote.\n\n| a | b |\n| --- | --- |\n| 1 | 2 |\n\n```js\nconst x = 1;\n```\n",
-  });
-  const preview = el("div", { class: "mvb-pane" });
+    value: "# Title\n\nSome **bold**, *italic* and `code`.\n\n- one\n- two\n\n> A quote.\n\n| a | b |\n| --- | --- |\n| 1 | 2 |\n\n```js\nconst x = 1;\n```\n"});
+  const preview = el("div", { class: "min-h-[120px] max-h-[380px] overflow-auto wrap-anywhere rounded-r1 border border-orbit bg-deck-2 px-4 py-3.5 leading-normal [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_h1]:my-4 [&_h2]:my-4 [&_h3]:my-4 [&_h1]:tracking-[-0.01em] [&_h2]:tracking-[-0.01em] [&_h3]:tracking-[-0.01em] [&_p]:mb-2.5 [&_ul]:mb-2.5 [&_ol]:mb-2.5 [&_pre]:mb-2.5 [&_ul]:ps-[22px] [&_ol]:ps-[22px] [&_code]:rounded-[5px] [&_code]:bg-deck [&_code]:px-[5px] [&_code]:py-px [&_code]:font-mono [&_code]:text-2xs [&_pre]:overflow-auto [&_pre]:rounded-r1 [&_pre]:bg-deck [&_pre]:px-3 [&_pre]:py-2.5 [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_a]:text-jade [&_table]:border-collapse [&_th]:border [&_td]:border [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-[9px] [&_td]:px-[9px] [&_th]:py-1.5 [&_td]:py-1.5" });
 
   function run() {
     preview.replaceChildren(...blocks(source.value));
@@ -132,8 +130,7 @@ export function mount(slot) {
       stack(panel("Markdown", source)),
       stack(panel("Preview", preview))
     ),
-    foot: actions(copyButton(() => source.value, "Copy markdown", "fill")),
-  });
+    foot: actions(copyButton(() => source.value, "Copy markdown", "fill"))});
   slot.append(card.node);
   run();
 

@@ -6,19 +6,19 @@ function fmt(n) {
 }
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const a = numberInput({ value: "1", "aria-label": "Coefficient a" });
   const b = numberInput({ value: "-3", "aria-label": "Coefficient b" });
   const c = numberInput({ value: "2", "aria-label": "Coefficient c" });
-  const discriminant = el("span", { class: "mvb-kv__v" }, "-");
-  const root1 = el("span", { class: "mvb-kv__v" }, "-");
-  const root2 = el("span", { class: "mvb-kv__v" }, "-");
-  const nature = el("span", { class: "mvb-kv__v" }, "-");
+  const discriminant = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const root1 = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const root2 = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const nature = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
   const kv = el(
     "div",
-    { class: "mvb-kv" },
+    { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("Discriminant", discriminant),
     kvRow("Root 1", root1),
     kvRow("Root 2", root2),
@@ -82,8 +82,7 @@ export function mount(slot) {
       stack(panel("a", a), panel("b", b), panel("c", c), error),
       stack(panel("Solution", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy roots", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy roots", "fill"))});
   slot.append(card.node);
   run();
 

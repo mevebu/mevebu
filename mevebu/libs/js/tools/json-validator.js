@@ -12,7 +12,7 @@ function describe(data) {
 }
 
 export function mount(slot) {
-  const source = textArea({ rows: 12, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "JSON", placeholder: "Paste JSON" });
+  const source = textArea({ rows: 12, "aria-label": "JSON", placeholder: "Paste JSON" });
   const report = output({ rows: 4 });
   const error = notice("error");
 
@@ -38,8 +38,7 @@ export function mount(slot) {
       stack(panel("JSON", source), error),
       stack(panel("Result", report))
     ),
-    foot: actions(copyButton(() => report.textContent, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => report.textContent, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

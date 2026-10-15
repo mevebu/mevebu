@@ -6,8 +6,8 @@ function fmt(n) {
 }
 
 function tile(label) {
-  const value = el("span", { class: "mvb-stat__v" }, "-");
-  const node = el("div", { class: "mvb-stat" }, value, el("span", { class: "mvb-stat__k" }, label));
+  const value = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "-");
+  const node = el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, value, el("span", { class: "text-2xs font-semibold text-ink-3" }, label));
   node.set = (text) => { value.textContent = text; };
   return node;
 }
@@ -19,7 +19,7 @@ export function mount(slot) {
   const unitsTile = tile("Break-even units");
   const revenueTile = tile("Revenue");
   const marginTile = tile("Contribution");
-  const stats = el("div", { class: "mvb-stats" }, unitsTile, revenueTile, marginTile);
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, unitsTile, revenueTile, marginTile);
   const error = notice("error");
   let text = "";
 
@@ -57,8 +57,7 @@ export function mount(slot) {
       stack(panel("Fixed costs", fixed), panel("Price per unit", price), panel("Variable cost per unit", variable), error),
       stack(stats)
     ),
-    foot: actions(copyButton(() => text, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

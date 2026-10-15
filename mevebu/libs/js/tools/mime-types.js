@@ -9,24 +9,23 @@ const TYPES = [
   ["mp3", "audio/mpeg", "Audio"], ["wav", "audio/wav", "Audio"], ["ogg", "audio/ogg", "Audio"], ["oga", "audio/ogg", "Audio"], ["m4a", "audio/mp4", "Audio"], ["flac", "audio/flac", "Audio"], ["aac", "audio/aac", "Audio"],
   ["mp4", "video/mp4", "Video"], ["webm", "video/webm", "Video"], ["ogv", "video/ogg", "Video"], ["mov", "video/quicktime", "Video"], ["avi", "video/x-msvideo", "Video"], ["mkv", "video/x-matroska", "Video"],
   ["woff", "font/woff", "Font"], ["woff2", "font/woff2", "Font"], ["ttf", "font/ttf", "Font"], ["otf", "font/otf", "Font"], ["eot", "application/vnd.ms-fontobject", "Font"],
-  ["wasm", "application/wasm", "Binary"], ["bin", "application/octet-stream", "Binary"],
-];
+  ["wasm", "application/wasm", "Binary"], ["bin", "application/octet-stream", "Binary"]];
 
 export function mount(slot) {
   const filter = textInput({ type: "search", placeholder: "Extension or type", "aria-label": "Filter" });
-  const scroll = el("div", { class: "mvb-scroll" });
+  const scroll = el("div", { class: "max-h-80 overflow-auto" });
   let visible = TYPES;
 
   function run() {
     const query = filter.value.trim().toLowerCase();
     visible = TYPES.filter(([ext, mime]) => !query || ext.includes(query) || mime.toLowerCase().includes(query));
     if (!visible.length) {
-      scroll.replaceChildren(el("p", { class: "mvb-note" }, "No type matches."));
+      scroll.replaceChildren(el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" }, "No type matches."));
       return;
     }
     scroll.replaceChildren(el(
       "table",
-      { class: "mvb-ttable" },
+      { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" },
       el("thead", {}, el("tr", {}, el("th", {}, "Extension"), el("th", {}, "MIME type"), el("th", {}, "Kind"))),
       el("tbody", {}, ...visible.map(([ext, mime, kind]) => el("tr", {},
         el("td", {}, `.${ext}`),
@@ -43,8 +42,7 @@ export function mount(slot) {
       stack(panel("Filter", filter)),
       stack(panel("MIME types", scroll))
     ),
-    foot: actions(copyButton(() => visible.map(([ext, mime]) => `.${ext} ${mime}`).join("\n"), "Copy list", "fill")),
-  });
+    foot: actions(copyButton(() => visible.map(([ext, mime]) => `.${ext} ${mime}`).join("\n"), "Copy list", "fill"))});
   slot.append(card.node);
   run();
 

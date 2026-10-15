@@ -70,12 +70,12 @@ function luminance({ r, g, b }) {
 }
 
 export function mount(slot) {
-  const anyField = textInput({ value: "#F5B942", class: "mvb-in mvb-in--mono", "aria-label": "Any color" });
+  const anyField = textInput({ value: "#F5B942", mono: true, "aria-label": "Any color" });
   const picker = colorInput({ value: "#f5b942", "aria-label": "Pick a color" });
-  const swatch = el("div", { class: "mvb-swatch" });
+  const swatch = el("div", { class: "h-14 rounded-r1 border border-orbit-hard bg-deck-2" });
 
   const readonly = (label) => {
-    const field = textInput({ readonly: true, class: "mvb-in mvb-in--mono", "aria-label": `${label}, press to copy` });
+    const field = textInput({ readonly: true, mono: true, "aria-label": `${label}, press to copy` });
     const wrap = panel(label, field);
     wrap.style.cursor = "pointer";
     wrap.addEventListener("click", async () => {
@@ -91,7 +91,7 @@ export function mount(slot) {
   const cssField = readonly("CSS variable");
 
   const error = notice("error");
-  const reading = el("p", { class: "mvb-note" });
+  const reading = el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" });
 
   // `from` names the control the value came from. The text field is never
   // rewritten while it is being typed into: "#abc" is valid shorthand one
@@ -136,14 +136,13 @@ export function mount(slot) {
   const card = toolcard({
     body: bench(
       stack(
-        panel("Color", el("div", { class: "mvb-row" }, picker, anyField)),
+        panel("Color", el("div", { class: "flex min-w-0 flex-wrap items-center gap-2" }, picker, anyField)),
         error,
         panel(null, swatch),
         reading
       ),
       stack(hexField, rgbField, hslField, cssField)
-    ),
-  });
+    )});
   slot.append(card.node);
   read("#F5B942", "init");
 

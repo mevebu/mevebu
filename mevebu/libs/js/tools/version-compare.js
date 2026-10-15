@@ -8,8 +8,8 @@ function parse(text) {
 }
 
 export function mount(slot) {
-  const left = textInput({ value: "1.2.0", class: "mvb-in mvb-in--mono", "aria-label": "First version" });
-  const right = textInput({ value: "1.1.5", class: "mvb-in mvb-in--mono", "aria-label": "Second version" });
+  const left = textInput({ value: "1.2.0", mono: true, "aria-label": "First version" });
+  const right = textInput({ value: "1.1.5", mono: true, "aria-label": "Second version" });
   const error = notice("error");
   const out = output({ rows: 8 });
   let text = "";
@@ -59,8 +59,7 @@ export function mount(slot) {
       stack(panel("First version", left), panel("Second version", right), error),
       stack(panel("Comparison", out))
     ),
-    foot: actions(copyButton(() => text, "Copy comparison", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy comparison", "fill"))});
   slot.append(card.node);
   run();
 

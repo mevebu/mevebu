@@ -6,8 +6,7 @@ function relative(date) {
   const abs = Math.abs(diff);
   const units = [
     ["year", 31536000000], ["month", 2592000000], ["day", 86400000],
-    ["hour", 3600000], ["minute", 60000], ["second", 1000],
-  ];
+    ["hour", 3600000], ["minute", 60000], ["second", 1000]];
   for (const [unit, ms] of units) {
     if (abs >= ms) {
       const value = Math.round(abs / ms);
@@ -32,11 +31,11 @@ function parse(text) {
 }
 
 const row = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const source = textInput({ value: "1700000000", "aria-label": "Timestamp or date", placeholder: "1700000000 or 2026-01-01T00:00:00Z" });
-  const kv = el("div", { class: "mvb-kv" });
+  const kv = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" });
   const error = notice("error");
   let iso = "";
 
@@ -74,8 +73,7 @@ export function mount(slot) {
       stack(panel("Timestamp or date", source), error),
       stack(panel("Reading", kv))
     ),
-    foot: actions(nowButton, copyButton(() => iso, "Copy ISO 8601", "fill")),
-  });
+    foot: actions(nowButton, copyButton(() => iso, "Copy ISO 8601", "fill"))});
   slot.append(card.node);
   run();
 

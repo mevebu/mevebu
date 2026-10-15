@@ -5,8 +5,8 @@ const isTiming = (line) => line.includes("-->");
 const isIndex = (line) => /^\d+$/.test(line.trim());
 
 function tile(label) {
-  const value = el("span", { class: "mvb-stat__v" }, "0");
-  const node = el("div", { class: "mvb-stat" }, value, el("span", { class: "mvb-stat__k" }, label));
+  const value = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "0");
+  const node = el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, value, el("span", { class: "text-2xs font-semibold text-ink-3" }, label));
   node.set = (text) => { value.textContent = text; };
   return node;
 }
@@ -18,9 +18,9 @@ export function mount(slot) {
   const linesTile = tile("Lines");
   const longTile = tile("Long lines");
   const longestTile = tile("Longest");
-  const stats = el("div", { class: "mvb-stats" }, linesTile, longTile, longestTile);
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, linesTile, longTile, longestTile);
 
-  const longWrap = el("div", { class: "mvb-scroll" });
+  const longWrap = el("div", { class: "max-h-80 overflow-auto" });
   const out = output({ rows: 10 });
   const note = notice("note");
 
@@ -41,16 +41,16 @@ export function mount(slot) {
     if (!long.length) {
       longWrap.replaceChildren(blank("film", "No line runs past the limit."));
     } else {
-      longWrap.replaceChildren(el("div", { class: "mvb-kv" },
-        ...long.map((line) => el("div", { class: "mvb-kv__row" },
-          el("span", { class: "mvb-kv__k" }, `${line.length}`),
-          el("span", { class: "mvb-kv__v" }, line)))));
+      longWrap.replaceChildren(el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
+        ...long.map((line) => el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" },
+          el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, `${line.length}`),
+          el("span", { class: "wrap-anywhere font-mono text-2xs" }, line)))));
     }
 
     tidied = raw
       .map((line) => line.replace(/\s+$/, ""))
       .join("\n")
-      .replace(/\n{3,}/g, "\n\n")
+      .replace(/\n{3}/g, "\n\n")
       .replace(/^\n+|\n+$/g, "");
     out.write(tidied);
   }
@@ -63,8 +63,7 @@ export function mount(slot) {
       stack(panel("Subtitles", source), panel("Maximum line length", max), note),
       stack(stats, panel("Long lines", longWrap), panel("Tidied", out))
     ),
-    foot: actions(copyButton(() => tidied, "Copy text", "fill")),
-  });
+    foot: actions(copyButton(() => tidied, "Copy text", "fill"))});
   slot.append(card.node);
   run();
 

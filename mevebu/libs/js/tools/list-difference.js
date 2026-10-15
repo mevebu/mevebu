@@ -16,8 +16,8 @@ function uniqueLines(text, ignoreCase) {
 }
 
 function tile(label) {
-  const value = el("span", { class: "mvb-stat__v" }, "0");
-  const node = el("div", { class: "mvb-stat" }, value, el("span", { class: "mvb-stat__k" }, label));
+  const value = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "0");
+  const node = el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, value, el("span", { class: "text-2xs font-semibold text-ink-3" }, label));
   node.set = (text) => { value.textContent = text; };
   return node;
 }
@@ -33,7 +33,7 @@ export function mount(slot) {
   const onlyATile = tile("Only in A");
   const onlyBTile = tile("Only in B");
   const bothTile = tile("In both");
-  const stats = el("div", { class: "mvb-stats" }, onlyATile, onlyBTile, bothTile);
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, onlyATile, onlyBTile, bothTile);
   let report = "";
 
   function run() {
@@ -62,8 +62,7 @@ export function mount(slot) {
       onlyB.join("\n"),
       "",
       `In both (${both.length}):`,
-      both.join("\n"),
-    ].join("\n");
+      both.join("\n")].join("\n");
   }
 
   first.addEventListener("input", run);
@@ -75,8 +74,7 @@ export function mount(slot) {
       stack(panel("List A", first), panel("List B", second), panel(null, caseBox)),
       stack(stats, panel("Only in A", onlyAOut), panel("Only in B", onlyBOut), panel("In both", bothOut))
     ),
-    foot: actions(copyButton(() => report, "Copy report", "fill")),
-  });
+    foot: actions(copyButton(() => report, "Copy report", "fill"))});
   slot.append(card.node);
   run();
 

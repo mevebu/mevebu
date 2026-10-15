@@ -13,8 +13,8 @@ const isUrl = (value) => {
 
 export function mount(slot) {
   const agent = textInput({ value: "*", "aria-label": "User agent" });
-  const disallow = textArea({ rows: 5, class: "mvb-in mvb-in--area mvb-in--mono", placeholder: "/admin\n/private", "aria-label": "Disallow paths" });
-  const allow = textArea({ rows: 3, class: "mvb-in mvb-in--area mvb-in--mono", placeholder: "/public", "aria-label": "Allow paths" });
+  const disallow = textArea({ rows: 5, placeholder: "/admin\n/private", "aria-label": "Disallow paths" });
+  const allow = textArea({ rows: 3, placeholder: "/public", "aria-label": "Allow paths" });
   const sitemap = textInput({ value: "https://example.com/sitemap.xml", "aria-label": "Sitemap URL" });
   const result = output({ rows: 8 });
   const error = notice("error");
@@ -49,8 +49,7 @@ export function mount(slot) {
       ),
       stack(panel("robots.txt", result))
     ),
-    foot: actions(copyButton(() => result.textContent, "Copy robots.txt", "fill")),
-  });
+    foot: actions(copyButton(() => result.textContent, "Copy robots.txt", "fill"))});
   slot.append(card.node);
   build();
 

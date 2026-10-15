@@ -17,16 +17,16 @@ function fmt(n) {
 }
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const source = textInput({ value: "12.5", "aria-label": "Percent", placeholder: "12.5" });
-  const fraction = el("span", { class: "mvb-kv__v" }, "-");
-  const decimal = el("span", { class: "mvb-kv__v" }, "-");
-  const mixed = el("span", { class: "mvb-kv__v" }, "-");
+  const fraction = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const decimal = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const mixed = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
   const kv = el(
     "div",
-    { class: "mvb-kv" },
+    { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("Fraction", fraction),
     kvRow("Decimal", decimal),
     kvRow("Mixed number", mixed)
@@ -85,8 +85,7 @@ export function mount(slot) {
       stack(panel("Percent", source), error),
       stack(panel("Result", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy fraction", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy fraction", "fill"))});
   slot.append(card.node);
   run();
 

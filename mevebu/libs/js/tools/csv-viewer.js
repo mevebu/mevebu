@@ -53,27 +53,26 @@ function detectDelimiter(text) {
 }
 
 function tile(label) {
-  const value = el("span", { class: "mvb-stat__v" }, "0");
-  const node = el("div", { class: "mvb-stat" }, value, el("span", { class: "mvb-stat__k" }, label));
+  const value = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "0");
+  const node = el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, value, el("span", { class: "text-2xs font-semibold text-ink-3" }, label));
   node.set = (text) => { value.textContent = text; };
   return node;
 }
 
 export function mount(slot) {
-  const source = textArea({ rows: 12, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "CSV", placeholder: "Paste CSV here" });
+  const source = textArea({ rows: 12, "aria-label": "CSV", placeholder: "Paste CSV here" });
   const delimiter = selectInput([
     { value: "auto", label: "Auto" },
     { value: ",", label: "Comma" },
     { value: ";", label: "Semicolon" },
     { value: "\t", label: "Tab" },
-    { value: "|", label: "Pipe" },
-  ], { value: "auto", "aria-label": "Delimiter" });
+    { value: "|", label: "Pipe" }], { value: "auto", "aria-label": "Delimiter" });
   const file = fileInput({ accept: ".csv,.tsv,.txt,text/csv", "aria-label": "CSV file" });
 
-  const tableWrap = el("div", { class: "mvb-scroll" });
+  const tableWrap = el("div", { class: "max-h-80 overflow-auto" });
   const rowsTile = tile("Rows");
   const colsTile = tile("Columns");
-  const stats = el("div", { class: "mvb-stats" }, rowsTile, colsTile);
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, rowsTile, colsTile);
   const error = notice("error");
   let current = [];
 
@@ -82,7 +81,7 @@ export function mount(slot) {
     const text = source.value;
     if (!text.trim()) {
       current = [];
-      tableWrap.replaceChildren(el("p", { class: "mvb-note" }, "Paste CSV or choose a file."));
+      tableWrap.replaceChildren(el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" }, "Paste CSV or choose a file."));
       rowsTile.set("0");
       colsTile.set("0");
       return;
@@ -97,7 +96,7 @@ export function mount(slot) {
     }
     rowsTile.set(String(body.length));
     colsTile.set(String(header.length));
-    tableWrap.replaceChildren(el("table", { class: "mvb-ttable" },
+    tableWrap.replaceChildren(el("table", { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" },
       el("thead", {}, el("tr", {}, ...header.map((cell, i) => el("th", {}, cell || `Column ${i + 1}`)))),
       el("tbody", {}, ...body.map((row) => el("tr", {}, ...header.map((_, i) => el("td", {}, row[i] ?? "")))))
     ));
@@ -121,8 +120,7 @@ export function mount(slot) {
       stack(panel("CSV", source), panel("Delimiter", delimiter), panel("CSV file", file), error),
       stack(stats, panel("Table", tableWrap))
     ),
-    foot: actions(clearButton, copyButton(() => current.map((row) => row.join("\t")).join("\n"), "Copy table", "fill")),
-  });
+    foot: actions(clearButton, copyButton(() => current.map((row) => row.join("\t")).join("\n"), "Copy table", "fill"))});
   slot.append(card.node);
   run();
 

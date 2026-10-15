@@ -4,11 +4,10 @@ import { bench, stack, panel, textInput, chipRow, output, notice, copyButton, ac
 const BUMPS = [
   { value: "major", label: "Major" },
   { value: "minor", label: "Minor" },
-  { value: "patch", label: "Patch" },
-];
+  { value: "patch", label: "Patch" }];
 
 export function mount(slot) {
-  const version = textInput({ value: "1.2.3", class: "mvb-in mvb-in--mono", "aria-label": "Current version" });
+  const version = textInput({ value: "1.2.3", mono: true, "aria-label": "Current version" });
   const prerelease = textInput({ value: "", placeholder: "rc.1", "aria-label": "Prerelease tag" });
   const error = notice("error");
   const out = output({ rows: 1 });
@@ -43,8 +42,7 @@ export function mount(slot) {
       stack(panel("Current version", version), panel("Bump", chips), panel("Prerelease", prerelease), error),
       stack(panel("New version", out))
     ),
-    foot: actions(copyButton(() => text, "Copy version", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy version", "fill"))});
   slot.append(card.node);
   run();
 

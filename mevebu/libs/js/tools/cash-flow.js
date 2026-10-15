@@ -20,15 +20,15 @@ export function mount(slot) {
     [{ value: "in", label: "In" }, { value: "out", label: "Out" }],
     { value: "in", label: "Direction", onChange: (next) => { type = next; } }
   );
-  const listWrap = el("div", { class: "mvb-scroll" });
-  const stats = el("div", { class: "mvb-stats" });
+  const listWrap = el("div", { class: "max-h-80 overflow-auto" });
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" });
 
   const addButton = button("Add", { icon: "plus", kind: "fill" });
 
   const save = () => writePin(PIN, { opening: Number(opening.value) || 0, entries });
-  const tile = (key, value) => el("div", { class: "mvb-stat" },
-    el("span", { class: "mvb-stat__v" }, String(value)),
-    el("span", { class: "mvb-stat__k" }, key));
+  const tile = (key, value) => el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" },
+    el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, String(value)),
+    el("span", { class: "text-2xs font-semibold text-ink-3" }, key));
 
   function totals() {
     let balance = Number(opening.value) || 0;
@@ -69,7 +69,7 @@ export function mount(slot) {
           el("td", {}, fmt(balance)),
           el("td", {}, removeButton(entry)));
       });
-      listWrap.replaceChildren(el("table", { class: "mvb-ttable" },
+      listWrap.replaceChildren(el("table", { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" },
         el("thead", {}, el("tr", {}, el("th", {}, "Label"), el("th", {}, "In"), el("th", {}, "Out"), el("th", {}, "Balance"), el("th", {}, ""))),
         el("tbody", {}, ...rows)));
     }
@@ -113,8 +113,7 @@ export function mount(slot) {
       copyButton(() => totals().lines.join("\n"), "Copy summary"),
       downloadButton(() => csv(), "cash-flow.csv", "Save CSV", "text/csv"),
       addButton
-    ),
-  });
+    )});
   slot.append(card.node);
   render();
 

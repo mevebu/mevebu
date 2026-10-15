@@ -19,7 +19,7 @@ export function mount(slot) {
     { value: "Idea", label: "Status", onChange: (next) => { status = next; } }
   );
 
-  const listWrap = el("div", { class: "mvb-scroll" });
+  const listWrap = el("div", { class: "max-h-80 overflow-auto" });
   const addButton = button("Add", { icon: "plus", kind: "fill" });
 
   const save = () => writePin(PIN, { entries });
@@ -46,7 +46,7 @@ export function mount(slot) {
       el("td", {}, entry.platform || ""),
       el("td", {}, entry.status),
       el("td", {}, removeButton(entry))));
-    listWrap.replaceChildren(el("table", { class: "mvb-ttable" },
+    listWrap.replaceChildren(el("table", { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" },
       el("thead", {}, el("tr", {},
         el("th", {}, "Date"), el("th", {}, "Topic"), el("th", {}, "Platform"), el("th", {}, "Status"), el("th", {}, ""))),
       el("tbody", {}, ...rows)));
@@ -100,8 +100,7 @@ export function mount(slot) {
       downloadButton(() => csv(), "content-calendar.csv", "Save CSV", "text/csv"),
       downloadButton(() => markdown(), "content-calendar.md", "Save Markdown", "text/markdown"),
       addButton
-    ),
-  });
+    )});
   slot.append(card.node);
   render();
 

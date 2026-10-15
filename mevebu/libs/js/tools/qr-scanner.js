@@ -19,9 +19,9 @@ function loadJsQR() {
 }
 
 export function mount(slot) {
-  const video = el("video", { class: "mvb-qrview", playsinline: true, muted: true, hidden: true });
+  const video = el("video", { class: "w-[min(420px,100%)] rounded-r2 border border-orbit-hard bg-black", playsinline: true, muted: true, hidden: true });
   const fileField = el("input", { type: "file", accept: "image/*", hidden: true, "aria-label": "Image file" });
-  const status = el("p", { class: "mvb-note" });
+  const status = el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" });
   const found = output({ rows: 3 });
   const error = notice("error");
 
@@ -32,15 +32,15 @@ export function mount(slot) {
   const paint = scratch.getContext("2d", { willReadFrequently: true });
 
   const startButton = button("Start camera", { icon: "camera", kind: "fill" });
-  const stopButton = el("button", { class: "mvb-btn mvb-btn--plain", type: "button", hidden: true }, icon("video-off"), el("span", {}, "Stop"));
+  const stopButton = el("button", { class: "inline-flex min-h-[var(--ctl)] cursor-pointer items-center justify-center gap-2 rounded-r1 border px-4 text-sm font-semibold whitespace-nowrap no-underline transition-[background-color,border-color,color,transform] duration-150 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 border-orbit bg-deck text-ink hover:border-orbit-hard hover:bg-deck-2", type: "button", hidden: true }, icon("video-off"), el("span", {}, "Stop"));
   const uploadButton = button("Choose an image", { icon: "upload" });
   const copyButton = button("Copy", { icon: "copy" });
-  const openWrap = el("span", { class: "mvb-row" });
+  const openWrap = el("span", { class: "flex min-w-0 flex-wrap items-center gap-2" });
 
   const drop = el(
     "div",
-    { class: "mvb-drop", role: "button", tabindex: "0", "aria-label": "Drop an image here or choose one" },
-    icon("image-up", "mvb-ico mvb-ico--lg"),
+    { class: "grid cursor-pointer justify-items-center gap-2 rounded-r2 border border-dashed border-orbit-hard px-4 py-7 text-sm text-ink-3 transition-colors duration-150 hover:border-jade hover:bg-jade-soft data-[drag]:border-jade data-[drag]:bg-jade-soft", role: "button", tabindex: "0", "aria-label": "Drop an image here or choose one" },
+    icon("image-up", "size-[26px] flex-none"),
     el("p", {}, "Drop an image here, or choose one.")
   );
 
@@ -50,7 +50,7 @@ export function mount(slot) {
     error.write("");
     openWrap.replaceChildren();
     if (/^https?:\/\//i.test(text.trim())) {
-      openWrap.append(el("a", { class: "mvb-btn mvb-btn--plain", href: text.trim(), target: "_blank", rel: "noopener" },
+      openWrap.append(el("a", { class: "inline-flex min-h-[var(--ctl)] cursor-pointer items-center justify-center gap-2 rounded-r1 border px-4 text-sm font-semibold whitespace-nowrap no-underline transition-[background-color,border-color,color,transform] duration-150 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 border-orbit bg-deck text-ink hover:border-orbit-hard hover:bg-deck-2", href: text.trim(), target: "_blank", rel: "noopener" },
         icon("external-link"), el("span", {}, "Open link")));
     }
     toast("Found");
@@ -159,12 +159,12 @@ export function mount(slot) {
   });
   drop.addEventListener("dragover", (event) => {
     event.preventDefault();
-    drop.classList.add("mvb-drag");
+    drop.dataset.drag = "";
   });
-  drop.addEventListener("dragleave", () => drop.classList.remove("mvb-drag"));
+  drop.addEventListener("dragleave", () => delete drop.dataset.drag);
   drop.addEventListener("drop", (event) => {
     event.preventDefault();
-    drop.classList.remove("mvb-drag");
+    delete drop.dataset.drag;
     if (event.dataTransfer.files[0]) scanFile(event.dataTransfer.files[0]);
   });
   copyButton.addEventListener("click", async () => {
@@ -180,8 +180,7 @@ export function mount(slot) {
       stack(video, drop, fileField, status, error),
       panel("Decoded", found)
     ),
-    foot: actions(openWrap, copyButton),
-  });
+    foot: actions(openWrap, copyButton)});
   slot.append(card.node);
 
   return { unmount: stop };

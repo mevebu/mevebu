@@ -4,7 +4,7 @@ import { el, bench, stack, panel, textArea, switchControl, copyButton, actions, 
 const bytes = (text) => new TextEncoder().encode(text).length;
 
 const tile = (key, value) =>
-  el("div", { class: "mvb-stat" }, el("span", { class: "mvb-stat__v" }, value), el("span", { class: "mvb-stat__k" }, key));
+  el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, value), el("span", { class: "text-2xs font-semibold text-ink-3" }, key));
 
 function minify(sql, stripComments) {
   let out = "";
@@ -59,12 +59,10 @@ function minify(sql, stripComments) {
 export function mount(slot) {
   const source = textArea({
     rows: 12,
-    class: "mvb-in mvb-in--area mvb-in--mono",
     "aria-label": "SQL",
-    value: "SELECT id,\n       name\n  FROM users\n WHERE active = true\n   AND age > 18;",
-  });
-  const result = textArea({ rows: 12, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Minified SQL" });
-  const stats = el("div", { class: "mvb-stats" });
+    value: "SELECT id,\n       name\n  FROM users\n WHERE active = true\n   AND age > 18;"});
+  const result = textArea({ rows: 12, readonly: true, "aria-label": "Minified SQL" });
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" });
   let stripComments = true;
 
   const comments = switchControl("Remove comments", { checked: true });
@@ -91,8 +89,7 @@ export function mount(slot) {
       stack(panel("Options", comments), panel("SQL", source)),
       stack(panel("Minified", result), stats)
     ),
-    foot: actions(copyButton(() => result.value, "Copy query", "fill")),
-  });
+    foot: actions(copyButton(() => result.value, "Copy query", "fill"))});
   slot.append(card.node);
   run();
 

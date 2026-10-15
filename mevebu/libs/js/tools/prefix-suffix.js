@@ -6,7 +6,7 @@ export function mount(slot) {
   const prefixField = textInput({ placeholder: "Prefix", "aria-label": "Prefix" });
   const suffixField = textInput({ placeholder: "Suffix", "aria-label": "Suffix" });
   const numbering = checkbox("Numbering", { checked: false });
-  const result = textArea({ rows: 11, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Result" });
+  const result = textArea({ rows: 11, readonly: true, "aria-label": "Result" });
 
   function run() {
     const text = source.value;
@@ -35,8 +35,7 @@ export function mount(slot) {
       ),
       stack(panel("Result", result))
     ),
-    foot: actions(copyButton(() => result.value, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => result.value, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

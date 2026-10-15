@@ -32,20 +32,20 @@ function calendarDiff(from, to) {
 }
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const today = new Date();
   const birth = textInput({ type: "date", value: "1990-01-01", "aria-label": "Birth date" });
   const at = textInput({ type: "date", value: `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`, "aria-label": "Age at date" });
 
-  const age = el("span", { class: "mvb-kv__v" }, "-");
-  const totalDays = el("span", { class: "mvb-kv__v" }, "-");
-  const nextDate = el("span", { class: "mvb-kv__v" }, "-");
-  const nextIn = el("span", { class: "mvb-kv__v" }, "-");
+  const age = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const totalDays = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const nextDate = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const nextIn = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
   const kv = el(
     "div",
-    { class: "mvb-kv" },
+    { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("Age", age),
     kvRow("Total days", totalDays),
     kvRow("Next birthday", nextDate),
@@ -97,8 +97,7 @@ export function mount(slot) {
       stack(panel("Birth date", birth), panel("Age at", at), error),
       stack(panel("Result", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy age", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy age", "fill"))});
   slot.append(card.node);
   run();
 

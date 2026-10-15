@@ -14,15 +14,14 @@ function slugify(text, sep) {
 
 export function mount(slot) {
   const source = textInput({ value: "Hello mevebu world", placeholder: "Title", "aria-label": "Title" });
-  const result = textInput({ readonly: true, class: "mvb-in mvb-in--mono", "aria-label": "Slug" });
+  const result = textInput({ readonly: true, mono: true, "aria-label": "Slug" });
 
   let sep = "-";
   const chips = chipRow(
     [
       { value: "-", label: "Hyphen" },
       { value: "_", label: "Underscore" },
-      { value: ".", label: "Dot" },
-    ],
+      { value: ".", label: "Dot" }],
     { value: "-", label: "Separator", onChange: (value) => { sep = value; run(); } }
   );
 
@@ -37,8 +36,7 @@ export function mount(slot) {
       stack(panel("Title", source), panel("Separator", chips)),
       stack(panel("Slug", result))
     ),
-    foot: actions(copyButton(() => result.value, "Copy slug", "fill")),
-  });
+    foot: actions(copyButton(() => result.value, "Copy slug", "fill"))});
   slot.append(card.node);
   run();
 

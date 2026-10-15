@@ -12,8 +12,7 @@ const VERSIONS = [
   { value: "v1", label: "v1" },
   { value: "v6", label: "v6" },
   { value: "nil", label: "Nil" },
-  { value: "max", label: "Max" },
-];
+  { value: "max", label: "Max" }];
 
 const toHex = (bytes) => [...bytes].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 const group = (hex) => `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
@@ -105,8 +104,7 @@ export function mount(slot) {
     onChange: (value) => {
       version = value;
       generate();
-    },
-  });
+    }});
 
   function totalCount() {
     return Math.max(1, Math.min(1000, parseInt(countField.value || "1", 10) || 1));
@@ -122,8 +120,7 @@ export function mount(slot) {
       count: String(total),
       caps: capsBox.input.checked,
       noHyphens: hyphensBox.input.checked,
-      version,
-    });
+      version});
   }
 
   const generateButton = button("Generate", { icon: "refresh-cw", kind: "fill" });
@@ -156,11 +153,10 @@ export function mount(slot) {
 
   const card = toolcard({
     body: bench(
-      stack(panel("Version", versions), panel("How many", countField), el("div", { class: "mvb-chips" }, capsBox, hyphensBox)),
+      stack(panel("Version", versions), panel("How many", countField), el("div", { class: "flex flex-wrap gap-1.5" }, capsBox, hyphensBox)),
       result
     ),
-    foot: actions(copyButton, jsonButton, saveButton, generateButton),
-  });
+    foot: actions(copyButton, jsonButton, saveButton, generateButton)});
   slot.append(card.node);
   generate();
 

@@ -12,16 +12,15 @@ const FONTS = [
   { value: 'Palatino, "Palatino Linotype", serif', label: "Palatino" },
   { value: "Garamond, Georgia, serif", label: "Garamond" },
   { value: '"Courier New", Courier, monospace', label: "Courier New" },
-  { value: "ui-monospace, SFMono-Regular, Menlo, monospace", label: "Mono" },
-];
+  { value: "ui-monospace, SFMono-Regular, Menlo, monospace", label: "Mono" }];
 
 function slider(label, { min, max, step, value, unit }) {
   const input = rangeInput({ min, max, step, value, "aria-label": label });
-  const val = el("span", { class: "mvb-slider__val" }, `${value}${unit}`);
+  const val = el("span", { class: "text-end font-mono text-2xs text-ink-2" }, `${value}${unit}`);
   const node = el(
     "div",
-    { class: "mvb-slider" },
-    el("span", { class: "mvb-slider__label" }, label),
+    { class: "grid items-center gap-2.5 [grid-template-columns:88px_minmax(0,1fr)_62px] max-[45rem]:[grid-template-columns:minmax(0,1fr)_62px]" },
+    el("span", { class: "text-2xs font-semibold text-ink-2 max-[45rem]:col-span-2" }, label),
     input,
     val
   );
@@ -46,7 +45,7 @@ export function mount(slot) {
 
   const heading = el("h2", { style: "margin:0 0 8px" }, "Heading sample");
   const para = el("p", { style: "margin:0" }, "Body text sample. The quick brown fox jumps over the lazy dog.");
-  const sample = el("div", { class: "mvb-preview__sample" }, heading, para);
+  const sample = el("div", { class: "w-full rounded-lg border border-orbit bg-deck px-[18px] py-4" }, heading, para);
   const code = output();
 
   function css() {
@@ -77,8 +76,7 @@ export function mount(slot) {
       stack(panel("Heading font", headingFont), panel("Body font", bodyFont), headingSize, bodySize, lineHeight, panel("Heading weight", weightChips)),
       stack(sample, code)
     ),
-    foot: actions(copyButton(css, "Copy CSS", "fill")),
-  });
+    foot: actions(copyButton(css, "Copy CSS", "fill"))});
   slot.append(card.node);
   update();
 

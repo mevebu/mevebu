@@ -12,10 +12,10 @@ export function mount(slot) {
 
   const question = textInput({ placeholder: "Question", "aria-label": "Question" });
   const answer = textArea({ rows: 3, placeholder: "Answer", "aria-label": "Answer" });
-  const listWrap = el("div", { class: "mvb-scroll" });
-  const stats = el("div", { class: "mvb-stats" });
-  const face = el("pre", { class: "mvb-out" });
-  const faceLabel = el("span", { class: "mvb-field__label" }, "Question");
+  const listWrap = el("div", { class: "max-h-80 overflow-auto" });
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" });
+  const face = el("pre", { class: "m-0 max-h-[340px] w-full overflow-auto rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3 font-mono text-sm leading-normal whitespace-pre-wrap [overflow-wrap:anywhere]" });
+  const faceLabel = el("span", { class: "text-sm font-semibold text-ink-2" }, "Question");
 
   const addButton = button("Add card", { icon: "plus", kind: "fill" });
   const flipButton = button("Flip", { icon: "arrow-left-right" });
@@ -23,9 +23,9 @@ export function mount(slot) {
   const nextButton = button("Next");
 
   const save = () => writePin(PIN, cards);
-  const tile = (key, value) => el("div", { class: "mvb-stat" },
-    el("span", { class: "mvb-stat__v" }, String(value)),
-    el("span", { class: "mvb-stat__k" }, key));
+  const tile = (key, value) => el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" },
+    el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, String(value)),
+    el("span", { class: "text-2xs font-semibold text-ink-3" }, key));
 
   const textExport = () =>
     cards.map((card, i) => `${i + 1}. Q: ${card.question}\n   A: ${card.answer}`).join("\n\n");
@@ -52,7 +52,7 @@ export function mount(slot) {
       const card = cards[index];
       faceLabel.textContent = flipped ? "Answer" : "Question";
       face.textContent = flipped ? card.answer : card.question;
-      listWrap.replaceChildren(el("table", { class: "mvb-ttable" },
+      listWrap.replaceChildren(el("table", { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" },
         el("tbody", {}, ...cards.map((entry, i) => el("tr", {},
           el("th", {}, `${i + 1}. ${entry.question}`),
           el("td", {}, removeButton(entry)))))));
@@ -106,8 +106,7 @@ export function mount(slot) {
       copyButton(() => textExport(), "Copy text"),
       downloadButton(() => jsonExport(), "flashcards.json", "Save JSON", "application/json"),
       addButton
-    ),
-  });
+    )});
   slot.append(card.node);
   render();
 

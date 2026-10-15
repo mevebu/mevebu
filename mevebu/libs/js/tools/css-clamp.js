@@ -3,11 +3,11 @@ import { el, bench, stack, rangeInput, output, copyButton, actions, toolcard } f
 
 function slider(label, { min, max, step, value, unit }) {
   const input = rangeInput({ min, max, step, value, "aria-label": label });
-  const val = el("span", { class: "mvb-slider__val" }, `${value}${unit}`);
+  const val = el("span", { class: "text-end font-mono text-2xs text-ink-2" }, `${value}${unit}`);
   const node = el(
     "div",
-    { class: "mvb-slider" },
-    el("span", { class: "mvb-slider__label" }, label),
+    { class: "grid items-center gap-2.5 [grid-template-columns:88px_minmax(0,1fr)_62px] max-[45rem]:[grid-template-columns:minmax(0,1fr)_62px]" },
+    el("span", { class: "text-2xs font-semibold text-ink-2 max-[45rem]:col-span-2" }, label),
     input,
     val
   );
@@ -24,7 +24,7 @@ export function mount(slot) {
 
   const sample = el(
     "div",
-    { class: "mvb-preview__sample" },
+    { class: "w-full rounded-lg border border-orbit bg-deck px-[18px] py-4" },
     el("p", { style: "margin:0" }, "The quick brown fox jumps over the lazy dog.")
   );
   const code = output();
@@ -55,8 +55,7 @@ export function mount(slot) {
       stack(min, preferred, max),
       stack(sample, code)
     ),
-    foot: actions(copyButton(() => `font-size: ${clampValue()};`, "Copy CSS", "fill")),
-  });
+    foot: actions(copyButton(() => `font-size: ${clampValue()};`, "Copy CSS", "fill"))});
   slot.append(card.node);
   update();
 

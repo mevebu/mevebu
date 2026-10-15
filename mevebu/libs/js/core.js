@@ -1,6 +1,11 @@
 // Shared utilities for every mevebu tool: DOM building, storage, clipboard,
 // crypto helpers, the bench controls, the modal, and the command palette.
-// Every class this file emits starts with mvb-.
+//
+// The interface is Tailwind, and this file is where the shared pieces of it live,
+// so a control is written once instead of in 186 tools. Every class string below
+// is a plain Tailwind utility list, and DESIGN.md section 3 pins the values they
+// resolve to. A tool passes only the delta it needs: `class` is merged onto the
+// helper's own class list, never substituted for it.
 
 import { svg, hasIcon } from "./icons.js";
 import { CATEGORIES, TOOLS, toolHref, getCategory } from "./registry.js";
@@ -46,7 +51,7 @@ export function clear(node) {
   return node;
 }
 
-export function icon(name, cls = "mvb-ico") {
+export function icon(name, cls = "size-[18px] flex-none") {
   return svg(name, cls);
 }
 
@@ -152,33 +157,60 @@ export function download(filename, data, mime = "text/plain") {
 let toastTimer;
 
 export function toast(message) {
-  let node = $("#mvb-toast");
+  let node = $("#toast");
   if (!node) {
-    node = el("div", { id: "mvb-toast", class: "mvb-toast", role: "status", "aria-live": "polite" });
+    node = el("div", {
+      id: "toast",
+      class: "pointer-events-none fixed bottom-6 left-1/2 z-90 -translate-x-1/2 translate-y-3 rounded-r1 bg-ink px-4 py-2.5 text-sm font-semibold text-void opacity-0 transition-[opacity,translate] duration-150 data-[on]:translate-y-0 data-[on]:opacity-100",
+      role: "status",
+      "aria-live": "polite",
+    });
     document.body.append(node);
   }
   node.textContent = message;
-  node.classList.add("mvb-on");
+  node.dataset.on = "";
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => node.classList.remove("mvb-on"), 1800);
+  toastTimer = setTimeout(() => delete node.dataset.on, 1800);
 }
 
 // ---------- modal ----------
 
 let lastFocus = null;
 
-/**
- * Opens a modal built from `body` nodes. Returns a close function.
- * Escape and backdrop clicks close it. Focus moves in and back out.
- */
-export function modal({ label, body, actions = [], onOpen, onClose, veilClass } = {}) {
+/* One panel shape for the whole app: an optional sigil head, body copy, then an
+   action row that follows the same rule as a tool card (primary last, rightmost).
+   A close button is always in the corner, and Escape or a backdrop click does the
+   same thing. This is the only surface in the app that carries a shadow, because
+   it is the only one that genuinely floats above the page. */
+const MODAL_BODY = "grid gap-2.5 [&_p]:text-pretty [&_p]:text-ink-2";
+
+/** The head every modal opens with: a sigil for what the dialog is about, then its title. */
+export function modalHead(iconName, title) {
+  return el(
+    "div",
+    { class: "flex items-center gap-3 pe-10" },
+    el("span", { class: "grid size-11 flex-none place-items-center rounded-xl border border-orbit bg-jade-soft text-jade [&_svg]:size-[22px]" }, icon(iconName)),
+    el("h2", { class: "text-xl font-bold tracking-[-0.02em]" }, title)
+  );
+}
+
+export function modal({ label, body, actions = [], onOpen, onClose, panelClass } = {}) {
   lastFocus = document.activeElement;
-  const veil = el("div", { class: "mvb-veil" + (veilClass ? ` ${veilClass}` : "") });
+  const veil = el("div", {
+    class: "group fixed inset-0 z-80 grid items-start justify-items-center overflow-y-auto bg-[var(--scrim)] px-5 pt-[clamp(60px,9vh,110px)] pb-10 opacity-0 transition-opacity duration-200 data-[state=open]:opacity-100",
+  });
   const panel = el(
     "div",
-    { class: "mvb-modal", role: "dialog", "aria-modal": "true", "aria-label": label },
-    el("div", { class: "mvb-modal__body" }, ...body),
-    actions.length ? el("div", { class: "mvb-modal__actions" }, ...actions) : null
+    {
+      class:
+        "relative grid gap-4 rounded-r3 border border-orbit bg-deck shadow-[var(--shadow)] transition-transform duration-200 ease-[var(--ease)] translate-y-3.5 scale-[0.97] group-data-[state=open]:translate-y-0 group-data-[state=open]:scale-100 " +
+        (panelClass ?? "w-[min(480px,100%)] p-[clamp(22px,3vw,28px)]"),
+      role: "dialog",
+      "aria-modal": "true",
+      "aria-label": label,
+    },
+    body ? el("div", { class: MODAL_BODY }, ...body) : null,
+    actions.length ? el("div", { class: "mt-1 flex flex-wrap items-center justify-end gap-2" }, ...actions) : null
   );
   veil.append(panel);
   document.body.append(veil);
@@ -188,7 +220,7 @@ export function modal({ label, body, actions = [], onOpen, onClose, veilClass } 
   const close = () => {
     if (closed) return;
     closed = true;
-    veil.classList.add("mvb-off");
+    delete veil.dataset.state;
     onClose?.();
     setTimeout(() => {
       veil.remove();
@@ -198,6 +230,17 @@ export function modal({ label, body, actions = [], onOpen, onClose, veilClass } 
     if (lastFocus?.focus) lastFocus.focus();
   };
 
+  const closeButton = el("button", {
+    class: "absolute top-3 end-3 inline-flex size-9 cursor-pointer items-center justify-center rounded-r1 border border-transparent bg-transparent text-ink-3 transition-colors duration-150 hover:bg-deck-2 hover:text-ink",
+    type: "button",
+    "aria-label": "Close",
+    onclick: () => close(),
+  }, icon("x"));
+
+  // The button is inside the panel, after its content, so it never lands in the
+  // tab order ahead of the dialog's own controls.
+  panel.append(closeButton);
+
   const onKey = (event) => {
     if (event.key === "Escape") close();
   };
@@ -206,7 +249,9 @@ export function modal({ label, body, actions = [], onOpen, onClose, veilClass } 
   });
   document.addEventListener("keydown", onKey);
 
-  requestAnimationFrame(() => veil.classList.add("mvb-open"));
+  requestAnimationFrame(() => {
+    veil.dataset.state = "open";
+  });
   onOpen?.({ close, panel });
   return close;
 }
@@ -228,27 +273,32 @@ export function openPalette({ onPick } = {}) {
   }));
 
   const input = el("input", {
-    class: "mvb-pal__in",
+    class: "h-[var(--ctl)] min-w-0 flex-1 border-0 bg-transparent text-md outline-none placeholder:text-ink-3",
     type: "search",
     placeholder: "Search tools",
     "aria-label": "Search tools",
     autocomplete: "off",
     spellcheck: "false",
   });
-  const list = el("ul", { class: "mvb-pal__list", role: "listbox" });
-  const count = el("p", { class: "mvb-pal__count" });
+  const list = el("ul", { class: "m-0 mt-1.5 max-h-[min(60vh,360px)] overflow-y-auto px-2 pb-2", role: "listbox" });
+  const count = el("p", { class: "m-0 px-[18px] pt-2 text-2xs text-ink-3" });
   const footer = el(
     "p",
-    { class: "mvb-pal__foot" },
+    { class: "m-0 flex flex-wrap items-center gap-2.5 border-t border-orbit px-[18px] py-2.5 text-2xs text-ink-3" },
     "↑↓ navigate  ",
-    el("kbd", { class: "mvb-kbd" }, "↵"),
+    el("kbd", { class: "rounded-[5px] border border-orbit-hard px-[7px] py-px font-sans text-2xs leading-[1.45] text-ink-3" }, "↵"),
     " open  ",
-    el("kbd", { class: "mvb-kbd" }, "esc"),
+    el("kbd", { class: "rounded-[5px] border border-orbit-hard px-[7px] py-px font-sans text-2xs leading-[1.45] text-ink-3" }, "esc"),
     " close"
   );
 
   const body = [
-    el("div", { class: "mvb-pal__head" }, icon("search", "mvb-ico mvb-ico--lg mvb-pal__icon"), input),
+    el(
+      "div",
+      { class: "flex items-center gap-3 border-b border-orbit py-4 pe-12 ps-[18px]" },
+      icon("search", "size-[26px] flex-none text-ink-3"),
+      input
+    ),
     count,
     list,
     footer,
@@ -269,23 +319,24 @@ export function openPalette({ onPick } = {}) {
         return el(
           "li",
           {
-            class: "mvb-pal__item" + (i === index ? " mvb-on" : ""),
+            class:
+              "group flex w-full cursor-pointer items-center gap-3 rounded-r1 border-0 bg-transparent px-3 py-2.5 text-start text-ink transition-colors duration-150 data-[on]:bg-jade-soft",
             role: "option",
             dataset: { href: toolHref(tool) },
             "aria-selected": String(i === index),
             onmousemove: () => setIndex(i),
             onclick: () => pick(i),
           },
-          el("span", { class: "mvb-pal__sigil" }, icon(tool.icon)),
-          el("span", { class: "mvb-pal__text" },
-            el("span", { class: "mvb-pal__name" }, tool.name),
-            el("span", { class: "mvb-pal__note" }, tool.note)),
-          el("span", { class: "mvb-pal__cat" }, category?.name ?? "")
+          el("span", { class: "grid size-8 flex-none place-items-center rounded-lg bg-deck-2 text-jade [&_svg]:size-4" }, icon(tool.icon)),
+          el("span", { class: "grid min-w-0 flex-1 gap-px" },
+            el("span", { class: "text-sm font-semibold tracking-[-0.01em] group-data-[on]:text-jade" }, tool.name),
+            el("span", { class: "overflow-hidden text-2xs text-ellipsis whitespace-nowrap text-ink-2" }, tool.note)),
+          el("span", { class: "whitespace-nowrap text-2xs text-ink-3" }, category?.name ?? "")
         );
       })
     );
     if (!current.length) {
-      list.append(el("li", { class: "mvb-pal__empty" }, "No tool matches “", query, "”."));
+      list.append(el("li", { class: "p-[18px] text-sm text-ink-3" }, "No tool matches “", query, "”."));
     }
     count.textContent = q
       ? `${current.length} of ${tools.length} tools`
@@ -295,9 +346,12 @@ export function openPalette({ onPick } = {}) {
   function setIndex(next) {
     if (!current.length) return;
     index = (next + current.length) % current.length;
-    for (const item of list.children) item.classList.remove("mvb-on");
-    list.children[index]?.classList.add("mvb-on");
-    list.children[index]?.scrollIntoView({ block: "nearest" });
+    for (const item of list.children) delete item.dataset.on;
+    const active = list.children[index];
+    if (active) {
+      active.dataset.on = "";
+      active.scrollIntoView({ block: "nearest" });
+    }
   }
 
   function pick(at) {
@@ -310,6 +364,7 @@ export function openPalette({ onPick } = {}) {
   const close = modal({
     label: "Search tools",
     body,
+    panelClass: "w-[min(640px,100%)] overflow-hidden p-0",
     onOpen: ({ close: doClose, panel: modalPanel }) => {
       input.focus();
       input.addEventListener("input", () => paint(input.value));
@@ -321,7 +376,6 @@ export function openPalette({ onPick } = {}) {
       void modalPanel;
       void doClose;
     },
-    veilClass: "mvb-veil--pal",
   });
 
   paint("");
@@ -363,29 +417,31 @@ export function debounce(fn, ms = 120) {
 
 /** Two column bench: controls on the left, the result on the right. */
 export function bench(side, main) {
-  return el("div", { class: "mvb-bench" }, el("div", { class: "mvb-bench__side" }, side), el("div", { class: "mvb-bench__main" }, main));
+  return el(
+    "div",
+    { class: "grid items-start gap-5 min-[60rem]:grid-cols-[minmax(0,21rem)_minmax(0,1fr)] min-[60rem]:gap-6" },
+    el("div", { class: "min-w-0" }, side),
+    el("div", { class: "min-w-0" }, main)
+  );
 }
 
 /** Single centred stage for tools whose whole interface is one object. */
 export function stage(...nodes) {
-  return el("div", { class: "mvb-stage" }, ...nodes);
+  return el("div", { class: "mx-auto grid max-w-[560px] justify-items-center gap-4 text-center max-[45rem]:justify-items-stretch max-[45rem]:text-start" }, ...nodes);
 }
 
 export function stack(...nodes) {
-  return el("div", { class: "mvb-stack" }, ...nodes);
+  return el("div", { class: "grid content-start gap-4" }, ...nodes);
 }
 
-/**
- * Row of controls. Pass anything; it sits in the row. Use `<.mvb-actions>` to
- * mark "thumbs-up submit" slots that should sit on the right of a tool form.
- */
+/** Row of controls. Pass anything; it sits in the row. */
 export function row(...nodes) {
-  return el("div", { class: "mvb-row" }, ...nodes);
+  return el("div", { class: "flex min-w-0 flex-wrap items-center gap-2" }, ...nodes);
 }
 
 /** Right-aligned actions block. Use this for primary action buttons. */
 export function actions(...nodes) {
-  return el("div", { class: "mvb-actions" }, ...nodes);
+  return el("div", { class: "flex flex-wrap items-center justify-end gap-2" }, ...nodes);
 }
 
 // ---------- tool card ----------
@@ -400,39 +456,76 @@ export function actions(...nodes) {
  *   slot.append(card.node);
  */
 export function toolcard({ head, body, foot } = {}) {
-  const headNode = el("div", { class: "mvb-toolcard__head", hidden: !head }, head);
-  const bodyNode = el("div", { class: "mvb-toolcard__body" }, body);
-  const footNode = el("div", { class: "mvb-toolcard__foot", hidden: !foot }, foot);
-  const node = el("div", { class: "mvb-toolcard" }, headNode, bodyNode, footNode);
+  const band = "border-orbit bg-deck-2 px-[var(--card-pad)] py-[var(--band-pad)] max-[60rem]:px-[18px]";
+  const headNode = el("div", { class: `flex flex-wrap items-center gap-2 border-b ${band}`, hidden: !head }, head);
+  const bodyNode = el("div", { class: "flex-1 p-[var(--card-pad)] max-[60rem]:p-[18px]" }, body);
+  const footNode = el("div", { class: `flex flex-wrap items-center justify-end gap-2 border-t ${band}`, hidden: !foot }, foot);
+  const node = el("div", { class: "flex flex-col overflow-clip rounded-r2 border border-orbit bg-deck" }, headNode, bodyNode, footNode);
   return { node, head: headNode, body: bodyNode, foot: footNode };
 }
 
 // ---------- controls ----------
 
-/**
- * A panel field: label on top, the control, optional hint underneath.
- * Pass a `state` ("error" | "good" | "warning") for status colours.
- */
+/** A panel field: label on top, the control, optional hint underneath.
+ *  Pass a `state` ("error" | "good" | "warning") for status colours. The state is
+ *  drawn as an outline, so it never fights the border or the focus ring. */
+const HINT_TONE = { error: "text-danger", good: "text-jade", warning: "text-ink" };
+const EDGE_TONE = {
+  error: "outline-2 -outline-offset-2 outline-danger",
+  good: "outline-2 -outline-offset-2 outline-jade",
+  warning: "outline-2 -outline-offset-2 outline-star",
+};
+
 export function panel(labelText, control, hint, state) {
+  if (state && EDGE_TONE[state] && control?.classList) control.classList.add(...EDGE_TONE[state].split(" "));
   return el(
     "label",
-    { class: "mvb-field" + (state ? ` mvb-field--${state}` : "") },
-    labelText ? el("span", { class: "mvb-field__label" }, labelText) : null,
+    { class: "grid min-w-0 content-start gap-1.5" },
+    labelText ? el("span", { class: "text-sm font-semibold text-ink-2" }, labelText) : null,
     control,
-    hint ? el("span", { class: "mvb-field__hint" }, hint) : null
+    hint ? el("span", { class: `text-2xs ${HINT_TONE[state] ?? "text-ink-3"}` }, hint) : null
   );
 }
 
-export function textInput(attrs = {}) {
-  return el("input", { class: "mvb-in", spellcheck: "false", autocomplete: "off", ...attrs });
+/* One field skin. You type on the raised deck surface, the same height as every
+   button beside it, and the focus ring is jade. Only the properties that never
+   change live in the base; width, padding and font size belong to the variant,
+   because two utilities for one property in the same layer resolve by sheet
+   order, not by the order they are written in the class list. */
+const FIELD =
+  "min-w-0 rounded-r1 border border-orbit bg-deck text-ink transition-[border-color,box-shadow] duration-150 placeholder:text-ink-3 hover:border-orbit-hard focus:border-jade focus:outline-none focus:ring-3 focus:ring-jade-soft";
+
+/** Merge a tool's own class onto a helper's class list. */
+function withExtra(base, extra) {
+  return extra ? `${base} ${extra}` : base;
 }
 
-export function textArea(attrs = {}) {
-  return el("textarea", { class: "mvb-in mvb-in--area", rows: 6, spellcheck: "false", ...attrs });
+export function textInput({ mono, class: extra, ...attrs } = {}) {
+  return el("input", {
+    class: withExtra(`${FIELD} w-full min-h-[var(--ctl)] px-3 py-2.5 ${mono ? "font-mono text-sm" : "text-base"}`, extra),
+    spellcheck: "false",
+    autocomplete: "off",
+    ...attrs,
+  });
 }
 
-export function selectInput(options, attrs = {}) {
-  const node = el("select", { class: "mvb-in mvb-in--select", ...attrs });
+export function textArea({ class: extra, rows = 6, ...attrs } = {}) {
+  return el("textarea", {
+    class: withExtra(`${FIELD} w-full min-h-24 resize-y px-3 py-2.5 font-mono text-sm leading-normal`, extra),
+    rows,
+    spellcheck: "false",
+    ...attrs,
+  });
+}
+
+export function selectInput(options, { class: extra, ...attrs } = {}) {
+  const node = el("select", {
+    class: withExtra(
+      `${FIELD} w-full min-h-[var(--ctl)] cursor-pointer py-2.5 ps-3 pe-9 appearance-none bg-no-repeat bg-[position:right_12px_center] bg-[length:14px] bg-[image:var(--caret)] text-base`,
+      extra
+    ),
+    ...attrs,
+  });
   for (const option of options) {
     const { value, label } = typeof option === "string" ? { value: option, label: option } : option;
     node.append(el("option", { value, selected: value === attrs.value }, label));
@@ -440,48 +533,85 @@ export function selectInput(options, attrs = {}) {
   return node;
 }
 
-export function numberInput(attrs = {}) {
-  return el("input", { class: "mvb-in mvb-in--num", type: "number", inputmode: "numeric", ...attrs });
+export function numberInput({ class: extra, ...attrs } = {}) {
+  return el("input", {
+    class: withExtra(`${FIELD} w-24 min-h-[var(--ctl)] px-3 py-2.5 text-base`, extra),
+    type: "number",
+    inputmode: "numeric",
+    ...attrs,
+  });
 }
 
-export function rangeInput(attrs = {}) {
-  return el("input", { class: "mvb-range", type: "range", ...attrs });
+export function rangeInput({ class: extra, ...attrs } = {}) {
+  return el("input", { class: withExtra("min-h-[var(--ctl)] w-full accent-[var(--jade)]", extra), type: "range", ...attrs });
 }
 
-export function colorInput(attrs = {}) {
-  return el("input", { class: "mvb-pick", type: "color", ...attrs });
+const PICK =
+  "h-[var(--ctl)] w-[52px] flex-none cursor-pointer rounded-r1 border border-orbit bg-deck p-0.5 hover:border-orbit-hard focus:border-jade focus:outline-none focus:ring-3 focus:ring-jade-soft";
+
+export function colorInput({ class: extra, ...attrs } = {}) {
+  return el("input", { class: withExtra(PICK, extra), type: "color", ...attrs });
 }
 
-export function fileInput(attrs = {}) {
-  return el("input", { class: "mvb-in mvb-in--file", type: "file", ...attrs });
+export function fileInput({ class: extra, ...attrs } = {}) {
+  return el("input", {
+    class: withExtra(
+      `${FIELD} w-full min-h-[var(--ctl)] p-1.5 text-sm [&::file-selector-button]:me-2.5 [&::file-selector-button]:cursor-pointer [&::file-selector-button]:rounded-r1 [&::file-selector-button]:border [&::file-selector-button]:border-orbit-hard [&::file-selector-button]:bg-deck-2 [&::file-selector-button]:px-2.5 [&::file-selector-button]:py-1 [&::file-selector-button]:text-2xs [&::file-selector-button]:font-semibold [&::file-selector-button]:text-ink`,
+      extra
+    ),
+    type: "file",
+    ...attrs,
+  });
 }
 
-export function passwordInput(attrs = {}) {
-  return el("input", { class: "mvb-in mvb-in--mono", type: "password", autocomplete: "new-password", ...attrs });
+export function passwordInput({ class: extra, ...attrs } = {}) {
+  return el("input", {
+    class: withExtra(`${FIELD} w-full min-h-[var(--ctl)] px-3 py-2.5 font-mono text-sm`, extra),
+    type: "password",
+    autocomplete: "new-password",
+    ...attrs,
+  });
 }
 
 export function checkbox(labelText, attrs = {}) {
-  const box = el("input", { class: "mvb-check__box", type: "checkbox", ...attrs });
-  const node = el("label", { class: "mvb-check" }, box, el("span", {}, labelText));
+  const box = el("input", { class: "m-0 size-4 accent-[var(--jade)]", type: "checkbox", ...attrs });
+  const node = el(
+    "label",
+    { class: "inline-flex min-h-[var(--ctl)] cursor-pointer items-center gap-2 rounded-r1 border border-orbit bg-deck py-2 ps-2.5 pe-3 text-sm transition-[border-color,background-color] duration-150 has-checked:border-jade has-checked:bg-jade-soft" },
+    box,
+    el("span", {}, labelText)
+  );
   node.input = box;
   return node;
 }
 
 export function switchControl(labelText, attrs = {}) {
-  const box = el("input", { class: "mvb-switch__box", type: "checkbox", role: "switch", ...attrs });
-  const track = el("span", { class: "mvb-switch__track" }, el("span", { class: "mvb-switch__thumb" }));
-  const node = el("label", { class: "mvb-switch" }, box, track, el("span", { class: "mvb-switch__label" }, labelText));
+  const box = el("input", { class: "peer pointer-events-none absolute opacity-0", type: "checkbox", role: "switch", ...attrs });
+  const track = el(
+    "span",
+    { class: "relative h-[22px] w-[38px] rounded-full bg-track transition-colors duration-150 peer-checked:bg-jade peer-checked:[&>span]:translate-x-4 peer-focus-visible:ring-3 peer-focus-visible:ring-jade-soft" },
+    el("span", { class: "absolute top-0.5 left-0.5 size-[18px] rounded-full bg-deck shadow-[0_1px_2px_rgb(0_0_0/0.18)] transition-transform duration-150" })
+  );
+  const node = el("label", { class: "inline-flex min-h-[var(--ctl)] cursor-pointer items-center gap-2.5 select-none text-sm" }, box, track, el("span", {}, labelText));
   node.input = box;
   return node;
 }
 
-/** Primary button. `kind: "fill"` is the high-emphasis action. */
-export function button(labelText, { icon: iconName, kind = "plain", size, ...rest } = {}) {
-  const cls = ["mvb-btn", `mvb-btn--${kind}`];
-  if (size) cls.push(`mvb-btn--${size}`);
+/* One button: one height, one padding, three weights. `fill` is the high
+   emphasis action and the only button that carries the accent. There is no size
+   modifier, because a tool that needs a smaller button needs fewer buttons. */
+const BTN =
+  "inline-flex min-h-[var(--ctl)] cursor-pointer items-center justify-center gap-2 rounded-r1 border text-sm font-semibold whitespace-nowrap no-underline transition-[background-color,border-color,color,transform] duration-150 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45";
+const BTN_KIND = {
+  fill: "border-jade bg-jade px-4 text-on-jade hover:border-jade-deep hover:bg-jade-deep",
+  plain: "border-orbit bg-deck px-4 text-ink hover:border-orbit-hard hover:bg-deck-2",
+  quiet: "border-transparent bg-transparent px-2.5 text-ink-2 hover:bg-deck-2 hover:text-ink",
+};
+
+export function button(labelText, { icon: iconName, kind = "plain", class: extra, ...rest } = {}) {
   return el(
     "button",
-    { class: cls.join(" "), type: "button", ...rest },
+    { class: withExtra(`${BTN} ${BTN_KIND[kind] ?? BTN_KIND.plain}`, extra), type: "button", ...rest },
     iconName ? icon(iconName) : null,
     el("span", {}, labelText)
   );
@@ -514,23 +644,23 @@ export function downloadButton(getData, filename, labelText = "Download", mime =
  * Single choice chips. `items` is [{ value, label }]. Returns the wrapper with
  * a `.select(value)` method so the tool can read the current value.
  */
+const CHIP =
+  "min-h-[var(--ctl)] cursor-pointer rounded-r1 border border-orbit bg-deck px-[13px] text-sm font-medium text-ink-2 transition-colors duration-150 hover:border-orbit-hard hover:text-ink data-[on]:border-jade data-[on]:bg-jade-soft data-[on]:text-ink";
+
 export function chipRow(items, { value, onChange, label } = {}) {
-  const wrap = el("div", { class: "mvb-chips", role: "group", "aria-label": label || "Options" });
+  const wrap = el("div", { class: "flex flex-wrap gap-1.5", role: "group", "aria-label": label || "Options" });
   let current = value;
   const paint = () => {
     for (const chip of wrap.children) {
       const item = items.find((entry) => entry.label === chip.textContent);
       const on = item?.value === current;
-      chip.classList.toggle("mvb-on", on);
+      if (on) chip.dataset.on = "";
+      else delete chip.dataset.on;
       chip.setAttribute("aria-pressed", String(on));
     }
   };
   for (const item of items) {
-    wrap.append(el(
-      "button",
-      { class: "mvb-chip", type: "button", onclick: () => wrap.select(item.value) },
-      item.label
-    ));
+    wrap.append(el("button", { class: CHIP, type: "button", onclick: () => wrap.select(item.value) }, item.label));
   }
   wrap.select = (next) => {
     current = next;
@@ -544,7 +674,7 @@ export function chipRow(items, { value, onChange, label } = {}) {
 /** Independent toggles. Returns the wrapper with `.values()` reading the boxes. */
 export function toggleRow(items) {
   const boxes = new Map();
-  const wrap = el("div", { class: "mvb-chips" });
+  const wrap = el("div", { class: "flex flex-wrap gap-1.5" });
   for (const item of items) {
     const node = checkbox(item.label, { checked: item.checked !== false });
     boxes.set(item.value, node.input);
@@ -556,10 +686,14 @@ export function toggleRow(items) {
 
 // ---------- readouts ----------
 
+/* The recessed half of the surface pair, so a result never reads as an input. */
+const OUT =
+  "m-0 max-h-[340px] w-full overflow-auto rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3 font-mono text-sm leading-normal whitespace-pre-wrap [overflow-wrap:anywhere]";
+
 export function output({ value = "", rows = 6, tag = "pre", readonly = true } = {}) {
   const node = tag === "pre"
-    ? el("pre", { class: "mvb-out" }, value)
-    : el("textarea", { class: "mvb-out", readonly, rows, value });
+    ? el("pre", { class: `${OUT} [&:empty]:border-dashed [&:empty]:bg-transparent` }, value)
+    : el("textarea", { class: `${OUT} resize-y`, readonly, rows, value });
   if (readonly) node.setAttribute("readonly", "");
   // A textarea ignores textContent once its value has been assigned, so the
   // readout has to write through `.value`.
@@ -571,8 +705,14 @@ export function output({ value = "", rows = 6, tag = "pre", readonly = true } = 
 }
 
 /** A short line under a control. `kind` is one of error, warn, note, good. */
+const NOTE_KIND = {
+  error: "border-s-danger text-danger",
+  warn: "border-s-star font-medium text-ink",
+  good: "border-s-jade text-jade",
+};
+
 export function notice(kind = "note") {
-  const node = el("p", { class: `mvb-note mvb-note--${kind}`, role: kind === "error" ? "alert" : null });
+  const node = el("p", { class: `border-s-[3px] ps-2 text-sm ${NOTE_KIND[kind] ?? "border-transparent text-ink-3"}`, role: kind === "error" ? "alert" : null });
   node.write = (text) => {
     node.textContent = text || "";
     node.hidden = !text;
@@ -584,8 +724,8 @@ export function notice(kind = "note") {
 export function blank(iconName, text) {
   return el(
     "div",
-    { class: "mvb-blank" },
-    iconName ? icon(iconName, "mvb-ico mvb-ico--lg") : null,
+    { class: "grid justify-items-center gap-2.5 rounded-r2 border border-dashed border-orbit-hard bg-deck-2 px-4 py-[clamp(28px,6vw,56px)] text-center text-ink-3 [&_p]:max-w-[34ch]" },
+    iconName ? icon(iconName, "size-[26px] flex-none") : null,
     el("p", {}, text)
   );
 }

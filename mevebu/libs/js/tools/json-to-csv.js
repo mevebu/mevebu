@@ -10,7 +10,7 @@ function stringifyCSV(rows, delimiter) {
 }
 
 export function mount(slot) {
-  const source = textArea({ rows: 12, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "JSON", placeholder: '[{"name":"Ada","role":"engineer"}]' });
+  const source = textArea({ rows: 12, "aria-label": "JSON", placeholder: '[{"name":"Ada","role":"engineer"}]' });
   const result = output({ rows: 12 });
   const error = notice("error");
   let current = "";
@@ -45,8 +45,7 @@ export function mount(slot) {
       ...records.map((record) => header.map((key) => {
         const value = record[key];
         return value && typeof value === "object" ? JSON.stringify(value) : value;
-      })),
-    ];
+      }))];
     current = stringifyCSV(rows, ",");
     result.write(current);
   }
@@ -61,8 +60,7 @@ export function mount(slot) {
     foot: actions(
       downloadButton(() => current, "data.csv", "Download CSV", "text/csv"),
       copyButton(() => current, "Copy CSV", "fill")
-    ),
-  });
+    )});
   slot.append(card.node);
   run();
 

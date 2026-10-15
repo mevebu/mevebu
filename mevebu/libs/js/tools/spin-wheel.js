@@ -2,7 +2,9 @@
 // spin, driven by the browser random source, so every option has equal odds.
 import { el, toast, copyButton, randomInt, bench, stage, stack, panel, textArea, button, readPin, writePin, toolcard, actions } from "../core.js";
 
-const SEGMENTS = ["#2456D6", "#151D2E", "#5F8BFF", "#4B5871", "#1A43AD", "#69748C", "#1D2A4D", "#C2CBDF"];
+// The slice palette. A green ramp that alternates dark and light, so two
+// neighbouring slices never read as one wedge and every label stays legible.
+const SEGMENTS = ["#0f6b4a", "#e0f0e7", "#0a5138", "#bfcac1", "#35805f", "#1d3b2c", "#8fd0b3", "#0b2a1e"];
 
 /**
  * The slice label, in whichever ink reads better on that fill. Every fill in the
@@ -12,7 +14,7 @@ const SEGMENTS = ["#2456D6", "#151D2E", "#5F8BFF", "#4B5871", "#1A43AD", "#69748
 function textOn(hex) {
   const linear = (value) => (value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
   const [r, g, b] = [1, 3, 5].map((at) => linear(parseInt(hex.slice(at, at + 2), 16) / 255));
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.2056 ? "#151D2E" : "#FFFFFF";
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.2056 ? "#101a15" : "#FFFFFF";
 }
 
 function entriesFrom(text) {
@@ -24,15 +26,15 @@ export function mount(slot) {
   const saved = readPin(PIN, { entries: "Ana\nBudi\nCitra\nDimas\nElena\nFajar" });
 
   const listField = textArea({ value: saved.entries ?? "", "aria-label": "Options, one per line", placeholder: "One option per line" });
-  const canvas = el("canvas", { class: "mvb-wheel", width: 360, height: 360, role: "img", "aria-label": "The wheel" });
+  const canvas = el("canvas", { class: "h-auto w-[min(320px,100%)]", width: 360, height: 360, role: "img", "aria-label": "The wheel" });
   const context = canvas.getContext("2d");
-  const historyBox = el("div", { class: "mvb-wheel__history", role: "list" });
+  const historyBox = el("div", { class: "flex max-w-[340px] flex-wrap justify-center gap-1.5", role: "list" });
 
   const spinButton = button("Spin", { icon: "rotate-cw", kind: "fill" });
   const clearButton = button("Clear past picks", { icon: "trash", kind: "quiet" });
   const copyWinner = copyButton(() => winner, "Copy winner");
 
-  const status = el("div", { class: "mvb-wheel__status", "aria-live": "polite" }, "Add options, then spin.");
+  const status = el("div", { class: "text-balance text-xl font-bold tracking-[-0.01em]", "aria-live": "polite" }, "Add options, then spin.");
 
   let rotation = 0;
   let busy = false;
@@ -45,15 +47,17 @@ export function mount(slot) {
     const center = size / 2;
     const radius = center - 12;
     const root = getComputedStyle(document.documentElement);
-    const ground = root.getPropertyValue("--mvb-void").trim() || "#fff";
-    const orbit = root.getPropertyValue("--mvb-orbit-hard").trim() || "#888";
-    const faint = root.getPropertyValue("--mvb-ink-3").trim() || "#888";
-    const comet = root.getPropertyValue("--mvb-comet").trim() || "#2456D6";
+    const ground = root.getPropertyValue("--void").trim() || "#fff";
+    const orbit = root.getPropertyValue("--orbit-hard").trim() || "#888";
+    const faint = root.getPropertyValue("--ink-3").trim() || "#888";
+    const jade = root.getPropertyValue("--jade").trim() || "#0f6b4a";
+    // Canvas text is outside the stylesheet, so it reads the same stack the page uses.
+    const stack = root.getPropertyValue("--sans").trim() || "system-ui, sans-serif";
 
     context.clearRect(0, 0, size, size);
     if (entries.length < 2) {
       context.fillStyle = faint;
-      context.font = "15px system-ui";
+      context.font = `15px ${stack}`;
       context.textAlign = "center";
       context.fillText(entries.length ? "Add one more option to spin" : "Type options to spin", center, center);
       status.textContent = entries.length ? "One more option to go." : "Add options, then spin.";
@@ -73,7 +77,7 @@ export function mount(slot) {
       context.rotate(a0 + slice / 2);
       context.textAlign = "right";
       context.fillStyle = textOn(SEGMENTS[i % SEGMENTS.length]);
-      context.font = "600 13px system-ui, sans-serif";
+      context.font = `600 13px ${stack}`;
       const label = entry.length > 13 ? `${entry.slice(0, 12)}…` : entry;
       context.fillText(label, radius - 12, 4);
       context.restore();
@@ -90,7 +94,7 @@ export function mount(slot) {
     context.lineTo(center + 8, 2);
     context.lineTo(center, 20);
     context.closePath();
-    context.fillStyle = comet;
+    context.fillStyle = jade;
     context.fill();
     if (status.dataset.winner !== "1") status.textContent = "Add options, then spin.";
   }
@@ -123,7 +127,7 @@ export function mount(slot) {
         status.dataset.winner = "1";
         winner = entries[winnerIndex];
         status.textContent = winner;
-        const chip = el("span", { class: "mvb-wheel__chip", role: "listitem" }, winner);
+        const chip = el("span", { class: "rounded-full border border-orbit bg-deck-2 px-2.5 py-1 text-2xs font-semibold", role: "listitem" }, winner);
         historyBox.prepend(chip);
         while (historyBox.children.length > 12) historyBox.lastChild.remove();
       }
@@ -150,8 +154,7 @@ export function mount(slot) {
       stack(panel("Options, one per line", listField)),
       stage(canvas, status, historyBox)
     ),
-    foot: actions(copyWinner, clearButton, spinButton),
-  });
+    foot: actions(copyWinner, clearButton, spinButton)});
   slot.append(card.node);
   draw();
 
@@ -159,8 +162,7 @@ export function mount(slot) {
     unmount() {
       cancelAnimationFrame(frame);
       busy = false;
-    },
-  };
+    }};
 }
 
 export default { mount };

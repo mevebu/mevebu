@@ -8,11 +8,11 @@ function parse(text) {
 }
 
 export function mount(slot) {
-  const first = textInput({ value: "1011", class: "mvb-in mvb-in--mono", "aria-label": "First number" });
-  const second = textInput({ value: "0110", class: "mvb-in mvb-in--mono", "aria-label": "Second number" });
-  const result = el("span", { class: "mvb-stat__v" }, "-");
-  const stats = el("div", { class: "mvb-stats" }, el("div", { class: "mvb-stat" }, el("span", { class: "mvb-stat__k" }, "Binary"), result));
-  const decimal = el("p", { class: "mvb-note" });
+  const first = textInput({ value: "1011", mono: true, "aria-label": "First number" });
+  const second = textInput({ value: "0110", mono: true, "aria-label": "Second number" });
+  const result = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "-");
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, el("span", { class: "text-2xs font-semibold text-ink-3" }, "Binary"), result));
+  const decimal = el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" });
   const error = notice("error");
   let mode = "add";
   let text = "";
@@ -47,8 +47,7 @@ export function mount(slot) {
       stack(panel("First number", first), panel("Second number", second), panel("Operation", chips), error),
       stack(panel("Result", stats), decimal)
     ),
-    foot: actions(copyButton(() => text, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

@@ -4,12 +4,10 @@ import { bench, stack, panel, textArea, notice, chipRow, copyButton, actions, to
 export function mount(slot) {
   const source = textArea({
     rows: 12,
-    class: "mvb-in mvb-in--area mvb-in--mono",
     "aria-label": "JSON",
     placeholder: "Paste JSON",
-    value: '{"hello":"world","count":3,"items":[1,2,3]}',
-  });
-  const result = textArea({ rows: 12, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Result" });
+    value: '{"hello":"world","count":3,"items":[1,2,3]}'});
+  const result = textArea({ rows: 12, readonly: true, "aria-label": "Result" });
   const error = notice("error");
   let indent = "2";
 
@@ -40,8 +38,7 @@ export function mount(slot) {
       stack(panel("Indent", chips), panel("JSON", source), error),
       stack(panel("Result", result))
     ),
-    foot: actions(copyButton(() => result.value, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => result.value, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

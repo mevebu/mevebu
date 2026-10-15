@@ -6,8 +6,8 @@ const cell = (text) => String(text ?? "").replace(/\|/g, "\\|").trim();
 export function mount(slot) {
   const columns = ["left", "left", "left"];
   const rows = [["Name", "Role", "City"], ["Ada", "Engineer", "London"]];
-  const editor = el("div", { class: "mvb-scroll" });
-  const alignment = el("div", { class: "mvb-stack" });
+  const editor = el("div", { class: "max-h-80 overflow-auto" });
+  const alignment = el("div", { class: "grid content-start gap-4" });
   const result = output({ rows: 8 });
 
   const toMarkdown = () => {
@@ -15,8 +15,7 @@ export function mount(slot) {
     const marks = columns.map((align) => (align === "center" ? ":---:" : align === "right" ? "---:" : ":---"));
     const lines = [
       `| ${columns.map((_, index) => cell(head[index])).join(" | ")} |`,
-      `| ${marks.join(" | ")} |`,
-    ];
+      `| ${marks.join(" | ")} |`];
     for (let r = 1; r < rows.length; r++) {
       lines.push(`| ${columns.map((_, index) => cell(rows[r][index])).join(" | ")} |`);
     }
@@ -26,7 +25,7 @@ export function mount(slot) {
   const update = () => { result.write(toMarkdown()); };
 
   function paintEditor() {
-    const table = el("table", { class: "mvb-ttable" });
+    const table = el("table", { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" });
     const headRow = el("tr");
     for (let c = 0; c < columns.length; c++) {
       const input = textInput({ value: rows[0][c] ?? "", "aria-label": `Column ${c + 1} header` });
@@ -100,8 +99,7 @@ export function mount(slot) {
       stack(panel("Columns", row(addColumn, removeColumn)), panel("Rows", row(addRow, removeRow)), panel("Alignment", alignment)),
       stack(panel("Cells", editor), panel("Markdown", result))
     ),
-    foot: actions(copyButton(() => result.textContent, "Copy table", "fill")),
-  });
+    foot: actions(copyButton(() => result.textContent, "Copy table", "fill"))});
   slot.append(card.node);
   paint();
 

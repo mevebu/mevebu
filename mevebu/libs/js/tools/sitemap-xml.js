@@ -15,7 +15,7 @@ const isUrl = (value) => {
 
 export function mount(slot) {
   const base = textInput({ value: "https://example.com", "aria-label": "Base URL" });
-  const pages = textArea({ rows: 8, class: "mvb-in mvb-in--area mvb-in--mono", value: "/\n/about", placeholder: "/\n/about\n/blog", "aria-label": "Pages" });
+  const pages = textArea({ rows: 8, value: "/\n/about", placeholder: "/\n/about\n/blog", "aria-label": "Pages" });
   const freq = selectInput(["always", "hourly", "daily", "weekly", "monthly", "yearly", "never"], { value: "weekly", "aria-label": "Change frequency" });
   const priority = numberInput({ value: "0.8", min: "0", max: "1", step: "0.1", "aria-label": "Priority" });
   const result = output({ rows: 14 });
@@ -43,15 +43,13 @@ export function mount(slot) {
         `    <lastmod>${today}</lastmod>`,
         `    <changefreq>${esc(freq.value)}</changefreq>`,
         `    <priority>${esc(priority.value || "0.5")}</priority>`,
-        "  </url>",
-      ].join("\n");
+        "  </url>"].join("\n");
     });
     result.write([
       '<?xml version="1.0" encoding="UTF-8"?>',
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
       ...entries,
-      "</urlset>",
-    ].join("\n"));
+      "</urlset>"].join("\n"));
   }
 
   for (const input of [base, pages, priority]) input.addEventListener("input", build);
@@ -71,8 +69,7 @@ export function mount(slot) {
     foot: actions(
       downloadButton(() => result.textContent, "sitemap.xml", "Save XML", "application/xml"),
       copyButton(() => result.textContent, "Copy XML", "fill")
-    ),
-  });
+    )});
   slot.append(card.node);
   build();
 

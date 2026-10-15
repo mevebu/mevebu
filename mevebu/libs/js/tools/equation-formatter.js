@@ -8,15 +8,13 @@ const GREEK = {
   theta: "θ", iota: "ι", kappa: "κ", lambda: "λ", mu: "μ", nu: "ν", xi: "ξ",
   pi: "π", rho: "ρ", sigma: "σ", tau: "τ", phi: "φ", chi: "χ", psi: "ψ", omega: "ω",
   Gamma: "Γ", Delta: "Δ", Theta: "Θ", Lambda: "Λ", Xi: "Ξ", Pi: "Π", Sigma: "Σ",
-  Phi: "Φ", Psi: "Ψ", Omega: "Ω",
-};
+  Phi: "Φ", Psi: "Ψ", Omega: "Ω"};
 const SYMBOLS = {
   times: "×", cdot: "·", div: "÷", pm: "±", mp: "∓", le: "≤", leq: "≤",
   ge: "≥", geq: "≥", ne: "≠", neq: "≠", approx: "≈", equiv: "≡", infty: "∞",
   sum: "Σ", prod: "Π", int: "∫", partial: "∂", nabla: "∇", rightarrow: "→",
   to: "→", leftarrow: "←", Rightarrow: "⇒", Leftarrow: "⇐", leftrightarrow: "↔",
-  in: "∈", notin: "∉", forall: "∀", exists: "∃", angle: "∠", degree: "°",
-};
+  in: "∈", notin: "∉", forall: "∀", exists: "∃", angle: "∠", degree: "°"};
 
 const superscript = (value) => [...value].map((char) => SUP[char] ?? char).join("");
 const subscript = (value) => [...value].map((char) => SUB[char] ?? char).join("");
@@ -43,9 +41,8 @@ export function mount(slot) {
     rows: 12,
     value: "x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}",
     "aria-label": "LaTeX",
-    placeholder: "\\frac{a}{b}",
-  });
-  const result = el("pre", { class: "mvb-out" });
+    placeholder: "\\frac{a}{b}"});
+  const result = el("pre", { class: "m-0 max-h-[340px] w-full overflow-auto rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3 font-mono text-sm leading-normal whitespace-pre-wrap [overflow-wrap:anywhere]" });
   const note = notice("note");
   note.write("Plain text preview, not rendered math.");
 
@@ -60,8 +57,7 @@ export function mount(slot) {
       stack(panel("LaTeX", source)),
       stack(panel("Preview", result), note)
     ),
-    foot: actions(copyButton(() => source.value, "Copy LaTeX", "fill")),
-  });
+    foot: actions(copyButton(() => source.value, "Copy LaTeX", "fill"))});
   slot.append(card.node);
   run();
 

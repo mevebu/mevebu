@@ -30,18 +30,18 @@ function calendarDiff(from, to) {
 }
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const start = textInput({ type: "date", value: "2026-01-01", "aria-label": "Start date" });
   const end = textInput({ type: "date", value: "2026-12-31", "aria-label": "End date" });
   const includeEnd = checkbox("Include the end date", { checked: false });
-  const days = el("span", { class: "mvb-kv__v" }, "-");
-  const weeks = el("span", { class: "mvb-kv__v" }, "-");
-  const calendar = el("span", { class: "mvb-kv__v" }, "-");
+  const days = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const weeks = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const calendar = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
   const kv = el(
     "div",
-    { class: "mvb-kv" },
+    { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("Total days", days),
     kvRow("Weeks", weeks),
     kvRow("Calendar gap", calendar)
@@ -89,8 +89,7 @@ export function mount(slot) {
       stack(panel("Start", start), panel("End", end), includeEnd, error),
       stack(panel("Difference", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

@@ -5,11 +5,11 @@ const KEYS = ["tl", "tr", "br", "bl"];
 
 function slider(label, value) {
   const input = rangeInput({ min: 0, max: 100, value, "aria-label": label });
-  const val = el("span", { class: "mvb-slider__val" }, `${value}px`);
+  const val = el("span", { class: "text-end font-mono text-2xs text-ink-2" }, `${value}px`);
   const node = el(
     "div",
-    { class: "mvb-slider" },
-    el("span", { class: "mvb-slider__label" }, label),
+    { class: "grid items-center gap-2.5 [grid-template-columns:88px_minmax(0,1fr)_62px] max-[45rem]:[grid-template-columns:minmax(0,1fr)_62px]" },
+    el("span", { class: "text-2xs font-semibold text-ink-2 max-[45rem]:col-span-2" }, label),
     input,
     val
   );
@@ -27,11 +27,10 @@ export function mount(slot) {
     tl: slider("Top left", corners.tl),
     tr: slider("Top right", corners.tr),
     br: slider("Bottom right", corners.br),
-    bl: slider("Bottom left", corners.bl),
-  };
+    bl: slider("Bottom left", corners.bl)};
 
   const linkSwitch = switchControl("Link corners", { checked: true });
-  const previewBox = el("div", { class: "mvb-preview__box" });
+  const previewBox = el("div", { class: "grid h-[120px] w-[min(200px,100%)] place-items-center bg-jade text-2xs text-on-jade" });
   const code = output();
 
   function css() {
@@ -75,10 +74,9 @@ export function mount(slot) {
   const card = toolcard({
     body: bench(
       stack(linkSwitch, sliders.tl, sliders.tr, sliders.br, sliders.bl),
-      stack(el("div", { class: "mvb-preview" }, previewBox), code)
+      stack(el("div", { class: "grid min-h-40 place-items-center overflow-hidden rounded-r1 border border-orbit bg-deck-2 p-[22px]" }, previewBox), code)
     ),
-    foot: actions(copyButton(css, "Copy CSS", "fill")),
-  });
+    foot: actions(copyButton(css, "Copy CSS", "fill"))});
   slot.append(card.node);
   update();
 

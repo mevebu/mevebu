@@ -38,8 +38,7 @@ const FIELDS = [
   ["hour", "Hour", "0-23", "*"],
   ["day", "Day of month", "1-31", "*"],
   ["month", "Month", "1-12", "*"],
-  ["weekday", "Day of week", "0-6", "*"],
-];
+  ["weekday", "Day of week", "0-6", "*"]];
 
 export function mount(slot) {
   const inputs = {};
@@ -49,8 +48,8 @@ export function mount(slot) {
     return panel(label, input, hint);
   });
 
-  const expression = textInput({ readonly: true, class: "mvb-in mvb-in--mono", "aria-label": "Cron expression" });
-  const reading = el("p", { class: "mvb-note" });
+  const expression = textInput({ readonly: true, mono: true, "aria-label": "Cron expression" });
+  const reading = el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" });
   const error = notice("error");
 
   function run() {
@@ -80,8 +79,7 @@ export function mount(slot) {
       stack(...controls, error),
       stack(panel("Expression", expression), panel("Reading", reading))
     ),
-    foot: actions(reset, copyButton(() => expression.value, "Copy expression", "fill")),
-  });
+    foot: actions(reset, copyButton(() => expression.value, "Copy expression", "fill"))});
   slot.append(card.node);
   run();
 

@@ -5,8 +5,7 @@ const SECTIONS = [
   ["hook", "Hook"],
   ["intro", "Intro"],
   ["body", "Body"],
-  ["outro", "Outro"],
-];
+  ["outro", "Outro"]];
 
 const clock = (seconds) => {
   const total = Math.max(0, Math.round(seconds));
@@ -15,9 +14,9 @@ const clock = (seconds) => {
 
 const countWords = (text) => (text.trim() ? text.trim().split(/\s+/).length : 0);
 
-const kvRow = (key, value) => el("div", { class: "mvb-kv__row" },
-  el("span", { class: "mvb-kv__k" }, key),
-  el("span", { class: "mvb-kv__v" }, value));
+const kvRow = (key, value) => el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" },
+  el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key),
+  el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const inputs = {};
@@ -30,13 +29,13 @@ export function mount(slot) {
   const rate = numberInput({ min: "60", max: "400", value: "150", "aria-label": "Speaking rate in words per minute" });
 
   const rows = {};
-  const list = el("div", { class: "mvb-kv" });
+  const list = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" });
   for (const [id, label] of SECTIONS) {
-    const value = el("span", { class: "mvb-kv__v" }, "0 words");
+    const value = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "0 words");
     rows[id] = value;
     list.append(kvRow(label, value));
   }
-  const total = el("span", { class: "mvb-kv__v" }, "0 words");
+  const total = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "0 words");
   list.append(kvRow("Total", total));
 
   let fullScript = "";
@@ -61,8 +60,7 @@ export function mount(slot) {
       stack(...fields),
       stack(panel("Speaking rate", rate, "Words per minute"), list)
     ),
-    foot: actions(copyButton(() => fullScript, "Copy script", "fill")),
-  });
+    foot: actions(copyButton(() => fullScript, "Copy script", "fill"))});
   slot.append(card.node);
   run();
 

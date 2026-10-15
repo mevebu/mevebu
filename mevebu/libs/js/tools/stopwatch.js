@@ -15,7 +15,7 @@ function format(ms) {
 
 export function mount(slot) {
   const display = output({ rows: 2 });
-  const listWrap = el("div", { class: "mvb-scroll" });
+  const listWrap = el("div", { class: "max-h-80 overflow-auto" });
 
   const startButton = button("Start", { icon: "play", kind: "fill" });
   const lapButton = button("Lap", { icon: "plus" });
@@ -59,7 +59,7 @@ export function mount(slot) {
         el("td", {}, format(total))
       );
     });
-    listWrap.replaceChildren(el("table", { class: "mvb-ttable" },
+    listWrap.replaceChildren(el("table", { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" },
       el("thead", {}, el("tr", {}, el("th", {}, "#"), el("th", {}, "Lap"), el("th", {}, "Total"))),
       el("tbody", {}, ...rows)
     ));
@@ -115,8 +115,7 @@ export function mount(slot) {
       stack(panel("Laps", listWrap)),
       stack(display)
     ),
-    foot: actions(copyLaps, resetButton, lapButton, startButton),
-  });
+    foot: actions(copyLaps, resetButton, lapButton, startButton)});
   slot.append(card.node);
   paint();
   renderLaps();
@@ -126,8 +125,7 @@ export function mount(slot) {
     unmount() {
       cancelAnimationFrame(frame);
       running = false;
-    },
-  };
+    }};
 }
 
 export default { mount };

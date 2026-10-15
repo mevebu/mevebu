@@ -17,18 +17,18 @@ function decimalForm(n) {
 }
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const source = textInput({ value: "3.2e8", "aria-label": "Number", placeholder: "3.2e8 or 320000000" });
-  const scientific = el("span", { class: "mvb-kv__v" }, "-");
-  const eForm = el("span", { class: "mvb-kv__v" }, "-");
-  const decimal = el("span", { class: "mvb-kv__v" }, "-");
-  const coefficient = el("span", { class: "mvb-kv__v" }, "-");
-  const exponent = el("span", { class: "mvb-kv__v" }, "-");
+  const scientific = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const eForm = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const decimal = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const coefficient = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const exponent = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
   const kv = el(
     "div",
-    { class: "mvb-kv" },
+    { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("Scientific", scientific),
     kvRow("E notation", eForm),
     kvRow("Decimal", decimal),
@@ -72,8 +72,7 @@ export function mount(slot) {
       stack(panel("Number", source), error),
       stack(panel("Forms", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy scientific", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy scientific", "fill"))});
   slot.append(card.node);
   run();
 

@@ -44,17 +44,15 @@ function format(css, size) {
   }
   const rest = clean(buffer);
   if (rest) push(rest);
-  return lines.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+  return lines.join("\n").replace(/\n{3}/g, "\n\n").trim();
 }
 
 export function mount(slot) {
   const source = textArea({
     rows: 12,
-    class: "mvb-in mvb-in--area mvb-in--mono",
     "aria-label": "CSS",
-    value: ".card{color:red;padding:10px 12px}.card:hover{color:blue}",
-  });
-  const result = textArea({ rows: 12, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Formatted CSS" });
+    value: ".card{color:red;padding:10px 12px}.card:hover{color:blue}"});
+  const result = textArea({ rows: 12, readonly: true, "aria-label": "Formatted CSS" });
   let size = "2";
 
   const chips = chipRow(
@@ -73,8 +71,7 @@ export function mount(slot) {
       stack(panel("Indent", chips), panel("CSS", source)),
       stack(panel("Formatted", result))
     ),
-    foot: actions(copyButton(() => result.value, "Copy CSS", "fill")),
-  });
+    foot: actions(copyButton(() => result.value, "Copy CSS", "fill"))});
   slot.append(card.node);
   run();
 

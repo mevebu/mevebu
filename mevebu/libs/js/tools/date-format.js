@@ -4,8 +4,7 @@ import { el, bench, stack, panel, textInput, selectInput, notice, copyButton, ac
 const FORMATS = [
   { value: "iso", label: "ISO (yyyy-mm-dd)" },
   { value: "dmy", label: "Day first (dd/mm/yyyy)" },
-  { value: "mdy", label: "Month first (mm/dd/yyyy)" },
-];
+  { value: "mdy", label: "Month first (mm/dd/yyyy)" }];
 
 const pad = (n) => String(n).padStart(2, "0");
 
@@ -41,20 +40,20 @@ function intlFormat(date, options, fallback) {
   }
 }
 
-const kvRow = (key, value) => el("div", { class: "mvb-kv__row" },
-  el("span", { class: "mvb-kv__k" }, key),
-  el("span", { class: "mvb-kv__v" }, value));
+const kvRow = (key, value) => el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" },
+  el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key),
+  el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const format = selectInput(FORMATS, { value: "iso", "aria-label": "Input format" });
   const entry = textInput({ placeholder: "2026-10-15", "aria-label": "Date" });
 
-  const iso = el("span", { class: "mvb-kv__v" }, "-");
-  const long = el("span", { class: "mvb-kv__v" }, "-");
-  const medium = el("span", { class: "mvb-kv__v" }, "-");
-  const weekday = el("span", { class: "mvb-kv__v" }, "-");
-  const unix = el("span", { class: "mvb-kv__v" }, "-");
-  const out = el("div", { class: "mvb-kv" },
+  const iso = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const long = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const medium = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const weekday = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const unix = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const out = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("ISO", iso),
     kvRow("Long", long),
     kvRow("Medium", medium),
@@ -96,8 +95,7 @@ export function mount(slot) {
       stack(panel("Input format", format), panel("Date", entry), error),
       stack(out, note)
     ),
-    foot: actions(copyButton(() => isoText, "Copy ISO date", "fill")),
-  });
+    foot: actions(copyButton(() => isoText, "Copy ISO date", "fill"))});
   slot.append(card.node);
   run();
 

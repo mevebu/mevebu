@@ -55,11 +55,9 @@ function generate(data, rootName) {
 export function mount(slot) {
   const source = textArea({
     rows: 12,
-    class: "mvb-in mvb-in--area mvb-in--mono",
     "aria-label": "JSON",
     placeholder: "Paste a JSON object or array",
-    value: '{\n  "id": 1,\n  "name": "Ada",\n  "tags": ["dev"],\n  "address": { "city": "London" }\n}',
-  });
+    value: '{\n  "id": 1,\n  "name": "Ada",\n  "tags": ["dev"],\n  "address": { "city": "London" }\n}'});
   const nameInput = textInput({ value: "Root", "aria-label": "Root type name" });
   const result = output({ rows: 16 });
   const error = notice("error");
@@ -91,8 +89,7 @@ export function mount(slot) {
       stack(panel("Root type name", nameInput), panel("JSON", source), error),
       stack(panel("TypeScript", result))
     ),
-    foot: actions(copyButton(() => result.textContent, "Copy types", "fill")),
-  });
+    foot: actions(copyButton(() => result.textContent, "Copy types", "fill"))});
   slot.append(card.node);
   run();
 

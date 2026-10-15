@@ -20,19 +20,19 @@ function slugify(text) {
 }
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const title = textInput({ value: "Best running shoes", "aria-label": "Title" });
   const base = textInput({ value: "https://example.com", "aria-label": "Base URL" });
   const error = notice("error");
 
-  const slugValue = el("span", { class: "mvb-kv__v" }, "-");
-  const urlValue = el("span", { class: "mvb-kv__v" }, "-");
-  const lengthValue = el("span", { class: "mvb-kv__v" }, "-");
+  const slugValue = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const urlValue = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const lengthValue = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
   const kv = el(
     "div",
-    { class: "mvb-kv" },
+    { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("Slug", slugValue),
     kvRow("URL", urlValue),
     kvRow("Length", lengthValue)
@@ -72,8 +72,7 @@ export function mount(slot) {
     foot: actions(
       copyButton(() => urlValue.textContent === "-" ? "" : urlValue.textContent, "Copy URL"),
       copyButton(() => slugValue.textContent === "-" ? "" : slugValue.textContent, "Copy slug", "fill")
-    ),
-  });
+    )});
   slot.append(card.node);
   run();
 

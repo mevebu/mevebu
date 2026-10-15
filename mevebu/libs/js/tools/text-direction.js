@@ -14,7 +14,7 @@ function detect(text) {
 
 export function mount(slot) {
   const source = textArea({ rows: 6, "aria-label": "Text", placeholder: "Type or paste text" });
-  const sample = el("div", { class: "mvb-preview__sample" }, "Sample text");
+  const sample = el("div", { class: "w-full rounded-lg border border-orbit bg-deck px-[18px] py-4" }, "Sample text");
   const code = output();
 
   let mode = "auto";
@@ -22,8 +22,7 @@ export function mount(slot) {
     [
       { value: "auto", label: "Auto" },
       { value: "ltr", label: "Left to right" },
-      { value: "rtl", label: "Right to left" },
-    ],
+      { value: "rtl", label: "Right to left" }],
     { value: "auto", label: "Direction", onChange: (next) => { mode = next; run(); } }
   );
 
@@ -44,8 +43,7 @@ export function mount(slot) {
       stack(panel("Text", source), panel("Direction", dirChips)),
       stack(panel("Preview", sample), panel("Attribute", code))
     ),
-    foot: actions(copyButton(() => snippet, "Copy attribute", "fill")),
-  });
+    foot: actions(copyButton(() => snippet, "Copy attribute", "fill"))});
   slot.append(card.node);
   run();
 

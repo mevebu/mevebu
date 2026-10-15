@@ -32,13 +32,13 @@ function toHsl({ r, g, b }) {
 
 export function mount(slot) {
   const picker = colorInput({ value: "#f5b942", "aria-label": "Pick a color" });
-  const hexInput = textInput({ value: "#F5B942", class: "mvb-in mvb-in--mono", "aria-label": "Hex value" });
-  const swatch = el("div", { class: "mvb-swatch" });
+  const hexInput = textInput({ value: "#F5B942", mono: true, "aria-label": "Hex value" });
+  const swatch = el("div", { class: "h-14 rounded-r1 border border-orbit-hard bg-deck-2" });
   const error = notice("error");
   let current = "#f5b942";
 
   const readonly = (label) => {
-    const field = textInput({ readonly: true, class: "mvb-in mvb-in--mono", "aria-label": `${label}, press to copy` });
+    const field = textInput({ readonly: true, mono: true, "aria-label": `${label}, press to copy` });
     const wrap = panel(label, field);
     wrap.style.cursor = "pointer";
     wrap.addEventListener("click", async () => {
@@ -82,8 +82,7 @@ export function mount(slot) {
     foot: actions(
       copyButton(() => `--color: ${current};`, "Copy CSS"),
       copyButton(() => current, "Copy hex", "fill")
-    ),
-  });
+    )});
   slot.append(card.node);
   read("#F5B942", false);
 

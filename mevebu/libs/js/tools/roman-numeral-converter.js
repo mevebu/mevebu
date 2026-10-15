@@ -3,8 +3,7 @@ import { el, bench, stack, panel, textInput, notice, copyButton, actions, toolca
 
 const NUMERALS = [
   [1000, "M"], [900, "CM"], [500, "D"], [400, "CD"], [100, "C"], [90, "XC"],
-  [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"],
-];
+  [50, "L"], [40, "XL"], [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]];
 
 function toRoman(n) {
   let rest = n;
@@ -32,15 +31,15 @@ function fromRoman(text) {
 }
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const source = textInput({ value: "2026", "aria-label": "Number or Roman numeral", placeholder: "2026 or MMXXVI" });
-  const detected = el("span", { class: "mvb-kv__v" }, "-");
-  const result = el("span", { class: "mvb-kv__v" }, "-");
+  const detected = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const result = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
   const kv = el(
     "div",
-    { class: "mvb-kv" },
+    { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("Input", detected),
     kvRow("Result", result)
   );
@@ -95,8 +94,7 @@ export function mount(slot) {
       stack(panel("Number or Roman numeral", source), error),
       stack(panel("Result", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

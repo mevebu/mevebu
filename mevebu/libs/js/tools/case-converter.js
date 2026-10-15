@@ -25,15 +25,14 @@ const CASES = [
   ["snake_case", (words) => words.map((word) => word.toLowerCase()).join("_")],
   ["kebab-case", (words) => words.map((word) => word.toLowerCase()).join("-")],
   ["CONSTANT_CASE", (words) => words.map((word) => word.toUpperCase()).join("_")],
-  ["Train-Case", (words) => words.map(cap).join("-")],
-];
+  ["Train-Case", (words) => words.map(cap).join("-")]];
 
 export function mount(slot) {
   const PIN = "case-converter";
   const saved = readPin(PIN, { input: "Hello world from mevebu", active: "camelCase" });
 
   const source = textArea({ value: saved.input ?? "", rows: 4, "aria-label": "Text to convert", placeholder: "Type or paste text" });
-  const list = el("div", { class: "mvb-cases" });
+  const list = el("div", { class: "grid gap-1" });
   let active = CASES.some(([name]) => name === saved.active) ? saved.active : "camelCase";
 
   function convert() {
@@ -41,9 +40,10 @@ export function mount(slot) {
     for (const row of list.children) {
       const convertCase = CASES.find(([name]) => name === row.dataset.case)[1];
       const value = words.length ? convertCase(words) : "";
-      row.querySelector(".mvb-case__value").textContent = value;
+      row.querySelector("[data-value]").textContent = value;
       const on = row.dataset.case === active;
-      row.classList.toggle("mvb-on", on);
+      if (on) row.dataset.on = "";
+      else delete row.dataset.on;
       row.setAttribute("aria-pressed", String(on));
     }
     writePin(PIN, { input: source.value, active });
@@ -53,16 +53,15 @@ export function mount(slot) {
     const button = el(
       "button",
       {
-        class: "mvb-case", type: "button", dataset: { case: name }, "aria-pressed": String(name === active),
+        class: "group flex w-full cursor-pointer items-baseline justify-between gap-3 rounded-r1 border border-transparent bg-transparent px-3 py-[9px] text-start transition-colors duration-150 hover:bg-deck-2 data-[on]:border-jade data-[on]:bg-jade-soft", type: "button", dataset: { case: name }, "aria-pressed": String(name === active),
         onclick: async () => {
           active = name;
           convert();
-          const value = button.querySelector(".mvb-case__value").textContent.trim();
+          const value = button.querySelector("[data-value]").textContent.trim();
           if (value) toast((await copyText(value)) ? "Copied" : "Copy failed");
-        },
-      },
-      el("span", { class: "mvb-case__name" }, name),
-      el("span", { class: "mvb-case__value" })
+        }},
+      el("span", { class: "flex-none text-2xs font-semibold text-ink-2 group-data-[on]:text-ink" }, name),
+      el("span", { class: "wrap-anywhere text-end font-mono text-sm", dataset: { value: "" } })
     );
     list.append(button);
   }

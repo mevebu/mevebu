@@ -3,7 +3,7 @@ import { bench, stack, panel, textArea, chipRow, toggleRow, copyButton, actions,
 
 export function mount(slot) {
   const source = textArea({ rows: 12, "aria-label": "Text", placeholder: "Paste your list, one entry per line" });
-  const result = textArea({ rows: 12, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Result" });
+  const result = textArea({ rows: 12, readonly: true, "aria-label": "Result" });
 
   let direction = "asc";
   const dirChips = chipRow(
@@ -12,8 +12,7 @@ export function mount(slot) {
   );
   const options = toggleRow([
     { value: "ignore", label: "Ignore case", checked: false },
-    { value: "numeric", label: "Numeric", checked: false },
-  ]);
+    { value: "numeric", label: "Numeric", checked: false }]);
 
   function run() {
     const text = source.value;
@@ -43,8 +42,7 @@ export function mount(slot) {
       stack(panel("Direction", dirChips), options),
       stack(panel("Result", result))
     ),
-    foot: actions(copyButton(() => result.value, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => result.value, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

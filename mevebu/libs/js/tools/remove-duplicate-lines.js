@@ -4,7 +4,7 @@ import { bench, stack, panel, textArea, checkbox, notice, copyButton, actions, t
 export function mount(slot) {
   const source = textArea({ rows: 12, "aria-label": "Text", placeholder: "Paste your list, one entry per line" });
   const ignoreCase = checkbox("Ignore case", { checked: false });
-  const result = textArea({ rows: 12, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Result" });
+  const result = textArea({ rows: 12, readonly: true, "aria-label": "Result" });
   const note = notice("note");
 
   function run() {
@@ -35,8 +35,7 @@ export function mount(slot) {
       stack(panel("Text", source), ignoreCase, note),
       stack(panel("Result", result))
     ),
-    foot: actions(copyButton(() => result.value, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => result.value, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

@@ -18,7 +18,7 @@ export function mount(slot) {
     { value: mode, label: "Mode", onChange: (next) => { mode = next; save(); run(); } }
   );
   const sharesField = panel("Shares", shares);
-  const result = el("div", { class: "mvb-scroll" });
+  const result = el("div", { class: "max-h-80 overflow-auto" });
   const error = notice("error");
   const remainder = notice("warn");
   let text = "";
@@ -34,7 +34,7 @@ export function mount(slot) {
     const names = people.value.split("\n").map((line) => line.trim()).filter(Boolean);
     const amount = Number(total.value);
     if (!names.length || total.value.trim() === "" || !Number.isFinite(amount) || amount < 0) {
-      result.replaceChildren(el("p", { class: "mvb-note" }, "Add a total and one name per line."));
+      result.replaceChildren(el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" }, "Add a total and one name per line."));
       return;
     }
 
@@ -42,12 +42,12 @@ export function mount(slot) {
     if (mode === "custom") {
       weights = shares.value.split("\n").map((line) => line.trim()).filter(Boolean).map(Number);
       if (weights.length !== names.length || weights.some((w) => !Number.isFinite(w) || w < 0)) {
-        result.replaceChildren(el("p", { class: "mvb-note" }, "Add one share for each name."));
+        result.replaceChildren(el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" }, "Add one share for each name."));
         error.write("Add one share for each name.");
         return;
       }
       if (weights.reduce((a, b) => a + b, 0) <= 0) {
-        result.replaceChildren(el("p", { class: "mvb-note" }, "Add one share for each name."));
+        result.replaceChildren(el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" }, "Add one share for each name."));
         error.write("The shares add up to zero.");
         return;
       }
@@ -60,7 +60,7 @@ export function mount(slot) {
     const paid = rounded.reduce((a, b) => a + b, 0);
     const leftover = Math.round((amount - paid) * 100) / 100;
 
-    result.replaceChildren(el("table", { class: "mvb-ttable" },
+    result.replaceChildren(el("table", { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" },
       el("thead", {}, el("tr", {}, el("th", {}, "Person"), el("th", {}, "Amount"))),
       el("tbody", {}, ...names.map((name, i) => el("tr", {},
         el("th", {}, name),
@@ -79,8 +79,7 @@ export function mount(slot) {
       stack(panel("Total", total), panel("Mode", modeChips), panel("People", people), sharesField, error),
       stack(panel("Each person", result), remainder)
     ),
-    foot: actions(copyButton(() => text, "Copy split", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy split", "fill"))});
   slot.append(card.node);
   run();
 

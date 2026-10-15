@@ -5,12 +5,11 @@ const GROUPS = [
   { key: "added", label: "Added" },
   { key: "changed", label: "Changed" },
   { key: "fixed", label: "Fixed" },
-  { key: "removed", label: "Removed" },
-];
+  { key: "removed", label: "Removed" }];
 
 export function mount(slot) {
-  const version = textInput({ value: "1.0.0", class: "mvb-in mvb-in--mono", "aria-label": "Version" });
-  const date = el("input", { class: "mvb-in", type: "date", value: new Date().toISOString().slice(0, 10), "aria-label": "Date" });
+  const version = textInput({ value: "1.0.0", mono: true, "aria-label": "Version" });
+  const date = el("input", { class: "min-w-0 rounded-r1 border border-orbit bg-deck text-ink transition-[border-color,box-shadow] duration-150 placeholder:text-ink-3 hover:border-orbit-hard focus:border-jade focus:outline-none focus:ring-3 focus:ring-jade-soft w-full min-h-[var(--ctl)] px-3 py-2.5 text-base", type: "date", value: new Date().toISOString().slice(0, 10), "aria-label": "Date" });
   const fields = GROUPS.map((group) => ({ ...group, area: textArea({ rows: 3, "aria-label": group.label }) }));
   const out = output({ rows: 16 });
   let text = "";
@@ -37,8 +36,7 @@ export function mount(slot) {
       stack(panel("Version", version), panel("Date", date), ...fields.map((group) => panel(group.label, group.area))),
       stack(panel("Changelog", out))
     ),
-    foot: actions(copyButton(() => text, "Copy Markdown", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy Markdown", "fill"))});
   slot.append(card.node);
   run();
 

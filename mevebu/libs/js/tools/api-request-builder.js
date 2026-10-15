@@ -36,8 +36,8 @@ function build(method, url, headers, body) {
 export function mount(slot) {
   const methodSelect = selectInput(METHODS, { value: "GET", "aria-label": "Method" });
   const urlInput = textInput({ value: "https://api.example.com/users", "aria-label": "URL", spellcheck: "false" });
-  const headerInput = textArea({ rows: 5, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Headers", placeholder: "Content-Type: application/json", value: "Accept: application/json" });
-  const bodyInput = textArea({ rows: 6, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Body", placeholder: '{"name":"Ada"}', value: '{\n  "name": "Ada"\n}' });
+  const headerInput = textArea({ rows: 5, "aria-label": "Headers", placeholder: "Content-Type: application/json", value: "Accept: application/json" });
+  const bodyInput = textArea({ rows: 6, "aria-label": "Body", placeholder: '{"name":"Ada"}', value: '{\n  "name": "Ada"\n}' });
   const result = output({ rows: 14 });
   const hint = notice("note");
 
@@ -65,8 +65,7 @@ export function mount(slot) {
       ),
       stack(panel("fetch", result))
     ),
-    foot: actions(copyButton(() => result.textContent, "Copy snippet", "fill")),
-  });
+    foot: actions(copyButton(() => result.textContent, "Copy snippet", "fill"))});
   slot.append(card.node);
   run();
 

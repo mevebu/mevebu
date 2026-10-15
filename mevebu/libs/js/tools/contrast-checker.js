@@ -31,19 +31,19 @@ export function mount(slot) {
   const bgPicker = colorInput({ value: "#ffffff", "aria-label": "Background color" });
 
   const kvRow = (key) => {
-    const value = el("span", { class: "mvb-kv__v" }, "-");
-    return { v: value, node: el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), value) };
+    const value = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+    return { v: value, node: el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), value) };
   };
   const ratioRow = kvRow("Contrast ratio");
   const normalAA = kvRow("Normal text AA");
   const normalAAA = kvRow("Normal text AAA");
   const largeAA = kvRow("Large text AA");
   const largeAAA = kvRow("Large text AAA");
-  const list = el("div", { class: "mvb-kv" }, ratioRow.node, normalAA.node, normalAAA.node, largeAA.node, largeAAA.node);
+  const list = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" }, ratioRow.node, normalAA.node, normalAAA.node, largeAA.node, largeAAA.node);
 
   const sample = el(
     "div",
-    { class: "mvb-preview__sample" },
+    { class: "w-full rounded-lg border border-orbit bg-deck px-[18px] py-4" },
     el("p", { style: "margin:0 0 8px;font-size:20px;font-weight:700" }, "Large text sample"),
     el("p", { style: "margin:0;font-size:15px" }, "Normal text sample for the contrast reading.")
   );
@@ -82,8 +82,7 @@ export function mount(slot) {
       stack(panel("Text color", textPicker), panel("Background color", bgPicker)),
       stack(sample, list)
     ),
-    foot: actions(swap, copyButton(() => reading, "Copy result", "fill")),
-  });
+    foot: actions(swap, copyButton(() => reading, "Copy result", "fill"))});
   slot.append(card.node);
   update();
 

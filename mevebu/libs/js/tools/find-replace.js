@@ -9,9 +9,8 @@ export function mount(slot) {
   const replaceField = textInput({ placeholder: "Replace with", "aria-label": "Replace with" });
   const options = toggleRow([
     { value: "regex", label: "Regex", checked: false },
-    { value: "ignore", label: "Ignore case", checked: false },
-  ]);
-  const result = textArea({ rows: 9, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Result" });
+    { value: "ignore", label: "Ignore case", checked: false }]);
+  const result = textArea({ rows: 9, readonly: true, "aria-label": "Result" });
   const error = notice("error");
   const countNote = notice("note");
 
@@ -77,8 +76,7 @@ export function mount(slot) {
       stack(panel("Text", source), panel("Find", findField), panel("Replace with", replaceField), options, error, countNote),
       stack(panel("Result", result))
     ),
-    foot: actions(copyButton(() => result.value, "Copy result"), replaceOneButton, replaceAllButton),
-  });
+    foot: actions(copyButton(() => result.value, "Copy result"), replaceOneButton, replaceAllButton)});
   slot.append(card.node);
   run();
 

@@ -5,8 +5,8 @@ const DAY = 86400000;
 const pad = (value) => String(value).padStart(2, "0");
 
 function tile(label) {
-  const value = el("span", { class: "mvb-stat__v" }, "-");
-  const node = el("div", { class: "mvb-stat" }, value, el("span", { class: "mvb-stat__k" }, label));
+  const value = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "-");
+  const node = el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, value, el("span", { class: "text-2xs font-semibold text-ink-3" }, label));
   node.set = (text) => { value.textContent = text; };
   return node;
 }
@@ -16,14 +16,13 @@ export function mount(slot) {
   const dateField = textInput({
     type: "date",
     value: `${soon.getFullYear()}-${pad(soon.getMonth() + 1)}-${pad(soon.getDate())}`,
-    "aria-label": "Expiry date",
-  });
+    "aria-label": "Expiry date"});
   const warnField = numberInput({ min: "1", max: "365", value: "30", "aria-label": "Warn threshold in days" });
 
   const daysTile = tile("Days left");
   const weeksTile = tile("Weeks left");
   const statusTile = tile("Status");
-  const stats = el("div", { class: "mvb-stats" }, daysTile, weeksTile, statusTile);
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, daysTile, weeksTile, statusTile);
   const status = notice("note");
   const error = notice("error");
   let summary = "";
@@ -70,8 +69,7 @@ export function mount(slot) {
       ),
       stack(stats, status)
     ),
-    foot: actions(copyButton(() => summary, "Copy summary", "fill")),
-  });
+    foot: actions(copyButton(() => summary, "Copy summary", "fill"))});
   slot.append(card.node);
   run();
 

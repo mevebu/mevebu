@@ -5,8 +5,7 @@ const ALGORITHMS = [
   { value: "SHA-256", label: "SHA-256" },
   { value: "SHA-384", label: "SHA-384" },
   { value: "SHA-512", label: "SHA-512" },
-  { value: "SHA-1", label: "SHA-1" },
-];
+  { value: "SHA-1", label: "SHA-1" }];
 
 const encoder = new TextEncoder();
 const toHex = (bytes) => [...bytes].map((byte) => byte.toString(16).padStart(2, "0")).join("");
@@ -46,13 +45,12 @@ export function mount(slot) {
     body: bench(
       stack(
         panel("Message", message),
-        panel("Secret key", el("div", { class: "mvb-secret" }, secret, showButton)),
+        panel("Secret key", el("div", { class: "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2" }, secret, showButton)),
         panel("Hash", hashField)
       ),
       stack(panel("Signature", result), error)
     ),
-    foot: actions(copyButton(() => result.textContent, "Copy signature", "fill")),
-  });
+    foot: actions(copyButton(() => result.textContent, "Copy signature", "fill"))});
   slot.append(card.node);
   run();
 

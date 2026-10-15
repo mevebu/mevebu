@@ -6,8 +6,8 @@ import qrcode from "../vendor/qrcode-generator.mjs";
 export function mount(slot) {
   const content = textArea({ rows: 4, value: "https://mevebu.app", "aria-label": "Text or link", placeholder: "Text or link" });
   const sizeField = numberInput({ value: "256", min: "120", max: "1024", step: "8", "aria-label": "Size in pixels" });
-  const canvas = el("canvas", { class: "mvb-qrcode", role: "img", "aria-label": "QR code" });
-  const reading = el("p", { class: "mvb-note" });
+  const canvas = el("canvas", { class: "h-auto w-[min(300px,100%)] [image-rendering:pixelated]", role: "img", "aria-label": "QR code" });
+  const reading = el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" });
   const error = notice("error");
   let svg = "";
 
@@ -86,8 +86,7 @@ export function mount(slot) {
       stack(panel("Text or link", content), panel("Size in pixels", sizeField), error),
       stack(panel("Preview", canvas), reading)
     ),
-    foot: actions(copyButton, svgButton, pngButton),
-  });
+    foot: actions(copyButton, svgButton, pngButton)});
   slot.append(card.node);
   render();
 

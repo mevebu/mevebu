@@ -9,16 +9,16 @@ export function mount(slot) {
   let list = Array.isArray(saved) ? saved : [];
 
   const entry = textInput({ placeholder: "New item", "aria-label": "New item" });
-  const listWrap = el("div", { class: "mvb-scroll" });
-  const stats = el("div", { class: "mvb-stats" });
+  const listWrap = el("div", { class: "max-h-80 overflow-auto" });
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" });
 
   const addButton = button("Add", { icon: "plus", kind: "fill" });
   const clearDone = button("Clear finished", { icon: "trash" });
   const copyList = copyButton(() => listText(), "Copy list");
 
-  const tile = (key, value) => el("div", { class: "mvb-stat" },
-    el("span", { class: "mvb-stat__v" }, String(value)),
-    el("span", { class: "mvb-stat__k" }, key));
+  const tile = (key, value) => el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" },
+    el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, String(value)),
+    el("span", { class: "text-2xs font-semibold text-ink-3" }, key));
 
   const save = () => writePin(PIN, list);
 
@@ -75,8 +75,7 @@ export function mount(slot) {
       stack(panel("New item", entry)),
       stack(stats, panel("Items", listWrap))
     ),
-    foot: actions(copyList, clearDone, addButton),
-  });
+    foot: actions(copyList, clearDone, addButton)});
   slot.append(card.node);
   renderList();
 

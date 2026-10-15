@@ -11,18 +11,18 @@ function describe(char) {
 
 export function mount(slot) {
   const source = textArea({ rows: 8, value: "mevebu", "aria-label": "Text" });
-  const scroll = el("div", { class: "mvb-scroll" });
+  const scroll = el("div", { class: "max-h-80 overflow-auto" });
   let rows = [];
 
   function run() {
     rows = Array.from(source.value).map(describe);
     if (!rows.length) {
-      scroll.replaceChildren(el("p", { class: "mvb-note" }, "Type or paste text."));
+      scroll.replaceChildren(el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" }, "Type or paste text."));
       return;
     }
     scroll.replaceChildren(el(
       "table",
-      { class: "mvb-ttable" },
+      { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" },
       el("thead", {}, el("tr", {},
         el("th", {}, "Character"),
         el("th", {}, "Code point"),
@@ -47,8 +47,7 @@ export function mount(slot) {
       () => rows.map((entry) => `${entry.char}\t${entry.point}\t${entry.decimal}\t${entry.bytes}`).join("\n"),
       "Copy table",
       "fill"
-    )),
-  });
+    ))});
   slot.append(card.node);
   run();
 

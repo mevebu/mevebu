@@ -2,8 +2,8 @@
 import { el, bench, stack, panel, textArea, selectInput, textInput, notice, copyButton, actions, toolcard } from "../core.js";
 
 function tile(label) {
-  const value = el("span", { class: "mvb-stat__v" }, "0");
-  const node = el("div", { class: "mvb-stat" }, value, el("span", { class: "mvb-stat__k" }, label));
+  const value = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "0");
+  const node = el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, value, el("span", { class: "text-2xs font-semibold text-ink-3" }, label));
   node.set = (text) => { value.textContent = text; };
   return node;
 }
@@ -17,16 +17,15 @@ export function mount(slot) {
     { value: "number", label: "Number" },
     { value: "minlength", label: "Minimum length" },
     { value: "maxlength", label: "Maximum length" },
-    { value: "regex", label: "Regex" },
-  ], { value: "email", "aria-label": "Rule" });
+    { value: "regex", label: "Regex" }], { value: "email", "aria-label": "Rule" });
   const setting = textInput({ "aria-label": "Rule setting", placeholder: "Number" });
   const settingField = panel("Setting", setting);
 
-  const tableWrap = el("div", { class: "mvb-scroll" });
+  const tableWrap = el("div", { class: "max-h-80 overflow-auto" });
   const totalTile = tile("Total");
   const validTile = tile("Valid");
   const invalidTile = tile("Invalid");
-  const stats = el("div", { class: "mvb-stats" }, totalTile, validTile, invalidTile);
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, totalTile, validTile, invalidTile);
   const error = notice("error");
   let failing = [];
 
@@ -72,11 +71,11 @@ export function mount(slot) {
     failing = failures;
 
     if (!values.length) {
-      tableWrap.replaceChildren(el("p", { class: "mvb-note" }, "Paste one value per line."));
+      tableWrap.replaceChildren(el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" }, "Paste one value per line."));
     } else if (!failures.length) {
-      tableWrap.replaceChildren(el("p", { class: "mvb-note" }, "Every value passes."));
+      tableWrap.replaceChildren(el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" }, "Every value passes."));
     } else {
-      tableWrap.replaceChildren(el("table", { class: "mvb-ttable" },
+      tableWrap.replaceChildren(el("table", { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" },
         el("thead", {}, el("tr", {}, el("th", {}, "#"), el("th", {}, "Value"), el("th", {}, "Reason"))),
         el("tbody", {}, ...failures.map((row) => el("tr", {},
           el("th", {}, String(row.line)),
@@ -100,8 +99,7 @@ export function mount(slot) {
       stack(panel("Values", source), panel("Rule", rule), settingField, error),
       stack(stats, panel("Failed rows", tableWrap))
     ),
-    foot: actions(copyButton(() => failing.map((row) => row.value).join("\n"), "Copy failing values", "fill")),
-  });
+    foot: actions(copyButton(() => failing.map((row) => row.value).join("\n"), "Copy failing values", "fill"))});
   slot.append(card.node);
   run();
 

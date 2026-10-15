@@ -6,8 +6,7 @@ const QUADRANTS = [
   { id: "do", name: "Do now" },
   { id: "schedule", name: "Schedule" },
   { id: "delegate", name: "Delegate" },
-  { id: "drop", name: "Drop" },
-];
+  { id: "drop", name: "Drop" }];
 
 export function mount(slot) {
   const PIN = "priority-matrix";
@@ -17,8 +16,7 @@ export function mount(slot) {
   const task = textInput({ placeholder: "Task", "aria-label": "Task" });
   const quadrant = selectInput(QUADRANTS.map((q) => ({ value: q.id, label: q.name })), {
     value: "do",
-    "aria-label": "Quadrant",
-  });
+    "aria-label": "Quadrant"});
 
   const matrix = stack();
 
@@ -39,8 +37,7 @@ export function mount(slot) {
     const text = el("span", {}, item.text);
     const move = selectInput(QUADRANTS.map((q) => ({ value: q.id, label: q.name })), {
       value: item.q,
-      "aria-label": `Move ${item.text}`,
-    });
+      "aria-label": `Move ${item.text}`});
     move.addEventListener("change", () => {
       item.q = move.value;
       save();
@@ -52,12 +49,12 @@ export function mount(slot) {
       save();
       render();
     });
-    return el("div", { class: "mvb-row" }, text, move, remove);
+    return el("div", { class: "flex min-w-0 flex-wrap items-center gap-2" }, text, move, remove);
   }
 
   function quadrantBox(q) {
     const items = list.filter((item) => item.q === q.id);
-    const body = items.length ? stack(...items.map(taskRow)) : el("span", { class: "mvb-note" }, "Empty");
+    const body = items.length ? stack(...items.map(taskRow)) : el("span", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" }, "Empty");
     return panel(`${q.name} (${items.length})`, body);
   }
 
@@ -89,8 +86,7 @@ export function mount(slot) {
       stack(panel("Task", task), panel("Quadrant", quadrant)),
       matrix
     ),
-    foot: actions(copyMatrix, addButton),
-  });
+    foot: actions(copyMatrix, addButton)});
   slot.append(card.node);
   render();
 

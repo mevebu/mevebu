@@ -20,7 +20,7 @@ function parseDate(value) {
 const iso = (date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const start = textInput({ type: "date", value: "2026-01-01", "aria-label": "Start date" });
@@ -29,13 +29,13 @@ export function mount(slot) {
   const weekdays = toggleRow(DAY_LABELS.map((label, index) => ({ value: index, label, checked: index >= 1 && index <= 5 })));
   const holidays = textArea({ rows: 4, placeholder: "2026-01-01", "aria-label": "Holidays, one per line" });
 
-  const working = el("span", { class: "mvb-kv__v" }, "-");
-  const calendar = el("span", { class: "mvb-kv__v" }, "-");
-  const weekend = el("span", { class: "mvb-kv__v" }, "-");
-  const holidayCount = el("span", { class: "mvb-kv__v" }, "-");
+  const working = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const calendar = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const weekend = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const holidayCount = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
   const kv = el(
     "div",
-    { class: "mvb-kv" },
+    { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("Working days", working),
     kvRow("Calendar days", calendar),
     kvRow("Weekend days", weekend),
@@ -109,8 +109,7 @@ export function mount(slot) {
       ),
       stack(panel("Holidays", holidays), panel("Count", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

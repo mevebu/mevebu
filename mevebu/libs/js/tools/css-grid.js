@@ -1,15 +1,15 @@
 // Lay out a CSS grid: columns, rows and gaps with a live preview.
 import { el, bench, stack, panel, numberInput, rangeInput, output, copyButton, actions, toolcard } from "../core.js";
 
-const CELL = "min-height:32px;background:var(--mvb-nebula);border:1px solid var(--mvb-comet);border-radius:6px";
+const CELL = "min-height:32px;background:var(--jade-soft);border:1px solid var(--jade);border-radius:6px";
 
 function slider(label, value) {
   const input = rangeInput({ min: 0, max: 48, value, "aria-label": label });
-  const val = el("span", { class: "mvb-slider__val" }, `${value}px`);
+  const val = el("span", { class: "text-end font-mono text-2xs text-ink-2" }, `${value}px`);
   const node = el(
     "div",
-    { class: "mvb-slider" },
-    el("span", { class: "mvb-slider__label" }, label),
+    { class: "grid items-center gap-2.5 [grid-template-columns:88px_minmax(0,1fr)_62px] max-[45rem]:[grid-template-columns:minmax(0,1fr)_62px]" },
+    el("span", { class: "text-2xs font-semibold text-ink-2 max-[45rem]:col-span-2" }, label),
     input,
     val
   );
@@ -62,10 +62,9 @@ export function mount(slot) {
   const card = toolcard({
     body: bench(
       stack(panel("Columns", columns), panel("Rows", rows), columnGap, rowGap),
-      stack(el("div", { class: "mvb-preview" }, grid), code)
+      stack(el("div", { class: "grid min-h-40 place-items-center overflow-hidden rounded-r1 border border-orbit bg-deck-2 p-[22px]" }, grid), code)
     ),
-    foot: actions(copyButton(() => code.textContent, "Copy CSS", "fill")),
-  });
+    foot: actions(copyButton(() => code.textContent, "Copy CSS", "fill"))});
   slot.append(card.node);
   update();
 

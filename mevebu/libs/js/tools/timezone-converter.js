@@ -18,8 +18,7 @@ const FALLBACK_ZONES = [
   "Asia/Shanghai",
   "Asia/Tokyo",
   "Asia/Singapore",
-  "Australia/Sydney",
-];
+  "Australia/Sydney"];
 
 function zoneList() {
   let zones = FALLBACK_ZONES;
@@ -68,8 +67,7 @@ function offsetMs(timeZone, date) {
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
-  });
+    second: "2-digit"});
   for (const part of format.formatToParts(date)) parts[part.type] = part.value;
   const hour = parts.hour === "24" ? 0 : Number(parts.hour);
   const asUTC = Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day), hour, Number(parts.minute), Number(parts.second));
@@ -85,7 +83,7 @@ function wallToInstant(day, time, timeZone) {
 const pad = (n) => String(n).padStart(2, "0");
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const zones = zoneList();
@@ -95,10 +93,10 @@ export function mount(slot) {
   const fromZone = selectInput(zones, { value: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC", "aria-label": "Source zone" });
   const toZone = selectInput(zones, { value: "UTC", "aria-label": "Target zone" });
 
-  const target = el("span", { class: "mvb-kv__v" }, "-");
-  const utc = el("span", { class: "mvb-kv__v" }, "-");
-  const diff = el("span", { class: "mvb-kv__v" }, "-");
-  const kv = el("div", { class: "mvb-kv" }, kvRow("Target time", target), kvRow("UTC", utc), kvRow("Offset", diff));
+  const target = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const utc = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const diff = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const kv = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" }, kvRow("Target time", target), kvRow("UTC", utc), kvRow("Offset", diff));
   const error = notice("error");
   let text = "";
 
@@ -127,8 +125,7 @@ export function mount(slot) {
         month: "short",
         year: "numeric",
         hour: "2-digit",
-        minute: "2-digit",
-      }).format(instant);
+        minute: "2-digit"}).format(instant);
       const utcText = `${instant.getUTCFullYear()}-${pad(instant.getUTCMonth() + 1)}-${pad(instant.getUTCDate())} ${pad(instant.getUTCHours())}:${pad(instant.getUTCMinutes())} UTC`;
       const deltaHours = (offsetMs(toZone.value, instant) - offsetMs(fromZone.value, instant)) / 3600000;
       const sign = deltaHours > 0 ? "+" : deltaHours < 0 ? "-" : "";
@@ -152,8 +149,7 @@ export function mount(slot) {
       stack(panel("Date", date), panel("Time", time), panel("From", fromZone), panel("To", toZone), error),
       stack(panel("Result", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

@@ -23,10 +23,9 @@ export function mount(slot) {
   const source = textArea({
     rows: 14,
     "aria-label": "Questions",
-    placeholder: "Question one\n- First option\n- Second option\n* The correct option\n\nQuestion two\n- ...",
-  });
-  const quiz = textArea({ rows: 12, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Quiz" });
-  const key = textArea({ rows: 12, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Answer key" });
+    placeholder: "Question one\n- First option\n- Second option\n* The correct option\n\nQuestion two\n- ..."});
+  const quiz = textArea({ rows: 12, readonly: true, "aria-label": "Quiz" });
+  const key = textArea({ rows: 12, readonly: true, "aria-label": "Answer key" });
   const error = notice("error");
 
   function render() {
@@ -59,8 +58,7 @@ export function mount(slot) {
     foot: actions(
       copyButton(() => key.value, "Copy key"),
       copyButton(() => quiz.value, "Copy quiz", "fill")
-    ),
-  });
+    )});
   slot.append(card.node);
   render();
 

@@ -21,11 +21,11 @@ function relative(seconds) {
 }
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
-  const source = textArea({ rows: 4, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Token", placeholder: "Paste a JWT" });
-  const claims = el("div", { class: "mvb-kv" });
+  const source = textArea({ rows: 4, "aria-label": "Token", placeholder: "Paste a JWT" });
+  const claims = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" });
   const status = notice("note");
   const error = notice("error");
   let summary = "";
@@ -82,12 +82,11 @@ export function mount(slot) {
       stack(
         panel("Token", source),
         error,
-        el("p", { class: "mvb-note" }, "Only the payload is read in this tab. The signature is not checked, so a valid look is not proof the token is genuine.")
+        el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" }, "Only the payload is read in this tab. The signature is not checked, so a valid look is not proof the token is genuine.")
       ),
       stack(panel("Time claims", claims), status)
     ),
-    foot: actions(copyButton(() => summary, "Copy claims", "fill")),
-  });
+    foot: actions(copyButton(() => summary, "Copy claims", "fill"))});
   slot.append(card.node);
   run();
 

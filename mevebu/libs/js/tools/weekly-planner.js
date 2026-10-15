@@ -11,8 +11,8 @@ export function mount(slot) {
   let day = Number.isInteger(saved.day) && saved.day >= 0 && saved.day < 7 ? saved.day : 0;
 
   const entry = textInput({ placeholder: "New item", "aria-label": "New item" });
-  const listWrap = el("div", { class: "mvb-scroll" });
-  const stats = el("div", { class: "mvb-stats" });
+  const listWrap = el("div", { class: "max-h-80 overflow-auto" });
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" });
 
   const dayChips = chipRow(DAYS.map((label, value) => ({ value, label })), {
     value: day,
@@ -21,15 +21,14 @@ export function mount(slot) {
       day = next;
       save();
       render();
-    },
-  });
+    }});
 
   const addButton = button("Add", { icon: "plus", kind: "fill" });
   const copyWeek = copyButton(() => weekText(), "Copy week");
 
-  const tile = (key, value) => el("div", { class: "mvb-stat" },
-    el("span", { class: "mvb-stat__v" }, String(value)),
-    el("span", { class: "mvb-stat__k" }, key));
+  const tile = (key, value) => el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" },
+    el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, String(value)),
+    el("span", { class: "text-2xs font-semibold text-ink-3" }, key));
 
   const save = () => writePin(PIN, { day, days });
 
@@ -53,7 +52,7 @@ export function mount(slot) {
       save();
       render();
     });
-    return el("div", { class: "mvb-row" }, box, remove);
+    return el("div", { class: "flex min-w-0 flex-wrap items-center gap-2" }, box, remove);
   }
 
   function renderStats() {
@@ -90,8 +89,7 @@ export function mount(slot) {
       stack(panel("Day", dayChips), panel("New item", entry)),
       stack(stats, panel("Items", listWrap))
     ),
-    foot: actions(copyWeek, addButton),
-  });
+    foot: actions(copyWeek, addButton)});
   slot.append(card.node);
   render();
 

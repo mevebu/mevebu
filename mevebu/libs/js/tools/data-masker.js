@@ -1,9 +1,9 @@
 // Masks emails, card numbers and phone numbers in pasted text.
 import { el, textArea, output, toggleRow, copyButton, bench, stack, panel, actions, toolcard } from "../core.js";
 
-const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
-const CARD = /\b\d[\d -]{11,}\d\b/g;
-const PHONE = /\b\+?\d[\d ().-]{5,}\d\b/g;
+const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2}/g;
+const CARD = /\b\d[\d -]{11}\d\b/g;
+const PHONE = /\b\+?\d[\d ().-]{5}\d\b/g;
 
 function maskDigits(value, keep) {
   const digits = value.replace(/\D/g, "");
@@ -28,8 +28,7 @@ export function mount(slot) {
   const kinds = toggleRow([
     { value: "email", label: "Email" },
     { value: "card", label: "Card number" },
-    { value: "phone", label: "Phone number" },
-  ]);
+    { value: "phone", label: "Phone number" }]);
 
   function run() {
     const on = kinds.values();
@@ -56,12 +55,11 @@ export function mount(slot) {
       stack(
         panel("Values", source),
         panel("What to mask", kinds),
-        el("p", { class: "mvb-note" }, "Pattern matching can miss a value, so check the result before sharing.")
+        el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" }, "Pattern matching can miss a value, so check the result before sharing.")
       ),
       stack(panel("Masked", result))
     ),
-    foot: actions(copyButton(() => result.textContent, "Copy masked", "fill")),
-  });
+    foot: actions(copyButton(() => result.textContent, "Copy masked", "fill"))});
   slot.append(card.node);
   run();
 

@@ -6,11 +6,10 @@ export function mount(slot) {
   let angle = 90;
   const stops = [
     { color: "#f5b942", pos: 0 },
-    { color: "#8a2be2", pos: 100 },
-  ];
+    { color: "#8a2be2", pos: 100 }];
 
-  const stopsBox = el("div", { class: "mvb-stack" });
-  const previewBox = el("div", { class: "mvb-preview__box" });
+  const stopsBox = el("div", { class: "grid content-start gap-4" });
+  const previewBox = el("div", { class: "grid h-[120px] w-[min(200px,100%)] place-items-center bg-jade text-2xs text-on-jade" });
   const code = output();
 
   function gradientCss() {
@@ -30,7 +29,7 @@ export function mount(slot) {
 
     const range = rangeInput({ min: 0, max: 100, value: stop.pos, "aria-label": "Stop position" });
     range.style.flex = "1";
-    const val = el("span", { class: "mvb-slider__val" }, `${stop.pos}%`);
+    const val = el("span", { class: "text-end font-mono text-2xs text-ink-2" }, `${stop.pos}%`);
     range.addEventListener("input", () => {
       stop.pos = parseInt(range.value, 10) || 0;
       val.textContent = `${stop.pos}%`;
@@ -45,7 +44,7 @@ export function mount(slot) {
       update();
     });
 
-    return el("div", { class: "mvb-row" }, picker, range, val, remove);
+    return el("div", { class: "flex min-w-0 flex-wrap items-center gap-2" }, picker, range, val, remove);
   }
 
   function paintStops() {
@@ -63,11 +62,11 @@ export function mount(slot) {
   });
 
   const angleInput = rangeInput({ min: 0, max: 360, value: angle, "aria-label": "Angle" });
-  const angleVal = el("span", { class: "mvb-slider__val" }, `${angle}deg`);
+  const angleVal = el("span", { class: "text-end font-mono text-2xs text-ink-2" }, `${angle}deg`);
   const angleRow = el(
     "div",
-    { class: "mvb-slider" },
-    el("span", { class: "mvb-slider__label" }, "Angle"),
+    { class: "grid items-center gap-2.5 [grid-template-columns:88px_minmax(0,1fr)_62px] max-[45rem]:[grid-template-columns:minmax(0,1fr)_62px]" },
+    el("span", { class: "text-2xs font-semibold text-ink-2 max-[45rem]:col-span-2" }, "Angle"),
     angleInput,
     angleVal
   );
@@ -85,10 +84,9 @@ export function mount(slot) {
   const card = toolcard({
     body: bench(
       stack(panel("Type", typeChips), angleRow, panel("Color stops", stopsBox), addStop),
-      stack(el("div", { class: "mvb-preview" }, previewBox), code)
+      stack(el("div", { class: "grid min-h-40 place-items-center overflow-hidden rounded-r1 border border-orbit bg-deck-2 p-[22px]" }, previewBox), code)
     ),
-    foot: actions(copyButton(() => `background: ${gradientCss()};`, "Copy CSS", "fill")),
-  });
+    foot: actions(copyButton(() => `background: ${gradientCss()};`, "Copy CSS", "fill"))});
   slot.append(card.node);
   paintStops();
   update();

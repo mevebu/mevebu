@@ -5,8 +5,7 @@ const BASES = [
   { value: "2", label: "Binary" },
   { value: "8", label: "Octal" },
   { value: "10", label: "Decimal" },
-  { value: "16", label: "Hex" },
-];
+  { value: "16", label: "Hex" }];
 
 const PATTERNS = { 2: /^[01]+$/, 8: /^[0-7]+$/, 10: /^[0-9]+$/, 16: /^[0-9a-f]+$/ };
 const PREFIX = { 2: "0b", 8: "0o", 10: "", 16: "0x" };
@@ -23,17 +22,17 @@ function parseInBase(text, base) {
 }
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const source = textInput({ value: "255", "aria-label": "Number", placeholder: "255" });
-  const binary = el("span", { class: "mvb-kv__v" }, "-");
-  const octal = el("span", { class: "mvb-kv__v" }, "-");
-  const decimal = el("span", { class: "mvb-kv__v" }, "-");
-  const hex = el("span", { class: "mvb-kv__v" }, "-");
+  const binary = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const octal = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const decimal = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const hex = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
   const kv = el(
     "div",
-    { class: "mvb-kv" },
+    { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
     kvRow("Binary", binary),
     kvRow("Octal", octal),
     kvRow("Decimal", decimal),
@@ -76,8 +75,7 @@ export function mount(slot) {
     onChange: (value) => {
       base = value;
       run();
-    },
-  });
+    }});
 
   source.addEventListener("input", run);
 
@@ -86,8 +84,7 @@ export function mount(slot) {
       stack(panel("Number", source), panel("Input base", chips), error),
       stack(panel("In every base", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy all", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy all", "fill"))});
   slot.append(card.node);
   run();
 

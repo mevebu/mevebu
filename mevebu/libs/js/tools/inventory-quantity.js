@@ -16,16 +16,16 @@ export function mount(slot) {
   const opening = numberInput({ value: "0", min: "0", "aria-label": "Opening stock" });
   const stockIn = numberInput({ value: "0", min: "0", "aria-label": "Stock in" });
   const stockOut = numberInput({ value: "0", min: "0", "aria-label": "Stock out" });
-  const listWrap = el("div", { class: "mvb-scroll" });
-  const stats = el("div", { class: "mvb-stats" });
+  const listWrap = el("div", { class: "max-h-80 overflow-auto" });
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" });
   const warn = notice("warn");
 
   const addButton = button("Add", { icon: "plus", kind: "fill" });
 
   const save = () => writePin(PIN, list);
-  const tile = (key, value) => el("div", { class: "mvb-stat" },
-    el("span", { class: "mvb-stat__v" }, String(value)),
-    el("span", { class: "mvb-stat__k" }, key));
+  const tile = (key, value) => el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" },
+    el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, String(value)),
+    el("span", { class: "text-2xs font-semibold text-ink-3" }, key));
 
   const closing = (item) => item.opening + item.in - item.out;
 
@@ -43,7 +43,7 @@ export function mount(slot) {
     if (!list.length) {
       listWrap.replaceChildren(blank("package", "No items yet."));
     } else {
-      listWrap.replaceChildren(el("table", { class: "mvb-ttable" },
+      listWrap.replaceChildren(el("table", { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" },
         el("thead", {}, el("tr", {},
           el("th", {}, "Item"), el("th", {}, "Opening"), el("th", {}, "In"),
           el("th", {}, "Out"), el("th", {}, "Closing"), el("th", {}, ""))),
@@ -92,8 +92,7 @@ export function mount(slot) {
     foot: actions(
       copyButton(() => list.map((item) => `${item.name}: opening ${fmt(item.opening)}, in ${fmt(item.in)}, out ${fmt(item.out)}, closing ${fmt(closing(item))}`).join("\n"), "Copy stock"),
       addButton
-    ),
-  });
+    )});
   slot.append(card.node);
   render();
 

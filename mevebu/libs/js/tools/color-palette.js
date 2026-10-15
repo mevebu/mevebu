@@ -59,7 +59,7 @@ function palette(hex, scheme) {
 
 export function mount(slot) {
   const picker = colorInput({ value: "#f5b942", "aria-label": "Base color" });
-  const swatches = el("div", { class: "mvb-swatches" });
+  const swatches = el("div", { class: "grid gap-2 [grid-template-columns:repeat(auto-fit,minmax(96px,1fr))]" });
   let colors = [];
   let scheme = "analogous";
 
@@ -67,8 +67,7 @@ export function mount(slot) {
     [
       { value: "analogous", label: "Analogous" },
       { value: "complementary", label: "Complementary" },
-      { value: "monochrome", label: "Monochrome" },
-    ],
+      { value: "monochrome", label: "Monochrome" }],
     { value: scheme, label: "Scheme", onChange: (value) => { scheme = value; paint(); } }
   );
 
@@ -82,9 +81,9 @@ export function mount(slot) {
       ...colors.map((hex) =>
         el(
           "button",
-          { class: "mvb-swatchcard", type: "button", onclick: () => copyOne(hex) },
-          el("span", { class: "mvb-swatchcard__chip", style: `background:${hex}` }),
-          el("span", { class: "mvb-swatchcard__code" }, hex)
+          { class: "grid cursor-pointer gap-1.5 rounded-r1 border border-orbit bg-deck p-2 text-start transition-colors duration-150 hover:border-jade", type: "button", onclick: () => copyOne(hex) },
+          el("span", { class: "h-[52px] rounded-lg border border-orbit-hard", style: `background:${hex}` }),
+          el("span", { class: "font-mono text-2xs text-ink-2" }, hex)
         )
       )
     );
@@ -99,8 +98,7 @@ export function mount(slot) {
     ),
     foot: actions(
       copyButton(() => colors.map((hex, i) => `--color-${i + 1}: ${hex};`).join("\n"), "Copy CSS variables", "fill")
-    ),
-  });
+    )});
   slot.append(card.node);
   paint();
 

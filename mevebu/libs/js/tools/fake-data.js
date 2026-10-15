@@ -7,8 +7,7 @@ const LAST = ["Ortega", "Wijaya", "Santos", "Kimura", "Novak", "Haddad", "Silva"
 const PLACES = [
   ["Jakarta", "ID", "+62"], ["Bandung", "ID", "+62"], ["Madrid", "ES", "+34"], ["Barcelona", "ES", "+34"],
   ["Austin", "US", "+1"], ["Seattle", "US", "+1"], ["Berlin", "DE", "+49"], ["Munich", "DE", "+49"],
-  ["Osaka", "JP", "+81"], ["Tokyo", "JP", "+81"], ["Recife", "BR", "+55"], ["Lagos", "NG", "+234"],
-];
+  ["Osaka", "JP", "+81"], ["Tokyo", "JP", "+81"], ["Recife", "BR", "+55"], ["Lagos", "NG", "+234"]];
 const pick = (list) => list[randomInt(list.length)];
 
 function person(id) {
@@ -23,8 +22,7 @@ function person(id) {
     phone: `${code} ${700 + randomInt(300)} ${1000000 + randomInt(8999999)}`,
     city,
     country,
-    card: `4${String(randomInt(1000)).padStart(3, "0")} … ${1000 + randomInt(9000)}`,
-  };
+    card: `4${String(randomInt(1000)).padStart(3, "0")} … ${1000 + randomInt(9000)}`};
 }
 
 export function mount(slot) {
@@ -34,12 +32,11 @@ export function mount(slot) {
     [
       { value: "json", label: "JSON" },
       { value: "csv", label: "CSV" },
-      { value: "table", label: "Table" },
-    ],
+      { value: "table", label: "Table" }],
     { value: "json", label: "Format", onChange: (value) => { format = value; render(); } }
   );
   const text = output({ rows: 14 });
-  const table = el("div", { class: "mvb-scroll" });
+  const table = el("div", { class: "max-h-80 overflow-auto" });
   let rows = [];
 
   function totalCount() {
@@ -51,8 +48,7 @@ export function mount(slot) {
     const columns = Object.keys(rows[0] ?? {});
     return [
       columns.join("\t"),
-      ...rows.map((row) => columns.map((key) => String(row[key])).join("\t")),
-    ].join("\n");
+      ...rows.map((row) => columns.map((key) => String(row[key])).join("\t"))].join("\n");
   }
 
   function render() {
@@ -75,7 +71,7 @@ export function mount(slot) {
       }
       const head = el("tr");
       for (const key of columns) head.append(el("th", {}, key));
-      table.replaceChildren(el("table", { class: "mvb-ttable" }, el("thead", {}, head), body));
+      table.replaceChildren(el("table", { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" }, el("thead", {}, head), body));
     }
   }
 
@@ -106,10 +102,9 @@ export function mount(slot) {
   const card = toolcard({
     body: bench(
       stack(panel("Format", chips), panel("Records", countField)),
-      el("div", { class: "mvb-stack" }, text, table)
+      el("div", { class: "grid content-start gap-4" }, text, table)
     ),
-    foot: actions(copyButton, saveButton, againButton),
-  });
+    foot: actions(copyButton, saveButton, againButton)});
   slot.append(card.node);
   render();
 

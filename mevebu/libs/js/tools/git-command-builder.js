@@ -7,56 +7,46 @@ const OPERATIONS = {
   clone: {
     label: "Clone a repository",
     fields: [["url", "Repository URL", "https://github.com/user/repo.git"], ["directory", "Directory (optional)", ""]],
-    build: (v) => `git clone ${quote(v.url)}${v.directory ? ` ${quote(v.directory)}` : ""}`,
-  },
+    build: (v) => `git clone ${quote(v.url)}${v.directory ? ` ${quote(v.directory)}` : ""}`},
   switch: {
     label: "Switch branch",
     fields: [["branch", "Branch", "main"]],
-    build: (v) => `git switch ${quote(v.branch)}`,
-  },
+    build: (v) => `git switch ${quote(v.branch)}`},
   pull: {
     label: "Pull",
     fields: [["remote", "Remote", "origin"], ["branch", "Branch (optional)", ""]],
-    build: (v) => `git pull ${quote(v.remote)}${v.branch ? ` ${quote(v.branch)}` : ""}`,
-  },
+    build: (v) => `git pull ${quote(v.remote)}${v.branch ? ` ${quote(v.branch)}` : ""}`},
   commit: {
     label: "Commit",
     fields: [["message", "Message", "Fix the thing"], ["files", "Paths (optional)", ""]],
-    build: (v) => `git commit -m ${quote(v.message)}${v.files ? ` ${v.files}` : ""}`,
-  },
+    build: (v) => `git commit -m ${quote(v.message)}${v.files ? ` ${v.files}` : ""}`},
   push: {
     label: "Push",
     fields: [["remote", "Remote", "origin"], ["branch", "Branch", "main"]],
-    build: (v) => `git push ${quote(v.remote)} ${quote(v.branch)}`,
-  },
+    build: (v) => `git push ${quote(v.remote)} ${quote(v.branch)}`},
   "push-force": {
     label: "Force push",
     fields: [["remote", "Remote", "origin"], ["branch", "Branch", "main"]],
     build: (v) => `git push --force-with-lease ${quote(v.remote)} ${quote(v.branch)}`,
-    destructive: "Force push can overwrite commits on the remote.",
-  },
+    destructive: "Force push can overwrite commits on the remote."},
   merge: {
     label: "Merge",
     fields: [["branch", "Branch", "feature"]],
-    build: (v) => `git merge ${quote(v.branch)}`,
-  },
+    build: (v) => `git merge ${quote(v.branch)}`},
   rebase: {
     label: "Rebase",
     fields: [["branch", "Branch", "main"]],
-    build: (v) => `git rebase ${quote(v.branch)}`,
-  },
+    build: (v) => `git rebase ${quote(v.branch)}`},
   reset: {
     label: "Reset hard",
     fields: [["ref", "Commit or ref", "HEAD~1"]],
     build: (v) => `git reset --hard ${quote(v.ref)}`,
-    destructive: "Reset hard discards uncommitted work.",
-  },
-};
+    destructive: "Reset hard discards uncommitted work."}};
 
 export function mount(slot) {
   const options = Object.entries(OPERATIONS).map(([value, config]) => ({ value, label: config.label }));
   const operationSelect = selectInput(options, { value: "clone", "aria-label": "Operation" });
-  const fieldsHost = el("div", { class: "mvb-stack" });
+  const fieldsHost = el("div", { class: "grid content-start gap-4" });
   const result = output({ rows: 4 });
   const warn = notice("warn");
   const values = {};
@@ -89,8 +79,7 @@ export function mount(slot) {
       stack(panel("Operation", operationSelect), fieldsHost, warn),
       stack(panel("Command", result))
     ),
-    foot: actions(copyButton(() => result.textContent, "Copy command", "fill")),
-  });
+    foot: actions(copyButton(() => result.textContent, "Copy command", "fill"))});
   slot.append(card.node);
   paintFields();
 

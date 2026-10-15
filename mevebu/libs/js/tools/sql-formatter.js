@@ -4,8 +4,7 @@ import { bench, stack, panel, textArea, notice, switchControl, copyButton, actio
 const CLAUSES = [
   "SELECT", "FROM", "WHERE", "GROUP BY", "ORDER BY", "HAVING", "LIMIT", "OFFSET", "VALUES", "SET",
   "INSERT INTO", "UPDATE", "DELETE FROM", "INNER JOIN", "LEFT JOIN", "RIGHT JOIN", "FULL JOIN",
-  "CROSS JOIN", "JOIN", "UNION ALL", "UNION", "CREATE TABLE", "ALTER TABLE", "DROP TABLE", "WITH", "RETURNING",
-];
+  "CROSS JOIN", "JOIN", "UNION ALL", "UNION", "CREATE TABLE", "ALTER TABLE", "DROP TABLE", "WITH", "RETURNING"];
 const WORDS = [...CLAUSES, "AND", "OR", "ON", "AS", "IN", "IS", "NOT", "NULL", "LIKE", "BETWEEN", "DISTINCT", "ASC", "DESC", "CASE", "WHEN", "THEN", "ELSE", "END"];
 
 const toPattern = (word) => word.replace(/ /g, "\\s+");
@@ -33,18 +32,16 @@ function format(sql, upper) {
   out = out.replace(clauseRe, "\n$1");
   out = out.replace(/\s*\b(AND|OR)\b/gi, "\n  $1");
   out = out.replace(/\(\s+/g, "(").replace(/\s+\)/g, ")");
-  out = out.replace(/\n{3,}/g, "\n\n").trim();
+  out = out.replace(/\n{3}/g, "\n\n").trim();
   return restore(out, store);
 }
 
 export function mount(slot) {
   const source = textArea({
     rows: 12,
-    class: "mvb-in mvb-in--area mvb-in--mono",
     "aria-label": "SQL",
-    value: "select id, name from users where active = true and age > 18 order by name",
-  });
-  const result = textArea({ rows: 12, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Formatted SQL" });
+    value: "select id, name from users where active = true and age > 18 order by name"});
+  const result = textArea({ rows: 12, readonly: true, "aria-label": "Formatted SQL" });
   const error = notice("error");
   let upper = true;
 
@@ -67,8 +64,7 @@ export function mount(slot) {
       stack(panel("Options", casing), panel("SQL", source), error),
       stack(panel("Formatted", result))
     ),
-    foot: actions(copyButton(() => result.value, "Copy query", "fill")),
-  });
+    foot: actions(copyButton(() => result.value, "Copy query", "fill"))});
   slot.append(card.node);
   run();
 

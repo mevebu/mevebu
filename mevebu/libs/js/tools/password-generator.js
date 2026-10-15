@@ -5,12 +5,11 @@ const SETS = {
   lower: "abcdefghijklmnopqrstuvwxyz",
   upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
   digits: "0123456789",
-  symbols: "!@#$%^&*()-_=+[]{};:,.<>?",
-};
+  symbols: "!@#$%^&*()-_=+[]{};:,.<>?"};
 
 export function mount(slot) {
   const lengthField = rangeInput({ min: "6", max: "64", value: "16", "aria-label": "Length" });
-  const lengthLabel = el("span", { class: "mvb-field__label" });
+  const lengthLabel = el("span", { class: "text-sm font-semibold text-ink-2" });
 
   function showLength() {
     lengthLabel.textContent = `Length: ${lengthField.value}`;
@@ -20,11 +19,10 @@ export function mount(slot) {
     { value: "lower", label: "a to z" },
     { value: "upper", label: "A to Z" },
     { value: "digits", label: "0 to 9" },
-    { value: "symbols", label: "Symbols" },
-  ]);
+    { value: "symbols", label: "Symbols" }]);
 
-  const secret = textInput({ class: "mvb-in mvb-in--mono", readonly: true, "aria-label": "Password", placeholder: "Press Generate" });
-  const meter = el("div", { class: "mvb-meter", role: "img", "aria-label": "Strength" }, el("div", { class: "mvb-meter__fill" }));
+  const secret = textInput({ mono: true, readonly: true, "aria-label": "Password", placeholder: "Press Generate" });
+  const meter = el("div", { class: "h-2 overflow-hidden rounded-full bg-deck-2", role: "img", "aria-label": "Strength" }, el("div", { class: "h-full w-0 rounded-full bg-orbit-hard transition-[width,background-color] duration-150 data-[level=weak]:bg-danger data-[level=ok]:bg-star data-[level=strong]:bg-jade" }));
   const strength = notice("note");
   const error = notice("error");
 
@@ -37,11 +35,11 @@ export function mount(slot) {
 
   function draw() {
     const source = pool();
-    const fill = meter.querySelector(".mvb-meter__fill");
+    const fill = meter.firstElementChild;
     if (!source) {
       secret.value = "";
       fill.style.width = "0%";
-      fill.className = "mvb-meter__fill";
+      delete fill.dataset.level;
       meter.setAttribute("aria-label", "Strength");
       strength.write("");
       error.write("Pick at least one group above.");
@@ -65,7 +63,7 @@ export function mount(slot) {
     const bits = Math.round(length * Math.log2(source.length));
     const word = bits < 50 ? "weak" : bits < 90 ? "good" : "strong";
     fill.style.width = `${Math.min(100, (bits / 128) * 100)}%`;
-    fill.className = `mvb-meter__fill ${bits < 50 ? "mvb-weak" : bits < 90 ? "mvb-ok" : "mvb-strong"}`;
+    fill.dataset.level = bits < 50 ? "weak" : bits < 90 ? "ok" : "strong";
     // The bar is colour only, so the reading it stands for also goes on the bar itself.
     meter.setAttribute("aria-label", `Strength: ${bits} bits, ${word}`);
     strength.write(`${bits} bits, ${word}.`);
@@ -84,8 +82,7 @@ export function mount(slot) {
       stack(panel(lengthLabel, lengthField), groups, error),
       stack(panel("Password", secret), meter, strength)
     ),
-    foot: actions(copyButton, generateButton),
-  });
+    foot: actions(copyButton, generateButton)});
   slot.append(card.node);
   draw();
 

@@ -11,19 +11,19 @@ function parseTime(value) {
 }
 
 const kvRow = (key, value) =>
-  el("div", { class: "mvb-kv__row" }, el("span", { class: "mvb-kv__k" }, key), el("span", { class: "mvb-kv__v" }, value));
+  el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" }, el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, key), el("span", { class: "wrap-anywhere font-mono text-2xs" }, value));
 
 export function mount(slot) {
   const start = textInput({ type: "time", value: "09:00", "aria-label": "Start time" });
   const end = textInput({ type: "time", value: "17:30", "aria-label": "End time" });
   const breakMin = numberInput({ value: "30", min: "0", "aria-label": "Break in minutes" });
 
-  const result = el("span", { class: "mvb-stat__v" }, "-");
-  const tile = el("div", { class: "mvb-stat" }, result, el("span", { class: "mvb-stat__k" }, "Duration"));
-  const stats = el("div", { class: "mvb-stats" }, tile);
-  const minutesOut = el("span", { class: "mvb-kv__v" }, "-");
-  const decimalOut = el("span", { class: "mvb-kv__v" }, "-");
-  const kv = el("div", { class: "mvb-kv" }, kvRow("Total minutes", minutesOut), kvRow("Decimal hours", decimalOut));
+  const result = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "-");
+  const tile = el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, result, el("span", { class: "text-2xs font-semibold text-ink-3" }, "Duration"));
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, tile);
+  const minutesOut = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const decimalOut = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "-");
+  const kv = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" }, kvRow("Total minutes", minutesOut), kvRow("Decimal hours", decimalOut));
   const error = notice("error");
   let text = "";
 
@@ -72,8 +72,7 @@ export function mount(slot) {
       stack(panel("Start", start), panel("End", end), panel("Break in minutes", breakMin), error),
       stack(stats, panel("Breakdown", kv))
     ),
-    foot: actions(copyButton(() => text, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => text, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

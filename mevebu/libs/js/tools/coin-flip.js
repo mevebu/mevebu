@@ -7,8 +7,8 @@ const TOSS_MS = 400;
 
 /** A tally tile. The value is the node the tool writes to. */
 function tile(key) {
-  const value = el("span", { class: "mvb-stat__v" }, "0");
-  const row = el("div", { class: "mvb-stat" }, value, el("span", { class: "mvb-stat__k" }, key));
+  const value = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "0");
+  const row = el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, value, el("span", { class: "text-2xs font-semibold text-ink-3" }, key));
   return { row, value };
 }
 
@@ -19,12 +19,12 @@ export function mount(slot) {
   let tails = Number(saved.tails) || 0;
   let timer = 0;
 
-  const coin = el("div", { class: "mvb-coin", role: "img", "aria-label": "Coin, not flipped yet" }, "?");
-  const verdict = el("p", { class: "mvb-flip__result min-h-7", "aria-live": "polite" });
+  const coin = el("div", { class: "grid size-32 select-none place-items-center rounded-full bg-jade text-display font-bold text-on-jade data-[toss]:animate-toss", role: "img", "aria-label": "Coin, not flipped yet" }, "?");
+  const verdict = el("p", { class: "text-lg font-bold tracking-[-0.01em] min-h-7", "aria-live": "polite" });
   const headsTile = tile("Heads");
   const tailsTile = tile("Tails");
   const totalTile = tile("Total");
-  const stats = el("div", { class: "mvb-stats" }, headsTile.row, tailsTile.row, totalTile.row);
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" }, headsTile.row, tailsTile.row, totalTile.row);
 
   function render(decision) {
     verdict.textContent = decision;
@@ -40,9 +40,9 @@ export function mount(slot) {
 
   flipButton.addEventListener("click", () => {
     clearTimeout(timer);
-    coin.classList.remove("mvb-toss");
+    delete coin.dataset.toss;
     void coin.offsetWidth;
-    coin.classList.add("mvb-toss");
+    coin.dataset.toss = "";
     timer = setTimeout(() => {
       const isHeads = randomInt(2) === 0;
       if (isHeads) heads++;
@@ -65,16 +65,14 @@ export function mount(slot) {
       stack(panel("Coin", coin)),
       stack(panel("Result", verdict), stats)
     ),
-    foot: actions(resetButton, flipButton),
-  });
+    foot: actions(resetButton, flipButton)});
   slot.append(card.node);
   render("");
 
   return {
     unmount() {
       clearTimeout(timer);
-    },
-  };
+    }};
 }
 
 export default { mount };

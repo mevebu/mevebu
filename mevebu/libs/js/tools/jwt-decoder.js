@@ -12,10 +12,10 @@ function decodeSegment(segment) {
 }
 
 export function mount(slot) {
-  const source = textArea({ rows: 4, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Token", placeholder: "Paste a JWT" });
+  const source = textArea({ rows: 4, "aria-label": "Token", placeholder: "Paste a JWT" });
   const headerOut = output({ rows: 4 });
   const payloadOut = output({ rows: 8 });
-  const claims = el("div", { class: "mvb-kv" });
+  const claims = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" });
   const error = notice("error");
 
   function render() {
@@ -49,9 +49,9 @@ export function mount(slot) {
       const value = Number(payload[key]);
       const when = Number.isFinite(value) ? new Date(value * 1000).toLocaleString() : String(payload[key]);
       claims.append(
-        el("div", { class: "mvb-kv__row" },
-          el("span", { class: "mvb-kv__k" }, label),
-          el("span", { class: "mvb-kv__v" }, when))
+        el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" },
+          el("span", { class: "wrap-anywhere text-2xs font-semibold text-ink-2" }, label),
+          el("span", { class: "wrap-anywhere font-mono text-2xs" }, when))
       );
     }
   }
@@ -63,8 +63,7 @@ export function mount(slot) {
       stack(panel("Token", source), error),
       stack(panel("Header", headerOut), panel("Payload", payloadOut), claims)
     ),
-    foot: actions(copyButton(() => payloadOut.textContent, "Copy payload", "fill")),
-  });
+    foot: actions(copyButton(() => payloadOut.textContent, "Copy payload", "fill"))});
   slot.append(card.node);
   render();
 

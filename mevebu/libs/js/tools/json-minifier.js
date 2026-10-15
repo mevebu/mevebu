@@ -4,18 +4,16 @@ import { el, bench, stack, panel, textArea, notice, copyButton, actions, toolcar
 const bytes = (text) => new TextEncoder().encode(text).length;
 
 const tile = (key, value) =>
-  el("div", { class: "mvb-stat" }, el("span", { class: "mvb-stat__v" }, value), el("span", { class: "mvb-stat__k" }, key));
+  el("div", { class: "grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3" }, el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, value), el("span", { class: "text-2xs font-semibold text-ink-3" }, key));
 
 export function mount(slot) {
   const source = textArea({
     rows: 12,
-    class: "mvb-in mvb-in--area mvb-in--mono",
     "aria-label": "JSON",
     placeholder: "Paste JSON",
-    value: '{\n  "hello": "world",\n  "count": 3\n}',
-  });
-  const result = textArea({ rows: 12, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Minified JSON" });
-  const stats = el("div", { class: "mvb-stats" });
+    value: '{\n  "hello": "world",\n  "count": 3\n}'});
+  const result = textArea({ rows: 12, readonly: true, "aria-label": "Minified JSON" });
+  const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" });
   const error = notice("error");
 
   function run() {
@@ -47,8 +45,7 @@ export function mount(slot) {
       stack(panel("JSON", source), error),
       stack(panel("Minified", result), stats)
     ),
-    foot: actions(copyButton(() => result.value, "Copy result", "fill")),
-  });
+    foot: actions(copyButton(() => result.value, "Copy result", "fill"))});
   slot.append(card.node);
   run();
 

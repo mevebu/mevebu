@@ -8,9 +8,8 @@ export function mount(slot) {
   const right = textArea({ rows: 9, "aria-label": "Second text", placeholder: "Second text" });
   const options = toggleRow([
     { value: "ignore", label: "Ignore case", checked: false },
-    { value: "spaces", label: "Ignore spaces", checked: false },
-  ]);
-  const diffBox = el("div", { class: "mvb-diff" });
+    { value: "spaces", label: "Ignore spaces", checked: false }]);
+  const diffBox = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" });
   const note = notice("note");
   let rows = [];
 
@@ -66,8 +65,14 @@ export function mount(slot) {
     const removed = rows.filter(([type]) => type === "del").length;
     diffBox.replaceChildren(...rows.map(([type, raw]) => el(
       "div",
-      { class: `mvb-diff__row${type === "add" ? " mvb-diff__row--add" : type === "del" ? " mvb-diff__row--del" : ""}` },
-      el("span", { class: "mvb-diff__sign" }, type === "add" ? "+" : type === "del" ? "-" : " "),
+      {
+        // One row skin. The add/del tint and the sign colour hang off the data
+        // attribute, so a row never carries two competing background utilities.
+        class:
+          "grid bg-deck font-mono text-2xs [grid-template-columns:34px_minmax(0,1fr)] [&>span]:wrap-anywhere [&>span]:px-2.5 [&>span]:py-[3px] [&>span]:whitespace-pre-wrap data-[kind=add]:bg-[var(--add)] data-[kind=add]:[&>span:first-child]:text-jade data-[kind=del]:bg-[var(--del)] data-[kind=del]:[&>span:first-child]:text-danger",
+        dataset: { kind: type },
+      },
+      el("span", { class: "border-e border-orbit text-center text-ink-3 select-none" }, type === "add" ? "+" : type === "del" ? "-" : " "),
       el("span", {}, raw)
     )));
     const counts = !added && !removed
@@ -93,8 +98,7 @@ export function mount(slot) {
       stack(panel("First text", left), panel("Second text", right), options, note),
       stack(panel("Difference", diffBox))
     ),
-    foot: actions(swapButton, copyButton(diffText, "Copy diff", "fill")),
-  });
+    foot: actions(swapButton, copyButton(diffText, "Copy diff", "fill"))});
   slot.append(card.node);
   run();
 

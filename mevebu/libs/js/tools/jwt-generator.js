@@ -21,12 +21,11 @@ export function mount(slot) {
   const headerField = textArea({ rows: 3, value: '{\n  "alg": "HS256",\n  "typ": "JWT"\n}' });
   const payloadField = textArea({
     rows: 7,
-    value: `{\n  "sub": "1234567890",\n  "name": "Ada",\n  "admin": true,\n  "iat": ${now}\n}`,
-  });
+    value: `{\n  "sub": "1234567890",\n  "name": "Ada",\n  "admin": true,\n  "iat": ${now}\n}`});
   const secretField = textInput({ type: "password", value: "your-256-bit-secret", autocomplete: "new-password" });
   const showButton = el(
     "button",
-    { class: "mvb-icobtn", type: "button", "aria-label": "Show secret", "aria-pressed": "false" },
+    { class: "inline-flex size-[var(--ctl)] cursor-pointer items-center justify-center rounded-r1 border border-transparent bg-transparent text-ink-2 transition-colors duration-150 hover:bg-deck-2 hover:text-ink focus-visible:border-jade", type: "button", "aria-label": "Show secret", "aria-pressed": "false" },
     icon("eye")
   );
   const error = notice("error");
@@ -94,13 +93,12 @@ export function mount(slot) {
       stack(
         panel("Header", headerField),
         panel("Payload", payloadField),
-        panel("Secret", el("div", { class: "mvb-secret" }, secretField, showButton)),
+        panel("Secret", el("div", { class: "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2" }, secretField, showButton)),
         error
       ),
       stack(panel("Token", tokenOut), timePanel)
     ),
-    foot: actions(copyBtn),
-  });
+    foot: actions(copyBtn)});
   slot.append(card.node);
   sign();
 
