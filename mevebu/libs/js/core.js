@@ -514,8 +514,8 @@ export function downloadButton(getData, filename, labelText = "Download", mime =
  * Single choice chips. `items` is [{ value, label }]. Returns the wrapper with
  * a `.select(value)` method so the tool can read the current value.
  */
-export function chipRow(items, { value, onChange, label, size = "sm" } = {}) {
-  const wrap = el("div", { class: `mvb-chips mvb-chips--${size}`, role: "group", "aria-label": label || "Options" });
+export function chipRow(items, { value, onChange, label } = {}) {
+  const wrap = el("div", { class: "mvb-chips", role: "group", "aria-label": label || "Options" });
   let current = value;
   const paint = () => {
     for (const chip of wrap.children) {

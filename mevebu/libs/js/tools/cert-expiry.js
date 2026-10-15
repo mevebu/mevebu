@@ -53,8 +53,7 @@ export function mount(slot) {
 
     if (days < 0) status.write(`Expired ${Math.abs(days)} days ago.`);
     else if (days === 0) status.write("Expires today.");
-    else if (days <= threshold) status.write(`Expires in ${days} days, within the ${threshold} day warning window.`);
-    else status.write(`Expires in ${days} days.`);
+    else if (days <= threshold) status.write(`Inside the ${threshold} day warning window.`);
 
     summary = `Expires ${expiry.toLocaleDateString()}, ${days} days left, ${state}.`;
   }
@@ -67,7 +66,6 @@ export function mount(slot) {
       stack(
         panel("Expiry date", dateField),
         panel("Warn within days", warnField),
-        el("p", { class: "mvb-note" }, "The date stays in this tab."),
         error
       ),
       stack(stats, status)

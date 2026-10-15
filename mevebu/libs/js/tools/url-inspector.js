@@ -82,8 +82,7 @@ export function mount(slot) {
     body: bench(
       stack(
         panel("URL", source),
-        error,
-        el("p", { class: "mvb-note" }, "The link is read in this tab. Nothing is opened or requested.")
+        error
       ),
       stack(kv, panel("Checks", flags))
     ),

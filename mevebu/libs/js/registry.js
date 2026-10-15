@@ -131,8 +131,8 @@ export const TOOLS = [
     tutorial: {
       intro: "Hash text with the SHA family. Hashing happens in this tab.",
       steps: [
-        "Type or paste text on the left.",
-        "Pick an algorithm with the chips (1 to 512).",
+        "Type or paste text.",
+        "Pick an algorithm with the chips.",
         "The hash updates as you type. Press Copy hash to copy the result.",
       ],
     },
@@ -272,16 +272,16 @@ export const TOOLS = [
     name: "UUID Generator",
     icon: "fingerprint-pattern",
     note: "Generate UUIDs, one or a thousand.",
-    about: "Version 4 UUIDs from the browser random source.",
+    about: "Versions 1, 4, 6 and 7, plus the Nil and Max sentinels.",
     tutorial: {
-      intro: "Generate version 4 UUIDs. Copy as a list, JSON, or save as a file.",
+      intro: "Generate UUIDs and take them as a list, as JSON, or as a file.",
       steps: [
-        "Set how many UUIDs to generate, between 1 and 1000.",
-        "Toggle Uppercase if you want them in caps. The list updates as you change a setting.",
-        "Use Copy all, Copy JSON, or Save .txt on the right.",
+        "Pick the version. v4 and v7 are random and v7 sorts by time. v1 and v6 carry a timestamp. Nil and Max are the two sentinels tests look for.",
+        "Set how many to generate, between 1 and 1000. Uppercase and No hyphens change the output only.",
+        "Use Copy all, Copy JSON, or Save .txt to take the list.",
       ],
     },
-    keywords: "guid unique id v4 identifier",
+    keywords: "guid unique id v1 v4 v6 v7 nil max identifier",
     load: () => import("./tools/uuid-generator.js"),
   },
   {
@@ -294,8 +294,8 @@ export const TOOLS = [
     tutorial: {
       intro: "Convert a color between hex, rgb, and hsl. The swatch and contrast reading update live.",
       steps: [
-        "Pick a color with the picker on the left, or type a hex, rgb, or hsl value.",
-        "The other formats, the swatch, and a contrast reading appear on the right.",
+        "Pick a color with the picker, or type a hex, rgb, or hsl value.",
+        "The other formats, the swatch, and a contrast reading update as you type.",
         "Click any of the four readouts to copy that value.",
       ],
     },
@@ -315,7 +315,7 @@ export const TOOLS = [
       steps: [
         "Type or paste on either side. The other side updates as you type.",
         "Edit the Base64 side directly to decode. Invalid Base64 shows an error.",
-        "Use Copy Base64 or Copy text on the right of each panel.",
+        "Use Copy Base64 or Copy text to take either side.",
       ],
     },
     keywords: "encode decode binary data uri atob btoa",

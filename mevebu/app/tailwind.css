@@ -1417,6 +1417,12 @@
     border-inline-start-color: var(--mvb-danger);
     color: var(--mvb-danger);
   }
+  .mvb-note--warn {
+    border-inline-start-color: var(--mvb-star);
+    --tw-font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-medium);
+    color: var(--mvb-ink);
+  }
   .mvb-note--good {
     border-inline-start-color: var(--mvb-aurora);
     color: var(--mvb-aurora);

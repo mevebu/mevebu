@@ -1,10 +1,12 @@
 // Percent-encoding for a single value, following encodeURIComponent. The
 // swap button moves the result back into the input for a second round.
-import { bench, stack, panel, textArea, notice, chipRow, button, copyButton, actions, toolcard } from "../core.js";
+import { bench, stack, panel, textArea, output, notice, chipRow, button, copyButton, actions, toolcard } from "../core.js";
 
 export function mount(slot) {
   const source = textArea({ rows: 5, value: "q=hello world&lang=id", "aria-label": "Input" });
-  const result = textArea({ rows: 5, readonly: true, class: "mvb-in mvb-in--area mvb-in--mono", "aria-label": "Result" });
+  // The encoded text is read, not typed, so it sits on the recessed surface.
+  const result = output({ tag: "textarea", rows: 5 });
+  result.setAttribute("aria-label", "Result");
   const error = notice("error");
   let mode = "encode";
 

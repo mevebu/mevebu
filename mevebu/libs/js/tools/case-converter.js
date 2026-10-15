@@ -69,7 +69,7 @@ export function mount(slot) {
 
   source.addEventListener("input", convert);
 
-  const card = toolcard({ body: stack(panel("Text", source), panel("Select a case to copy it", list)) });
+  const card = toolcard({ body: stack(panel("Text", source), panel("Cases", list)) });
   slot.append(card.node);
   convert();
 

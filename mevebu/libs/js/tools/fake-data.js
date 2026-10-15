@@ -46,6 +46,15 @@ export function mount(slot) {
     return Math.max(1, Math.min(200, parseInt(countField.value || "1", 10) || 1));
   }
 
+  /** The same rows as the table, tab separated. */
+  function tsv() {
+    const columns = Object.keys(rows[0] ?? {});
+    return [
+      columns.join("\t"),
+      ...rows.map((row) => columns.map((key) => String(row[key])).join("\t")),
+    ].join("\n");
+  }
+
   function render() {
     const total = totalCount();
     rows = Array.from({ length: total }, (_, i) => person(i + 1));
@@ -83,8 +92,11 @@ export function mount(slot) {
     countField.value = String(totalCount());
   });
   copyButton.addEventListener("click", async () => {
-    const text = format === "table" ? JSON.stringify(rows) : text.textContent;
-    toast((await copyText(text)) ? "Copied" : "Copy failed");
+    // In table mode the visible table is what gets copied, as tab separated text
+    // so it lands in a spreadsheet as a table. The local name here used to shadow
+    // the readout above, which threw before the copy ever ran.
+    const payload = format === "table" ? tsv() : text.textContent;
+    toast((await copyText(payload)) ? "Copied" : "Copy failed");
   });
   saveButton.addEventListener("click", () => {
     if (format === "csv") download("test-data.csv", text.textContent, "text/csv");
@@ -94,7 +106,7 @@ export function mount(slot) {
   const card = toolcard({
     body: bench(
       stack(panel("Format", chips), panel("Records", countField)),
-      el("div", { class: "mvb-scroll" }, text, table)
+      el("div", { class: "mvb-stack" }, text, table)
     ),
     foot: actions(copyButton, saveButton, againButton),
   });

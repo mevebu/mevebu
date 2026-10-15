@@ -55,8 +55,8 @@ export function mount(slot) {
     body: bench(
       stack(
         panel("Values", source),
-        panel("Mask", kinds),
-        el("p", { class: "mvb-note" }, "Masking runs in this tab. Check the result before sharing.")
+        panel("What to mask", kinds),
+        el("p", { class: "mvb-note" }, "Pattern matching can miss a value, so check the result before sharing.")
       ),
       stack(panel("Masked", result))
     ),

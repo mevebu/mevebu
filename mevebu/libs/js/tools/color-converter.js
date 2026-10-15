@@ -93,12 +93,14 @@ export function mount(slot) {
   const error = notice("error");
   const reading = el("p", { class: "mvb-note" });
 
-  function show(color, keepPicker) {
+  // `from` names the control the value came from. The text field is never
+  // rewritten while it is being typed into: "#abc" is valid shorthand one
+  // keystroke before it is valid six digit hex, so echoing the expanded form
+  // back would wipe out the rest of what was being typed.
+  function show(color, from) {
     const hex = hexOf(color);
-    if (!keepPicker) {
-      anyField.value = hex.toUpperCase();
-      picker.value = hex;
-    }
+    if (from !== "text") anyField.value = hex.toUpperCase();
+    picker.value = hex;
     hexField.querySelector("input").value = hex.toUpperCase();
     const { h, s, l } = hslOf(color);
     rgbField.querySelector("input").value = color.a < 1
@@ -113,18 +115,23 @@ export function mount(slot) {
     reading.textContent = `Contrast ${onWhite}:1 on white, ${onBlack}:1 on black.${Number(onWhite) >= 4.5 ? "" : " Low on white."}${Number(onBlack) >= 4.5 ? "" : " Low on black."}`;
   }
 
-  function read(text, keepPicker) {
+  function read(text, from) {
+    // An empty field is not a mistake, it is someone clearing it to start over.
+    if (!text.trim()) {
+      error.write("");
+      return;
+    }
     const color = parse(text);
     if (!color) {
       error.write("That color was not recognized.");
       return;
     }
     error.write("");
-    show(color, keepPicker);
+    show(color, from);
   }
 
-  anyField.addEventListener("input", () => read(anyField.value, false));
-  picker.addEventListener("input", () => read(picker.value, true));
+  anyField.addEventListener("input", () => read(anyField.value, "text"));
+  picker.addEventListener("input", () => read(picker.value, "picker"));
 
   const card = toolcard({
     body: bench(
@@ -138,7 +145,7 @@ export function mount(slot) {
     ),
   });
   slot.append(card.node);
-  read("#F5B942", false);
+  read("#F5B942", "init");
 
   return {};
 }

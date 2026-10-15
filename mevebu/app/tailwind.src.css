@@ -667,6 +667,13 @@
     @apply border-s-danger text-danger;
   }
 
+  /* A warning is a caution, not a failure: amber rule, text that stays readable
+     on both surfaces. Without this rule a warn notice fell back to the neutral
+     note, so a real warning looked quieter than the all clear. */
+  .mvb-note--warn {
+    @apply border-s-star font-medium text-ink;
+  }
+
   .mvb-note--good {
     @apply border-s-aurora text-aurora;
   }

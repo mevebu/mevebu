@@ -1,6 +1,6 @@
 // Placeholder text by the word, the sentence or the paragraph. The classic
 // opening is a checkbox, not a lock-in, and regeneration never clears the copy.
-import { toast, copyText, chipRow, numberInput, checkbox, button, bench, stack, panel, textArea, readPin, writePin, actions, toolcard } from "../core.js";
+import { toast, copyText, chipRow, numberInput, checkbox, output, button, bench, stack, panel, readPin, writePin, actions, toolcard } from "../core.js";
 
 const WORDS = "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris nisi aliquip ex ea commodo consequat duis aute irure in reprehenderit voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt culpa qui officia deserunt mollit anim id est laborum".split(" ");
 
@@ -42,7 +42,9 @@ export function mount(slot) {
   );
   const amount = numberInput({ value: saved.amount ?? "3", min: "1", max: "200", "aria-label": "How many" });
   const classic = checkbox("Start with the classic opening", { checked: saved.classic !== false });
-  const result = textArea({ rows: 12, readonly: true, class: "mvb-in mvb-in--area", "aria-label": "Generated text" });
+  // Generated text is read, not typed, so it sits on the recessed surface.
+  const result = output({ tag: "textarea", rows: 12 });
+  result.setAttribute("aria-label", "Generated text");
 
   function totalCount() {
     return Math.max(1, Math.min(200, parseInt(amount.value || "1", 10) || 1));
