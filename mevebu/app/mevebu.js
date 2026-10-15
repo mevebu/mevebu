@@ -169,7 +169,7 @@ function openUpdate(latest) {
       updatable ? commandBox : null,
     ],
     actions: updatable
-      ? [el("a", { class: "mvb-btn", href: `https://www.npmjs.com/package/${PACKAGE_NAME}/v/${latest}`, target: "_blank", rel: "noopener" }, "What changed")]
+      ? [el("a", { class: "mvb-btn", href: `${REPO_URL}/releases/tag/v${latest}`, target: "_blank", rel: "noopener" }, "What changed")]
       : [],
     veilClass: "mvb-veil--help",
   });
