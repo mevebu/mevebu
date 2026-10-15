@@ -1,8 +1,19 @@
 // Spins through your options and lands on one. Canvas wheel with an eased
 // spin, driven by the browser random source, so every option has equal odds.
-import { el, toast, randomInt, bench, stage, stack, panel, textArea, button, output, readPin, writePin, toolcard, actions } from "../core.js";
+import { el, toast, copyButton, randomInt, bench, stage, stack, panel, textArea, button, readPin, writePin, toolcard, actions } from "../core.js";
 
 const SEGMENTS = ["#2456D6", "#151D2E", "#5F8BFF", "#4B5871", "#1A43AD", "#69748C", "#1D2A4D", "#C2CBDF"];
+
+/**
+ * The slice label, in whichever ink reads better on that fill. Every fill in the
+ * palette sits far enough from mid grey that one of the two clears 4.5:1, so a
+ * pale slice never gets white text.
+ */
+function textOn(hex) {
+  const linear = (value) => (value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+  const [r, g, b] = [1, 3, 5].map((at) => linear(parseInt(hex.slice(at, at + 2), 16) / 255));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.2056 ? "#151D2E" : "#FFFFFF";
+}
 
 function entriesFrom(text) {
   return text.split(/\n+/).map((line) => line.trim()).filter(Boolean);
@@ -15,18 +26,18 @@ export function mount(slot) {
   const listField = textArea({ value: saved.entries ?? "", "aria-label": "Options, one per line", placeholder: "One option per line" });
   const canvas = el("canvas", { class: "mvb-wheel", width: 360, height: 360, role: "img", "aria-label": "The wheel" });
   const context = canvas.getContext("2d");
-  const result = output({ rows: 2 });
   const historyBox = el("div", { class: "mvb-wheel__history", role: "list" });
 
   const spinButton = button("Spin", { icon: "rotate-cw", kind: "fill" });
   const clearButton = button("Clear past picks", { icon: "trash", kind: "quiet" });
+  const copyWinner = copyButton(() => winner, "Copy winner");
 
   const status = el("div", { class: "mvb-wheel__status", "aria-live": "polite" }, "Add options, then spin.");
-  result.write("");
 
   let rotation = 0;
   let busy = false;
   let frame = 0;
+  let winner = "";
 
   function draw() {
     const entries = entriesFrom(listField.value);
@@ -44,7 +55,7 @@ export function mount(slot) {
       context.fillStyle = faint;
       context.font = "15px system-ui";
       context.textAlign = "center";
-      context.fillText(entries.length ? "Add one more option to spin" : "Type options on the left", center, center);
+      context.fillText(entries.length ? "Add one more option to spin" : "Type options to spin", center, center);
       status.textContent = entries.length ? "One more option to go." : "Add options, then spin.";
       return;
     }
@@ -61,7 +72,7 @@ export function mount(slot) {
       context.translate(center, center);
       context.rotate(a0 + slice / 2);
       context.textAlign = "right";
-      context.fillStyle = "#fff";
+      context.fillStyle = textOn(SEGMENTS[i % SEGMENTS.length]);
       context.font = "600 13px system-ui, sans-serif";
       const label = entry.length > 13 ? `${entry.slice(0, 12)}…` : entry;
       context.fillText(label, radius - 12, 4);
@@ -92,8 +103,8 @@ export function mount(slot) {
     spinButton.disabled = true;
     status.dataset.winner = "";
     const slice = (Math.PI * 2) / entries.length;
-    const winner = randomInt(entries.length);
-    const finish = (-Math.PI / 2) - (winner * slice + slice / 2);
+    const winnerIndex = randomInt(entries.length);
+    const finish = (-Math.PI / 2) - (winnerIndex * slice + slice / 2);
     const fullTurns = Math.PI * 2 * (5 + randomInt(3));
     const delta = ((finish - rotation) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) + fullTurns;
     const start = rotation;
@@ -110,9 +121,9 @@ export function mount(slot) {
         busy = false;
         spinButton.disabled = false;
         status.dataset.winner = "1";
-        status.textContent = entries[winner];
-        result.write(entries[winner]);
-        const chip = el("span", { class: "mvb-wheel__chip", role: "listitem" }, entries[winner]);
+        winner = entries[winnerIndex];
+        status.textContent = winner;
+        const chip = el("span", { class: "mvb-wheel__chip", role: "listitem" }, winner);
         historyBox.prepend(chip);
         while (historyBox.children.length > 12) historyBox.lastChild.remove();
       }
@@ -122,13 +133,14 @@ export function mount(slot) {
 
   listField.addEventListener("input", () => {
     status.dataset.winner = "";
+    winner = "";
     writePin(PIN, { entries: listField.value });
     draw();
   });
   spinButton.addEventListener("click", spin);
   clearButton.addEventListener("click", () => {
     historyBox.replaceChildren();
-    result.write("");
+    winner = "";
     status.dataset.winner = "";
     status.textContent = "Past picks cleared.";
   });
@@ -136,9 +148,9 @@ export function mount(slot) {
   const card = toolcard({
     body: bench(
       stack(panel("Options, one per line", listField)),
-      stage(canvas, status, result, historyBox)
+      stage(canvas, status, historyBox)
     ),
-    foot: actions(clearButton, spinButton),
+    foot: actions(copyWinner, clearButton, spinButton),
   });
   slot.append(card.node);
   draw();
