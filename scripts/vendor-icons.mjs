@@ -22,6 +22,39 @@ const ICONS = [
   "arrow-left-right", "trash", "plus", "minus", "camera", "video-off",
   "image-up", "clipboard", "eye", "eye-off", "circle-alert", "triangle-alert",
   "loader", "play", "lock",
+  // categories (extended)
+  "calendar-days", "graduation-cap", "calculator", "clock", "table",
+  "brush", "globe", "book-open", "briefcase", "code", "languages",
+  "megaphone", "git-branch",
+  // text and writing
+  "text-cursor-input", "ruler", "list", "list-minus", "arrow-down-a-z",
+  "replace", "eraser", "link-2", "list-plus", "file-diff", "text-search",
+  "text-align-start", "square-check", "type", "text-cursor",
+  // developer
+  "braces", "circle-check", "badge-check", "minimize-2", "shrink",
+  "file-code", "regex", "code-xml", "calendar-clock", "paintbrush",
+  "settings-2", "file-key", "send", "webhook", "scan-text",
+  // daily use
+  "timer", "list-checks", "calendar-plus", "calendar-range", "grid-2x2",
+  "target", "users-round", "flame", "clipboard-list",
+  // math and time
+  "percent", "trending-up", "badge-percent", "tag", "divide", "sigma",
+  "superscript", "radical", "list-ordered", "calendar-check", "bell",
+  "pause", "square-play", "chart-line", "hand-coins", "scale",
+  // date, time, data and lists
+  "calendar-minus", "hourglass", "cake", "file-spreadsheet", "table-2",
+  "git-merge", "git-compare", "combine", "rows-3", "arrow-right-left",
+  // design
+  "swatch-book", "pipette", "layers", "blend", "contrast", "ratio",
+  "rectangle-horizontal", "square-dashed-bottom", "layout-grid", "scaling",
+  "type-outline", "baseline", "grid-3x3", "sliders-horizontal",
+  // security
+  "shield-alert", "gauge", "clock-alert", "scan-eye", "activity",
+  // academic, business, content, units
+  "text-quote", "library", "notebook-pen", "shapes", "receipt", "banknote",
+  "package", "film", "video", "git-pull-request", "weight", "thermometer",
+  "hard-drive", "square-function", "clipboard-check", "circle-check-big",
+  "square",
 ];
 
 const src = join(root, "node_modules", "lucide", "dist", "esm", "icons");

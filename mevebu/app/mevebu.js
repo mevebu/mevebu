@@ -164,7 +164,7 @@ function openUpdate(latest) {
           el("span", { class: "mvb-vers__val" }, VERSION)),
         el("div", { class: "mvb-vers__row" + (updatable ? " mvb-vers__row--new" : "") },
           el("span", { class: "mvb-vers__label" }, "Latest"),
-          el("span", { class: "mvb-vers__val" }, latest ?? "—"))),
+          el("span", { class: "mvb-vers__val" }, latest ?? "-"))),
       updatable ? el("p", { class: "mvb-vers__hint" }, "Copy the command below and run it in your terminal.") : null,
       updatable ? commandBox : null,
     ],
@@ -280,7 +280,7 @@ function footer() {
             id: "mvb-version",
             type: "button",
             title: "Check for updates",
-          }, "—")
+          }, "-")
         )
       )
     )

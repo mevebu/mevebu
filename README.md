@@ -34,21 +34,37 @@ and falls back to any free port only when those are taken.
 
 ## Tools
 
-15 tools, each with its own page. Most update as you type, with no submit button.
+186 tools, each with its own page. Most update as you type, with no submit button.
 
 | Category | Tools |
 | :--- | :--- |
-| Random | Spin the Wheel, Name Picker, Coin Flip |
-| Passwords and keys | Password Generator, JWT Generator, Hash Generator |
-| Developer | UUID Generator, Color Converter |
-| Convert | Base64, URL Encoder, Case Converter |
-| Text and data | Lorem Ipsum, Test Data |
-| QR codes | QR Generator, QR Scanner |
+| Random | 3 |
+| Passwords and keys | 10 |
+| Developer | 21 |
+| Convert | 3 |
+| Text and data | 14 |
+| Daily use | 8 |
+| Math | 17 |
+| Date and time | 7 |
+| Data and lists | 8 |
+| Design | 10 |
+| Web and SEO | 12 |
+| Encoding | 8 |
+| Academic | 15 |
+| Study | 7 |
+| Business | 10 |
+| Locale | 7 |
+| Content | 8 |
+| GitHub | 8 |
+| Units | 8 |
+| QR codes | 2 |
+
+Press `Ctrl+K` in the app to search the full list.
 
 ## Development
 
 ```sh
-npm run dev      # serve on http://localhost:5173
+npm run dev      # serve on http://localhost:5555
 npm run icons    # regenerate vendored lucide icons
 ```
 
