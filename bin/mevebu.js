@@ -20,6 +20,9 @@ const DEFAULT_DIR = resolve(here, "..", "mevebu");
 const pkg = JSON.parse(await readFile(resolve(here, "..", "package.json"), "utf8"));
 const VERSION = pkg.version;
 
+// Preferred ports, tried in order. Falls back to any free port when all are taken.
+const PREFERRED_PORTS = [5555, 5678, 5432];
+
 const HELP = `mevebu ${VERSION}
 
 Serve the offline tools on localhost. No accounts, no uploads, no tracking.
@@ -28,7 +31,7 @@ Usage:
   mevebu [options]
 
 Options:
-  -p, --port <number>   Port to listen on. Defaults to a free port.
+  -p, --port <number>   Try this port first (${PREFERRED_PORTS.join(", ")} otherwise).
   -d, --dir <path>      Folder to serve. Defaults to the bundled tools.
       --no-open         Do not open the browser.
   -v, --version         Print the version and exit.
@@ -73,6 +76,46 @@ function openBrowser(url) {
   });
 }
 
+/**
+ * Binds the server to the first port that is free. A `--port` value is tried
+ * first, then the preferred list (5555, 5678, 5432), then any free port. This
+ * keeps the address stable across restarts while never failing on a clash.
+ */
+function listen(server, preferred, host) {
+  const queue = [];
+  if (preferred) queue.push(preferred);
+  for (const port of PREFERRED_PORTS) if (!queue.includes(port)) queue.push(port);
+  queue.push(0); // 0 lets the OS pick any free port as the last resort
+
+  return new Promise((resolve, reject) => {
+    let index = 0;
+    const attempt = () => {
+      if (index >= queue.length) {
+        reject(new Error("No free port found."));
+        return;
+      }
+      const port = queue[index++];
+      const onError = (error) => {
+        server.removeListener("listening", onListening);
+        if (error.code === "EADDRINUSE" || error.code === "EACCES") {
+          if (port) console.log(`  port ${port} is taken, trying the next one...`);
+          attempt();
+        } else {
+          reject(error);
+        }
+      };
+      const onListening = () => {
+        server.removeListener("error", onError);
+        resolve(server.address().port);
+      };
+      server.once("error", onError);
+      server.once("listening", onListening);
+      server.listen(port, host);
+    };
+    attempt();
+  });
+}
+
 const options = args(process.argv);
 const root = resolve(options.dir);
 
@@ -107,9 +150,13 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(options.port || 0, "127.0.0.1", () => {
-  const { port } = server.address();
-  const url = `http://localhost:${port}/`;
-  console.log(`\n  mevebu is running at ${url}\n  Press Ctrl+C to stop.\n`);
-  if (options.open) openBrowser(url);
-});
+listen(server, options.port, "127.0.0.1")
+  .then((port) => {
+    const url = `http://localhost:${port}/`;
+    console.log(`\n  mevebu is running at ${url}\n  Press Ctrl+C to stop.\n`);
+    if (options.open) openBrowser(url);
+  })
+  .catch((error) => {
+    console.error(`\n  Could not start mevebu: ${error.message}\n`);
+    process.exit(1);
+  });

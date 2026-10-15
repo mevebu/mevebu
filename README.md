@@ -22,12 +22,15 @@ The tools open in your default browser. Press `Ctrl+C` in the terminal to stop.
 ### Options
 
 ```
--p, --port <number>   Port to listen on. Defaults to a free port.
+-p, --port <number>   Try this port first (5555, 5678, 5432 otherwise).
 -d, --dir <path>      Folder to serve. Defaults to the bundled tools.
     --no-open         Do not open the browser.
 -v, --version         Print the version and exit.
 -h, --help            Print this help and exit.
 ```
+
+The port is stable across restarts: mevebu tries **5555** first, then **5678**, then **5432**,
+and falls back to any free port only when those are taken.
 
 ## Tools
 
