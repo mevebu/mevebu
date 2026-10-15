@@ -8,7 +8,7 @@ export function mount(slot) {
   const listField = textArea({ value: saved.entries ?? "", rows: 8, "aria-label": "Entries, one per line", placeholder: "One entry per line" });
   const countField = numberInput({ value: saved.winners ?? "1", min: "1", max: "500", "aria-label": "How many to draw" });
   const uniqueBox = checkbox("No repeats", { checked: saved.unique !== false });
-  const notify = el("p", { class: "note" });
+  const notify = el("p", { class: "mvb-note" });
 
   const drawButton = button("Draw", { icon: "play", kind: "fill" });
   const copyButton = button("Copy", { icon: "copy" });

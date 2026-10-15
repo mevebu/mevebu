@@ -6,7 +6,7 @@ const ALGORITHMS = ["SHA-1", "SHA-256", "SHA-384", "SHA-512"];
 export function mount(slot) {
   const source = textArea({ value: "mevebu", rows: 5, "aria-label": "Text to hash", placeholder: "Type or paste text" });
   const result = output();
-  const digest = el("p", { class: "note" });
+  const digest = el("p", { class: "mvb-note" });
   const error = notice("error");
 
   let algorithm = "SHA-256";
@@ -41,11 +41,11 @@ export function mount(slot) {
   const copy = copyButton(() => result.textContent, "Copy hash");
 
   const card = toolcard({
-    head: actions(copy),
     body: bench(
       stack(panel("Algorithm", chips), panel("Text", source)),
       stack(panel("Hash", result), digest, error)
     ),
+    foot: actions(copy),
   });
   slot.append(card.node);
   run();

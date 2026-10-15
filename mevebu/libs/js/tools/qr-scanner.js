@@ -21,7 +21,7 @@ function loadJsQR() {
 export function mount(slot) {
   const video = el("video", { class: "mvb-qrview", playsinline: true, muted: true, hidden: true });
   const fileField = el("input", { type: "file", accept: "image/*", hidden: true, "aria-label": "Image file" });
-  const status = el("p", { class: "note" });
+  const status = el("p", { class: "mvb-note" });
   const found = output({ rows: 3 });
   const error = notice("error");
 

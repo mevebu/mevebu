@@ -336,14 +336,14 @@ function toolRow(tool, onToggle) {
   return el(
     "li",
     {
-      class: "mvb-row",
+      class: "mvb-listrow",
       dataset: { href: toolHref(tool), haystack: `${tool.name} ${tool.note} ${tool.keywords ?? ""}`.toLowerCase() },
     },
     el(
       "a",
-      { class: "mvb-row__link", href: toolHref(tool) },
-      el("span", { class: "mvb-row__name" }, tool.name),
-      el("span", { class: "mvb-row__note" }, tool.note)
+      { class: "mvb-listrow__link", href: toolHref(tool) },
+      el("span", { class: "mvb-listrow__name" }, tool.name),
+      el("span", { class: "mvb-listrow__note" }, tool.note)
     ),
     starButton(tool, onToggle)
   );
@@ -367,21 +367,21 @@ function filterBar(placeholder = "Search tools") {
   );
 }
 
-/** Live filters `.mvb-card` grids and `.mvb-rows` lists already in the tree. */
+/** Live filters `.mvb-card` grids and `.mvb-listrow` lists already in the tree. */
 function wireFilter(root, meta) {
   const input = root.querySelector(".mvb-filter__in");
   if (!input) return;
   const run = () => {
     const query = input.value.trim().toLowerCase();
     let shown = 0;
-    for (const item of root.querySelectorAll(".mvb-card, .mvb-row")) {
+    for (const item of root.querySelectorAll(".mvb-card, .mvb-listrow")) {
       const hay = item.dataset.haystack ?? item.textContent.toLowerCase();
       const hit = !query || hay.includes(query);
       item.hidden = !hit;
       if (hit) shown++;
     }
     for (const section of root.querySelectorAll("[data-mvb-group]")) {
-      const any = [...section.querySelectorAll(".mvb-card, .mvb-row")].some((item) => !item.hidden);
+      const any = [...section.querySelectorAll(".mvb-card, .mvb-listrow")].some((item) => !item.hidden);
       section.hidden = !any;
     }
     meta.textContent = query ? `${shown} of ${TOOLS.length} tools` : `${TOOLS.length} tools`;
@@ -389,7 +389,7 @@ function wireFilter(root, meta) {
   input.addEventListener("input", run);
   input.addEventListener("keydown", (event) => {
     if (event.key !== "Enter") return;
-    const first = [...root.querySelectorAll(".mvb-card, .mvb-row")].find((item) => !item.hidden);
+    const first = [...root.querySelectorAll(".mvb-card, .mvb-listrow")].find((item) => !item.hidden);
     if (first) {
       const href = first.tagName === "A" ? first.getAttribute("href") : first.dataset.href;
       go(href.slice(1));
@@ -532,7 +532,7 @@ function favoritesPage() {
         "Tap the star on any tool to keep it here. ",
         el("a", { class: "mvb-link", href: "#/tools" }, "Browse the tools")),
     el("section", { class: "mvb-section" },
-      el("ul", { class: "mvb-rows" }, ...saved.map((tool) => toolRow(tool, rerenderFavorites))))
+      el("ul", { class: "mvb-list" }, ...saved.map((tool) => toolRow(tool, rerenderFavorites))))
   );
 }
 
@@ -653,7 +653,7 @@ function aboutPage() {
       el("p", {}, "Add one object to ", el("code", {}, "mevebu/libs/js/registry.js"), " and one file in ", el("code", {}, "mevebu/libs/js/tools/"), ". The home page, the index, the categories, search and the route all come from that entry.")),
 
     block("Built with",
-      el("p", {}, "Plain HTML, CSS and JavaScript. No framework, no bundler, no build step. Icons are Lucide and the QR decoder is jsQR."),
+      el("p", {}, "Hand written HTML, CSS and JavaScript, with Tailwind for the stylesheet. Icons are Lucide and the QR decoder is jsQR."),
       el("p", {}, "Source and issues: ",
         el("a", { class: "mvb-link", href: REPO_URL, target: "_blank", rel: "noopener" }, "github.com/mevebu/mevebu")),
       el("p", {}, copyButton(() => location.href, "Copy this page link")))

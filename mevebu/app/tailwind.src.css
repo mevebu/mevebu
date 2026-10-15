@@ -1,0 +1,1188 @@
+/* mevebu styles, authored in Tailwind CSS v4.
+
+   Owner decision, recorded in AGENTS.md section 3: the repo writes its styles with
+   Tailwind and builds one stylesheet that ships inside mevebu/. Nothing loads from a
+   CDN, so the app stays offline and makes no third-party request.
+
+   Source of truth: this file.
+   Built output:    mevebu/app/tailwind.css   (committed, never edit by hand)
+   Rebuild:         npm run css
+
+   Component classes keep the mvb- prefix and the exact names the tools already pass,
+   so no tool file has to know how the design system is implemented. Every token lives
+   in the :root blocks below, so no rule hardcodes a colour. Raw Tailwind utilities are
+   welcome for one-off layout inside a single tool.
+
+   The five things this file is opinionated about:
+   1. One place for actions. A tool's buttons sit on a card edge, never floating mid column.
+   2. One spacing rhythm. 4px base, 16px inside a group, 24px between groups.
+   3. Phone first. Two columns arrive at 60rem, never before.
+   4. Dark mode is a real theme, not the light theme inverted.
+   5. You type into a raised surface and read results on a recessed one. */
+
+@import "tailwindcss" source(none);
+
+@source "./index.html";
+@source "./app";
+@source "./libs/js";
+
+/* The app switches theme with <html data-theme>, so dark: follows that attribute. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ---------- tokens ---------- */
+
+:root {
+  --mvb-void: #eef1f7;
+  --mvb-deck: #ffffff;
+  --mvb-deck-2: #f1f4fa;
+  --mvb-ink: #151d2e;
+  --mvb-ink-2: #4b5871;
+  --mvb-ink-3: #69748c;
+  --mvb-orbit: #dfe4ef;
+  --mvb-orbit-hard: #c2cbdf;
+  --mvb-comet: #2456d6;
+  --mvb-comet-deep: #1a43ad;
+  --mvb-on-comet: #ffffff;
+  --mvb-nebula: #e3ebfd;
+  --mvb-aurora: #0d7a56;
+  --mvb-danger: #b3261e;
+  --mvb-star: #e6a100;
+  --mvb-track: #c2cbdf;
+  --mvb-scrim: rgb(6 10 24 / 0.5);
+
+  --mvb-r1: 10px;
+  --mvb-r2: 16px;
+  --mvb-r3: 24px;
+
+  --mvb-margin: clamp(20px, 5vw, 44px);
+  --mvb-gutter: clamp(14px, 2vw, 24px);
+  --mvb-bench: 1120px;
+  --mvb-bar: 60px;
+
+  --mvb-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mvb-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --mvb-ease: cubic-bezier(0.22, 0.9, 0.28, 1);
+  --mvb-t: 150ms;
+
+  /* native controls and the select caret follow the theme through these */
+  --mvb-caret: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2369748c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --mvb-void: #05080f;
+  --mvb-deck: #0e1526;
+  --mvb-deck-2: #16203a;
+  --mvb-ink: #e9eefb;
+  --mvb-ink-2: #aeb9d2;
+  --mvb-ink-3: #8b97b3;
+  --mvb-orbit: #24324f;
+  --mvb-orbit-hard: #35476f;
+  --mvb-comet: #5f8bff;
+  --mvb-comet-deep: #7ba1ff;
+  --mvb-on-comet: #060b18;
+  --mvb-nebula: #131e3c;
+  --mvb-aurora: #4ad69c;
+  --mvb-danger: #ff8a80;
+  --mvb-star: #ffcf4d;
+  --mvb-track: #35476f;
+  --mvb-scrim: rgb(2 4 10 / 0.68);
+  --mvb-caret: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b97b3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  color-scheme: dark;
+}
+
+/* The tokens above become Tailwind utilities: bg-deck, text-ink-2, border-orbit,
+   rounded-r2, ring-nebula. `inline` keeps them as var() references, so every utility
+   follows the theme switch without a second class. */
+@theme inline {
+  --color-void: var(--mvb-void);
+  --color-deck: var(--mvb-deck);
+  --color-deck-2: var(--mvb-deck-2);
+  --color-ink: var(--mvb-ink);
+  --color-ink-2: var(--mvb-ink-2);
+  --color-ink-3: var(--mvb-ink-3);
+  --color-orbit: var(--mvb-orbit);
+  --color-orbit-hard: var(--mvb-orbit-hard);
+  --color-comet: var(--mvb-comet);
+  --color-comet-deep: var(--mvb-comet-deep);
+  --color-on-comet: var(--mvb-on-comet);
+  --color-nebula: var(--mvb-nebula);
+  --color-aurora: var(--mvb-aurora);
+  --color-danger: var(--mvb-danger);
+  --color-star: var(--mvb-star);
+
+  --radius-r1: var(--mvb-r1);
+  --radius-r2: var(--mvb-r2);
+  --radius-r3: var(--mvb-r3);
+
+  --font-sans: var(--mvb-sans);
+  --font-mono: var(--mvb-mono);
+}
+
+/* ---------- base ---------- */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--mvb-void);
+    color: var(--mvb-ink);
+    font-family: var(--mvb-sans);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6, p, ul, ol, pre, figure { margin: 0; }
+  ul, ol { list-style: none; padding: 0; }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  a { color: inherit; }
+  img, svg, canvas, video { display: block; max-width: 100%; }
+
+  /* The card head and foot are rendered with a hidden attribute rather than removed,
+     and their own display rule would otherwise win over the browser default. */
+  [hidden] { display: none !important; }
+
+  :focus-visible {
+    outline: 2px solid var(--mvb-comet);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::selection { background: var(--mvb-nebula); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* ---------- icons ---------- */
+
+  .mvb-ico { @apply block size-[18px] flex-none; }
+  .mvb-ico--lg { @apply size-[26px]; }
+  .mvb-ico--sm { @apply size-[15px]; }
+
+  /* ---------- masthead ---------- */
+
+  .mvb-bar {
+    @apply sticky top-0 z-30 border-b border-orbit;
+    background: color-mix(in srgb, var(--mvb-deck) 88%, transparent);
+    backdrop-filter: saturate(140%) blur(10px);
+    -webkit-backdrop-filter: saturate(140%) blur(10px);
+  }
+
+  .mvb-bar__in {
+    height: var(--mvb-bar);
+    margin-inline: var(--mvb-margin);
+    @apply flex items-center gap-[clamp(14px,3vw,32px)];
+  }
+
+  .mvb-mark {
+    @apply inline-flex flex-none items-center gap-2.5 text-lg font-bold tracking-[-0.01em] text-ink no-underline;
+  }
+
+  .mvb-mark img {
+    @apply block size-[30px] rounded-[9px];
+    box-shadow: 0 0 0 1px var(--mvb-orbit);
+  }
+
+  .mvb-nav {
+    @apply ms-auto flex flex-none gap-1 rounded-r2 border border-orbit bg-deck-2 p-1;
+  }
+
+  .mvb-nav__link {
+    @apply whitespace-nowrap rounded-lg px-3 py-[7px] text-[0.90625rem] font-semibold text-ink-2 no-underline transition-colors duration-150;
+  }
+
+  .mvb-nav__link:hover {
+    @apply bg-ink/6 text-ink;
+  }
+
+  .mvb-nav__link.mvb-on {
+    @apply bg-deck text-ink;
+    box-shadow: 0 0 0 1px var(--mvb-orbit);
+  }
+
+  .mvb-bar__end { @apply flex items-center gap-0.5; }
+
+  .mvb-icobtn {
+    @apply inline-flex size-10 cursor-pointer items-center justify-center rounded-r1 border border-transparent bg-transparent text-ink-2 transition-colors duration-150;
+  }
+
+  .mvb-icobtn:hover { @apply bg-deck-2 text-ink; }
+  .mvb-icobtn:focus-visible { @apply border-comet; }
+
+  .mvb-bar__menu { @apply hidden; }
+
+  /* search button that opens the palette */
+
+  .mvb-searchbtn {
+    @apply me-1 inline-flex h-10 min-w-[180px] cursor-pointer items-center gap-2 rounded-r1 border border-orbit bg-deck-2 ps-3 pe-2.5 text-sm font-medium text-ink-2 transition-colors duration-150;
+  }
+
+  .mvb-searchbtn:hover { @apply border-orbit-hard bg-deck text-ink; }
+  .mvb-searchbtn:focus-visible { @apply border-comet; }
+  .mvb-searchbtn .mvb-ico { @apply size-[15px] text-ink-3; }
+
+  .mvb-searchbtn__txt { @apply flex-1 text-start text-sm; }
+
+  .mvb-searchbtn__key {
+    @apply rounded-[4px] border border-orbit bg-deck px-1.5 py-px font-sans text-[0.71875rem] font-semibold text-ink-3;
+  }
+
+  /* nav sheet on a phone */
+
+  .mvb-sheet {
+    @apply grid border-t border-orbit bg-deck px-[var(--mvb-margin)] pt-1.5 pb-3.5;
+  }
+
+  .mvb-sheet__nav { @apply grid; }
+
+  .mvb-sheet__link {
+    @apply flex items-center gap-2 border-b border-orbit bg-transparent py-[13px] text-start text-[1.0625rem] font-medium text-ink no-underline;
+  }
+
+  .mvb-sheet__link:last-child { @apply border-b-0; }
+  .mvb-sheet__link .mvb-ico { @apply text-ink-3; }
+  .mvb-sheet__action { @apply text-comet; }
+
+  /* ---------- frame ---------- */
+
+  .mvb-main { @apply flex-1 outline-none; }
+
+  .mvb-page { @apply px-[var(--mvb-margin)]; }
+
+  .mvb-page--tool,
+  .mvb-page--narrow {
+    max-width: var(--mvb-bench);
+    @apply mx-auto;
+  }
+
+  .mvb-link { @apply text-comet underline-offset-[3px]; }
+
+  .mvb-kbd {
+    @apply rounded-[5px] border border-orbit bg-deck-2 px-[7px] py-px font-sans text-[0.78125rem] text-ink-2;
+  }
+
+  /* hero, only on the home page */
+
+  .mvb-hero {
+    @apply relative border-b border-orbit;
+    overflow: clip;
+    background:
+      radial-gradient(560px 300px at 12% -40px, var(--mvb-nebula), transparent 70%),
+      var(--mvb-deck);
+  }
+
+  .mvb-hero__in {
+    max-width: var(--mvb-bench);
+    @apply mx-auto grid items-center gap-[clamp(24px,5vw,72px)] px-[var(--mvb-margin)] pt-[clamp(48px,8vw,104px)] pb-[clamp(40px,6vw,80px)];
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  }
+
+  .mvb-hero__title {
+    @apply text-balance text-[clamp(34px,6vw,60px)] font-bold leading-[1.02] tracking-[-0.03em];
+  }
+
+  .mvb-hero__cta { @apply mt-6 flex flex-wrap gap-2.5; }
+
+  .mvb-hero__orbit { @apply w-[min(300px,70vw)] justify-self-center; }
+  .mvb-hero__orbit img { @apply block h-auto w-full rounded-r3; }
+
+  /* index sections */
+
+  .mvb-section { @apply pt-[clamp(32px,5vw,60px)]; }
+
+  .mvb-section__head { @apply mb-4 flex items-baseline gap-3; }
+
+  .mvb-section__title {
+    @apply flex items-center gap-2.5 text-[clamp(21px,3vw,27px)] font-bold tracking-[-0.02em];
+  }
+
+  .mvb-section__title .mvb-ico { @apply size-[22px] text-comet; }
+
+  .mvb-section__count {
+    @apply ms-1.5 rounded-full bg-deck-2 px-2 py-px text-[0.8125rem] font-semibold tabular-nums text-ink-3;
+  }
+
+  .mvb-section__more {
+    @apply ms-auto whitespace-nowrap text-[0.90625rem] font-semibold text-comet no-underline;
+  }
+
+  .mvb-section__more:hover { @apply underline; }
+
+  /* ---------- column system ----------
+     Every grid climbs through three states, so a tablet gets a layout of its own
+     instead of a stretched stack or four crammed columns. */
+
+  .mvb-cols { @apply grid gap-[var(--mvb-gutter)]; }
+  .mvb-cols--2 { @apply grid-cols-1 sm:grid-cols-2; }
+  .mvb-cols--3 { @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-3; }
+  .mvb-cols--4 { @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-4; }
+  .mvb-cols--auto { grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); }
+  .mvb-cols--side { @apply grid-cols-1 min-[60rem]:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]; }
+
+  .mvb-row { @apply flex min-w-0 flex-wrap items-center gap-2; }
+  .mvb-col { @apply min-w-0; }
+  .mvb-col--grow { @apply flex-1; }
+  .mvb-col--shrink { @apply flex-none; }
+
+  .mvb-grid { @apply grid grid-cols-1 gap-[var(--mvb-gutter)] sm:grid-cols-2 lg:grid-cols-3; }
+
+  .mvb-card {
+    @apply relative grid gap-1.5 rounded-r2 border border-orbit bg-deck p-5 no-underline transition-colors duration-150;
+  }
+
+  .mvb-card:hover { @apply border-comet; }
+
+  .mvb-card__top { @apply flex items-center gap-3; }
+
+  .mvb-card__sigil {
+    @apply grid size-[42px] flex-none place-items-center rounded-[13px] bg-nebula text-comet;
+  }
+
+  .mvb-card__sigil .mvb-ico { @apply size-[21px]; }
+
+  .mvb-card__name { @apply text-[1.0625rem] font-semibold tracking-[-0.01em]; }
+
+  .mvb-card__note { @apply min-h-11 text-pretty text-[0.90625rem] text-ink-2; }
+
+  .mvb-card__foot {
+    @apply mt-1.5 flex items-center gap-2 text-[0.84375rem] font-semibold text-ink-3;
+  }
+
+  /* ---------- tool list (category and favorites pages) ---------- */
+
+  .mvb-list {
+    @apply grid overflow-clip rounded-r2 border border-orbit bg-deck;
+  }
+
+  .mvb-listrow {
+    @apply flex items-center border-b border-orbit;
+  }
+
+  .mvb-listrow:last-child { @apply border-b-0; }
+
+  .mvb-listrow__link {
+    @apply grid min-w-0 flex-1 gap-px py-[13px] pe-1.5 ps-[18px] no-underline;
+  }
+
+  .mvb-listrow__link:hover .mvb-listrow__name { @apply text-comet; }
+
+  .mvb-listrow__name { @apply text-[1.03125rem] font-semibold tracking-[-0.01em]; }
+  .mvb-listrow__note { @apply text-sm text-ink-2; }
+
+  .mvb-star {
+    @apply me-2 inline-flex size-11 flex-none cursor-pointer items-center justify-center rounded-r1 border-0 bg-transparent text-orbit-hard transition-[color,transform] duration-150;
+  }
+
+  .mvb-star:hover { @apply text-ink-2; }
+  .mvb-star.mvb-on { @apply text-star; }
+  .mvb-star.mvb-on .mvb-ico { fill: var(--mvb-star); }
+  .mvb-star:active { @apply scale-[0.88]; }
+
+  /* ---------- filter ---------- */
+
+  .mvb-filter {
+    @apply mt-[clamp(22px,4vw,36px)] flex items-center gap-2.5 rounded-r2 border border-orbit bg-deck px-3.5 transition-colors duration-150;
+  }
+
+  .mvb-filter:focus-within { @apply border-comet; }
+
+  .mvb-filter__icon { @apply flex text-ink-3; }
+
+  .mvb-filter__in {
+    @apply min-w-0 flex-1 border-0 bg-transparent text-[1.0625rem];
+    height: 52px;
+  }
+
+  .mvb-filter__in:focus { @apply outline-none; }
+  .mvb-filter__in::placeholder { @apply text-ink-3; }
+
+  .mvb-filter__key {
+    @apply rounded-[5px] border border-orbit px-[7px] py-0.5 font-sans text-[0.75rem] text-ink-3;
+  }
+
+  .mvb-filter__meta {
+    @apply mt-2.5 flex min-h-[22px] items-baseline gap-3.5 text-sm text-ink-3;
+  }
+
+  .mvb-tally { @apply text-danger; }
+
+  /* ---------- page headings ---------- */
+
+  .mvb-lead {
+    @apply mt-[clamp(28px,5vw,56px)] max-w-[20ch] text-balance text-[clamp(28px,5vw,44px)] font-bold leading-[1.06] tracking-[-0.025em];
+  }
+
+  .mvb-lede { @apply mt-3 max-w-[60ch] text-pretty text-[1.0625rem] text-ink-2; }
+
+  /* ---------- tool page ---------- */
+
+  .mvb-head { @apply my-[clamp(24px,4vw,44px)] mb-[clamp(22px,3vw,32px)]; }
+
+  .mvb-head__back {
+    @apply mb-4 inline-flex items-center gap-[7px] text-[0.9375rem] font-medium text-ink-2 no-underline;
+  }
+
+  .mvb-head__back:hover { @apply text-ink; }
+
+  .mvb-head__row { @apply flex items-start gap-2; }
+
+  .mvb-head__title {
+    @apply flex-1 text-balance text-[clamp(26px,4vw,36px)] font-bold leading-[1.1] tracking-[-0.025em];
+  }
+
+  .mvb-head__actions { @apply flex items-center gap-0.5 pt-1; }
+
+  .mvb-head__about { @apply mt-2 max-w-[58ch] text-pretty text-[1.0625rem] text-ink-2; }
+
+  .mvb-helpbtn {
+    @apply inline-flex size-[38px] cursor-pointer items-center justify-center rounded-full border border-orbit bg-deck-2 font-sans text-base font-bold text-ink-2 transition-colors duration-150;
+  }
+
+  .mvb-helpbtn:hover { @apply border-orbit-hard bg-deck text-ink; }
+  .mvb-helpbtn:focus-visible { @apply border-comet; }
+
+  .mvb-more { @apply mt-[clamp(40px,6vw,72px)]; }
+  .mvb-more__title { @apply mb-2.5 text-[0.9375rem] font-bold text-ink-3; }
+
+  /* ---------- tool card ----------
+     Head and foot are the only places a tool may put an action row, so the buttons
+     always land on a card edge. The body is the working surface. */
+
+  .mvb-toolcard {
+    @apply flex flex-col overflow-clip rounded-r2 border border-orbit bg-deck;
+  }
+
+  .mvb-toolcard__head {
+    @apply flex flex-wrap items-center gap-2 border-b border-orbit bg-deck-2 px-[clamp(20px,3vw,32px)] py-[clamp(12px,2vw,16px)];
+  }
+
+  .mvb-toolcard__body {
+    @apply flex-1 p-[clamp(20px,3vw,32px)];
+  }
+
+  .mvb-toolcard__foot {
+    @apply flex flex-wrap items-center justify-end gap-2 border-t border-orbit bg-deck-2 px-[clamp(20px,3vw,32px)] py-[clamp(12px,2vw,16px)];
+  }
+
+  /* ---------- bench ----------
+     One column until there is real room for two, so the phone reads top to bottom
+     and a tablet is not a stretched stack. */
+
+  .mvb-bench { @apply grid items-start gap-5; }
+
+  .mvb-bench__side,
+  .mvb-bench__main { @apply min-w-0; }
+
+  @media (min-width: 60rem) {
+    .mvb-bench {
+      @apply gap-6;
+      grid-template-columns: minmax(0, 21rem) minmax(0, 1fr);
+    }
+  }
+
+  .mvb-stage {
+    @apply mx-auto grid max-w-[560px] justify-items-center gap-4 text-center;
+  }
+
+  .mvb-stack { @apply grid content-start gap-4; }
+
+  /* ---------- field ---------- */
+
+  .mvb-field { @apply grid min-w-0 content-start gap-1.5; }
+  .mvb-field__label { @apply text-[0.875rem] font-semibold text-ink-2; }
+  .mvb-field__hint { @apply text-[0.8125rem] text-ink-3; }
+
+  .mvb-field--error .mvb-in,
+  .mvb-field--error .mvb-pick {
+    border-color: var(--mvb-danger);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--mvb-danger) 14%, transparent);
+  }
+
+  .mvb-field--error .mvb-field__hint { @apply text-danger; }
+
+  .mvb-field--good .mvb-in,
+  .mvb-field--good .mvb-pick {
+    border-color: var(--mvb-aurora);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--mvb-aurora) 14%, transparent);
+  }
+
+  .mvb-field--good .mvb-field__hint { @apply text-aurora; }
+
+  /* ---------- inputs ----------
+     You type into a raised surface. Results live in .mvb-out on a recessed one. */
+
+  .mvb-in {
+    @apply w-full min-w-0 rounded-r1 border border-orbit bg-deck px-3 py-2.5 text-ink transition-[border-color,box-shadow] duration-150;
+  }
+
+  .mvb-in:hover { @apply border-orbit-hard; }
+  .mvb-in:focus { @apply border-comet outline-none ring-3 ring-nebula; }
+  .mvb-in::placeholder { @apply text-ink-3; }
+
+  .mvb-in[disabled],
+  .mvb-in[readonly] { @apply cursor-default bg-deck-2 text-ink-3; }
+
+  .mvb-in[disabled] { @apply cursor-not-allowed opacity-70; }
+
+  .mvb-in--area {
+    @apply min-h-24 resize-y py-2.5 font-mono text-[0.875rem] leading-normal;
+  }
+
+  .mvb-in--num { width: 96px; }
+  .mvb-in--mono { @apply font-mono text-[0.875rem]; }
+
+  .mvb-in--select {
+    @apply cursor-pointer py-2.5 pe-9;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: var(--mvb-caret);
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+  }
+
+  .mvb-in--file { @apply p-1.5; }
+
+  .mvb-in--file::file-selector-button {
+    @apply me-2.5 cursor-pointer rounded-r1 border border-orbit-hard bg-deck-2 px-2.5 py-1 text-[0.8125rem] font-semibold text-ink;
+  }
+
+  .mvb-check {
+    @apply inline-flex cursor-pointer items-center gap-2 rounded-r1 border border-orbit bg-deck py-2 ps-2.5 pe-3 text-[0.9375rem] transition-[border-color,background-color] duration-150;
+  }
+
+  .mvb-check:has(.mvb-check__box:checked) { @apply border-comet bg-nebula; }
+
+  .mvb-check__box {
+    @apply m-0 size-4;
+    accent-color: var(--mvb-comet);
+  }
+
+  /* switch */
+
+  .mvb-switch {
+    @apply inline-flex cursor-pointer select-none items-center gap-2.5 text-[0.9375rem];
+  }
+
+  .mvb-switch__box { @apply pointer-events-none absolute opacity-0; }
+
+  .mvb-switch__track {
+    @apply relative h-[22px] w-[38px] rounded-full transition-colors duration-150;
+    background: var(--mvb-track);
+  }
+
+  .mvb-switch__thumb {
+    @apply absolute top-0.5 left-0.5 size-[18px] rounded-full bg-deck transition-transform duration-150;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.18);
+  }
+
+  .mvb-switch__box:checked + .mvb-switch__track { background: var(--mvb-comet); }
+  .mvb-switch__box:checked + .mvb-switch__track .mvb-switch__thumb { @apply translate-x-4; }
+  .mvb-switch__box:focus-visible + .mvb-switch__track { box-shadow: 0 0 0 3px var(--mvb-nebula); }
+
+  .mvb-range {
+    @apply w-full;
+    accent-color: var(--mvb-comet);
+  }
+
+  .mvb-pick {
+    @apply h-10 w-[52px] flex-none cursor-pointer rounded-r1 border border-orbit bg-deck p-0.5;
+  }
+
+  .mvb-pick:hover { @apply border-orbit-hard; }
+  .mvb-pick:focus { @apply border-comet outline-none ring-3 ring-nebula; }
+
+  /* chips */
+
+  .mvb-chips { @apply flex flex-wrap gap-1.5; }
+
+  .mvb-chip {
+    @apply min-h-[38px] cursor-pointer rounded-r1 border border-orbit bg-deck px-[13px] text-sm font-medium text-ink-2 transition-colors duration-150;
+  }
+
+  .mvb-chip:hover { @apply border-orbit-hard text-ink; }
+  .mvb-chip.mvb-on { @apply border-comet bg-nebula text-ink; }
+
+  /* ---------- actions ----------
+     One row, one alignment, one gap. Third position is not an option: a tool's
+     actions belong on a card edge. */
+
+  .mvb-actions { @apply flex flex-wrap items-center justify-end gap-2; }
+
+  .mvb-toolcard__head .mvb-actions,
+  .mvb-toolcard__foot .mvb-actions { @apply w-full; }
+
+  /* An action row that ends a column keeps a small top gap; a card edge owns its own
+     padding instead. */
+  .mvb-stack > .mvb-actions { @apply mt-1; }
+
+  /* buttons */
+
+  .mvb-btn {
+    @apply inline-flex min-h-10 cursor-pointer items-center justify-center gap-[7px] rounded-r1 border border-transparent px-4 text-[0.9375rem] font-semibold no-underline transition-[background-color,border-color,color,transform] duration-150;
+  }
+
+  .mvb-btn:active { @apply scale-[0.97]; }
+
+  .mvb-btn--fill { @apply border-comet bg-comet text-on-comet; }
+  .mvb-btn--fill:hover { @apply border-comet-deep bg-comet-deep; }
+
+  .mvb-btn--plain { @apply border-orbit bg-deck text-ink; }
+  .mvb-btn--plain:hover { @apply border-orbit-hard; }
+
+  .mvb-btn--quiet { @apply bg-transparent px-2 text-ink-2; }
+  .mvb-btn--quiet:hover { @apply bg-deck-2 text-ink; }
+
+  .mvb-btn:disabled { @apply cursor-not-allowed opacity-45; }
+
+  /* readouts: the recessed half of the pair, so a result never reads as an input */
+
+  .mvb-out {
+    @apply m-0 max-h-[340px] w-full overflow-auto rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3 font-mono text-[0.875rem] leading-normal;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  textarea.mvb-out { @apply resize-y; }
+
+  /* An empty readout is a waiting slot, not data. Dashed already means "nothing yet"
+     in this system (.mvb-blank, .mvb-drop), so an empty one says the same thing
+     instead of reading as a mysterious grey bar. Only <pre> can be matched safely:
+     a textarea holds its text in a property, so :empty would lie about it. */
+  pre.mvb-out:empty { @apply border-dashed bg-transparent; }
+
+  /* notices. A state is never colour alone: the rule marks it as well. */
+
+  .mvb-note { @apply border-s-[3px] border-transparent ps-2 text-sm text-ink-3; }
+
+  .mvb-note--error {
+    @apply border-s-danger text-danger;
+  }
+
+  .mvb-note--good {
+    @apply border-s-aurora text-aurora;
+  }
+
+  .mvb-blank {
+    @apply grid justify-items-center gap-2.5 rounded-r2 border border-dashed border-orbit-hard bg-deck-2 px-4 py-[clamp(28px,6vw,56px)] text-center text-ink-3;
+  }
+
+  .mvb-blank p { @apply max-w-[34ch]; }
+
+  .mvb-code {
+    @apply overflow-x-auto whitespace-pre-wrap rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3 font-mono text-[0.875rem];
+  }
+
+  :not(pre) > code {
+    @apply rounded-[4px] bg-deck-2 px-[5px] py-px font-mono text-[0.92em];
+  }
+
+  /* about blocks */
+
+  .mvb-about {
+    @apply mt-8 grid max-w-[62ch] gap-2.5 border-t border-orbit pt-6;
+  }
+
+  .mvb-about__title { @apply text-lg font-bold tracking-[-0.01em]; }
+  .mvb-about p { @apply text-pretty text-ink-2; }
+
+  /* ---------- modal ---------- */
+
+  .mvb-veil {
+    @apply fixed inset-0 z-80 grid items-start justify-items-center px-5 pt-[clamp(60px,10vh,120px)] pb-5;
+    background: var(--mvb-scrim);
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+
+  .mvb-veil.mvb-open { opacity: 1; }
+  .mvb-veil.mvb-off { opacity: 0; }
+
+  .mvb-modal {
+    @apply w-[min(440px,100%)] rounded-r3 border border-orbit bg-deck p-7 text-center;
+    transform: translateY(14px) scale(0.96);
+    transition: transform 220ms var(--mvb-ease);
+  }
+
+  .mvb-veil.mvb-open .mvb-modal { transform: none; }
+  .mvb-veil.mvb-off .mvb-modal { transform: translateY(10px) scale(0.97); }
+
+  .mvb-modal__art img { @apply mx-auto block size-[88px] rounded-[22px]; }
+
+  .mvb-modal__title { @apply mt-3.5 text-[1.375rem] font-bold tracking-[-0.02em]; }
+  .mvb-modal__body p { @apply mt-2 text-pretty text-[0.96875rem] text-ink-2; }
+  .mvb-modal__actions { @apply mt-5 grid gap-2; }
+
+  /* version readout inside the update modal */
+  .mvb-vers { @apply mt-[18px] overflow-hidden rounded-r2 border border-orbit; }
+  .mvb-vers__row { @apply flex items-center justify-between gap-3 px-4 py-3; }
+  .mvb-vers__row + .mvb-vers__row { @apply border-t border-orbit; }
+  .mvb-vers__label { @apply text-sm text-ink-3; }
+  .mvb-vers__val { @apply font-mono text-[0.9375rem] font-semibold; }
+  .mvb-vers__row--new .mvb-vers__val { @apply text-comet; }
+  .mvb-vers__hint { @apply mt-3.5 text-sm; }
+
+  .mvb-cmd {
+    @apply mt-2.5 flex flex-wrap items-center gap-2 rounded-r2 border border-orbit bg-deck-2 py-2.5 pe-2.5 ps-4;
+  }
+
+  .mvb-cmd__text {
+    @apply min-w-0 flex-1 wrap-anywhere font-mono text-sm;
+  }
+
+  /* ---------- command palette ---------- */
+
+  .mvb-veil--pal { @apply pt-[clamp(60px,12vh,140px)]; }
+
+  .mvb-veil--pal .mvb-modal {
+    @apply w-[min(640px,100%)] overflow-hidden p-0 text-start;
+  }
+
+  .mvb-pal__head {
+    @apply flex items-center gap-3 border-b border-orbit px-[18px] py-4;
+  }
+
+  .mvb-pal__icon { @apply text-ink-3; }
+
+  .mvb-pal__in {
+    @apply h-10 min-w-0 flex-1 border-0 bg-transparent text-[1.0625rem];
+  }
+
+  .mvb-pal__in:focus { @apply outline-none; }
+  .mvb-pal__in::placeholder { @apply text-ink-3; }
+
+  .mvb-pal__count { @apply m-0 px-[18px] pt-2 text-[0.78125rem] text-ink-3; }
+
+  .mvb-pal__list {
+    @apply m-0 mt-1.5 max-h-[min(60vh,360px)] overflow-y-auto px-2 pb-2;
+  }
+
+  .mvb-pal__item {
+    @apply flex w-full cursor-pointer items-center gap-3 rounded-r1 border-0 bg-transparent px-3 py-2.5 text-start text-ink transition-colors duration-150;
+  }
+
+  .mvb-pal__item.mvb-on { @apply bg-nebula; }
+  .mvb-pal__item.mvb-on .mvb-pal__name { @apply text-comet; }
+
+  .mvb-pal__sigil {
+    @apply grid size-8 flex-none place-items-center rounded-lg bg-deck-2 text-comet;
+  }
+
+  .mvb-pal__sigil .mvb-ico { @apply size-4; }
+  .mvb-pal__text { @apply grid min-w-0 flex-1 gap-px; }
+  .mvb-pal__name { @apply text-[0.9375rem] font-semibold tracking-[-0.01em]; }
+  .mvb-pal__note { @apply overflow-hidden text-[0.84375rem] text-ellipsis whitespace-nowrap text-ink-2; }
+  .mvb-pal__cat { @apply whitespace-nowrap text-[0.78125rem] text-ink-3; }
+
+  .mvb-pal__empty { @apply p-[18px] text-sm text-ink-3; }
+
+  .mvb-pal__foot {
+    @apply m-0 flex flex-wrap items-center gap-2.5 border-t border-orbit px-[18px] py-2.5 text-[0.78125rem] text-ink-3;
+  }
+
+  .mvb-pal__key {
+    @apply rounded-[4px] border border-orbit bg-deck-2 px-1.5 py-px font-sans text-[0.6875rem] text-ink-2;
+  }
+
+  /* ---------- help modal ---------- */
+
+  .mvb-veil--help { @apply pt-[clamp(60px,10vh,120px)]; }
+
+  .mvb-veil--help .mvb-modal {
+    @apply w-[min(560px,100%)] overflow-hidden p-7 text-start;
+  }
+
+  .mvb-help__head { @apply mb-3 flex items-center gap-3.5; }
+
+  .mvb-help__sigil {
+    @apply grid size-11 place-items-center rounded-xl bg-nebula text-comet;
+  }
+
+  .mvb-help__sigil .mvb-ico { @apply size-[22px]; }
+
+  .mvb-help__title { @apply text-xl font-bold tracking-[-0.02em]; }
+  .mvb-help__note { @apply mb-3.5 text-pretty text-[0.96875rem] leading-normal text-ink-2; }
+
+  .mvb-help__steps {
+    @apply m-0 grid list-none gap-2.5 p-0;
+    counter-reset: mvb-step;
+  }
+
+  .mvb-help__steps li {
+    @apply grid grid-cols-[22px_1fr] items-start gap-2 text-[0.90625rem] leading-normal text-ink;
+  }
+
+  .mvb-help__steps li::before {
+    content: counter(mvb-step);
+    counter-increment: mvb-step;
+    @apply grid size-[22px] place-items-center rounded-full bg-nebula text-[0.75rem] font-bold tabular-nums text-comet;
+  }
+
+  .mvb-help__actions {
+    @apply mt-5 flex flex-wrap justify-end gap-2;
+  }
+
+  /* ---------- footer ---------- */
+
+  .mvb-foot {
+    @apply mt-[clamp(56px,8vw,96px)] border-t border-orbit bg-deck-2;
+  }
+
+  .mvb-foot__in {
+    max-width: var(--mvb-bench);
+    @apply mx-auto px-[var(--mvb-margin)] pt-[clamp(36px,5vw,56px)] pb-[clamp(24px,3vw,36px)];
+  }
+
+  .mvb-foot__top {
+    @apply grid items-start gap-[clamp(20px,4vw,56px)] min-[60rem]:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)];
+  }
+
+  .mvb-foot__brand { @apply grid gap-2.5; }
+
+  .mvb-foot__mark {
+    @apply inline-flex items-center gap-2.5 text-[1.375rem] font-bold tracking-[-0.02em] text-ink no-underline;
+  }
+
+  .mvb-foot__mark img {
+    @apply size-[34px] rounded-[10px];
+    box-shadow: 0 0 0 1px var(--mvb-orbit);
+  }
+
+  .mvb-foot__tag { @apply max-w-[38ch] text-pretty text-sm text-ink-2; }
+
+  .mvb-foot__nav {
+    @apply grid grid-cols-2 gap-x-[clamp(20px,4vw,40px)] gap-y-1.5;
+  }
+
+  .mvb-foot__nav h4 { @apply m-0 mb-2 text-[0.75rem] font-bold tracking-normal text-ink-3 normal-case; }
+  .mvb-foot__nav ul { @apply grid gap-1.5; }
+  .mvb-foot__nav a { @apply text-[0.90625rem] text-ink-2 no-underline; }
+  .mvb-foot__nav a:hover { @apply text-comet; }
+
+  .mvb-foot__bottom {
+    @apply mt-[clamp(24px,4vw,36px)] flex flex-wrap items-center gap-x-[clamp(14px,3vw,28px)] gap-y-1.5 border-t border-orbit pt-[18px];
+  }
+
+  .mvb-foot__legal { @apply flex items-center gap-[7px] text-[0.84375rem] text-ink-3; }
+  .mvb-foot__count { @apply tabular-nums; }
+  .mvb-foot__count:empty { @apply hidden; }
+
+  /* version chip in the footer; turns into an update button when npm has a newer one */
+  .mvb-version {
+    @apply inline-flex min-h-7 cursor-pointer items-center gap-1.5 rounded-full border border-orbit bg-transparent px-2.5 py-[3px] font-sans text-[0.8125rem] tabular-nums text-ink-3 transition-colors duration-150;
+  }
+
+  .mvb-version:hover { @apply border-orbit-hard text-ink; }
+  .mvb-version:focus-visible { @apply outline-2 outline-comet outline-offset-2; }
+
+  .mvb-version--new {
+    @apply border-comet bg-nebula font-semibold text-comet;
+  }
+
+  .mvb-version--new:hover { @apply bg-comet text-on-comet; }
+
+  .mvb-version .mvb-ico { @apply size-[15px]; }
+
+  /* ---------- toast ---------- */
+
+  .mvb-toast {
+    @apply pointer-events-none fixed bottom-6 left-1/2 z-90 rounded-r1 bg-ink px-4 py-2.5 text-sm font-semibold text-void;
+    transform: translate(-50%, 12px);
+    opacity: 0;
+    transition: opacity 150ms ease, transform 150ms ease;
+  }
+
+  .mvb-toast.mvb-on { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ==========================================================================
+     Objects a tool renders itself
+     ========================================================================== */
+
+  /* ---------- wheel ---------- */
+
+  .mvb-wheel { @apply h-auto w-[min(320px,100%)]; }
+
+  .mvb-wheel__status {
+    @apply text-balance text-xl font-bold tracking-[-0.01em];
+  }
+
+  .mvb-wheel__history {
+    @apply flex max-w-[340px] flex-wrap justify-center gap-1.5;
+  }
+
+  .mvb-wheel__chip {
+    @apply rounded-full border border-orbit bg-deck-2 px-2.5 py-1 text-[0.8125rem] font-semibold;
+  }
+
+  /* ---------- coin ---------- */
+
+  .mvb-coin {
+    @apply grid size-32 select-none place-items-center rounded-full bg-comet text-[44px] font-bold text-on-comet;
+  }
+
+  .mvb-coin.mvb-toss { animation: mvb-toss 450ms ease; }
+
+  @keyframes mvb-toss {
+    0% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.12) rotate(180deg); }
+    100% { transform: scale(1) rotate(360deg); }
+  }
+
+  .mvb-flip__result { @apply text-[1.1875rem] font-bold tracking-[-0.01em]; }
+  .mvb-flip__tally { @apply text-sm tabular-nums text-ink-3; }
+
+  /* ---------- meter ---------- */
+
+  .mvb-meter { @apply h-2 overflow-hidden rounded-full bg-deck-2; }
+
+  .mvb-meter__fill {
+    @apply h-full w-0 rounded-full transition-[width,background-color] duration-150;
+    background: var(--mvb-orbit-hard);
+  }
+
+  .mvb-meter__fill.mvb-weak { background: var(--mvb-danger); }
+  .mvb-meter__fill.mvb-ok { background: var(--mvb-comet); }
+  .mvb-meter__fill.mvb-strong { background: var(--mvb-aurora); }
+
+  /* ---------- swatch and picker ---------- */
+
+  .mvb-swatch {
+    @apply h-14 rounded-r1 border border-orbit-hard bg-deck-2;
+  }
+
+  /* ---------- case list ---------- */
+
+  .mvb-cases { @apply grid gap-1; }
+
+  .mvb-case {
+    @apply flex w-full cursor-pointer items-baseline justify-between gap-3 rounded-r1 border border-transparent bg-transparent px-3 py-[9px] text-start transition-colors duration-150;
+  }
+
+  .mvb-case:hover { @apply bg-deck-2; }
+  .mvb-case.mvb-on { @apply border-comet bg-nebula; }
+
+  .mvb-case__name { @apply flex-none text-[0.8125rem] font-semibold text-ink-2; }
+  .mvb-case.mvb-on .mvb-case__name { @apply text-ink; }
+  .mvb-case__value { @apply wrap-anywhere text-end font-mono text-sm; }
+
+  /* ---------- dropzone and camera ---------- */
+
+  .mvb-drop {
+    @apply grid cursor-pointer justify-items-center gap-2 rounded-r2 border border-dashed border-orbit-hard px-4 py-7 text-[0.9375rem] text-ink-3 transition-colors duration-150;
+  }
+
+  .mvb-drop:hover,
+  .mvb-drop.mvb-drag { @apply border-comet bg-nebula; }
+
+  .mvb-qrview {
+    @apply w-[min(420px,100%)] rounded-r2 border border-orbit-hard bg-black;
+  }
+
+  .mvb-qrcode {
+    @apply h-auto w-[min(300px,100%)];
+    image-rendering: pixelated;
+  }
+
+  /* ---------- tables ---------- */
+
+  .mvb-scroll { @apply max-h-80 overflow-auto; }
+
+  .mvb-ttable {
+    @apply w-full border-collapse font-mono text-sm;
+  }
+
+  .mvb-ttable th,
+  .mvb-ttable td { @apply wrap-anywhere border-b border-orbit px-2.5 py-2 text-start; }
+
+  .mvb-ttable th { @apply font-sans text-[0.8125rem] font-semibold text-ink-2; }
+
+  .mvb-ttable tbody tr:last-child th,
+  .mvb-ttable tbody tr:last-child td { @apply border-b-0; }
+
+  /* ---------- secrets ---------- */
+
+  .mvb-secret { @apply grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2; }
+
+  /* ---------- stat tiles ---------- */
+
+  .mvb-stats {
+    @apply grid gap-2.5;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+  .mvb-stat {
+    @apply grid gap-0.5 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3;
+  }
+
+  .mvb-stat__v { @apply wrap-anywhere text-[1.375rem] font-bold tracking-[-0.02em] tabular-nums; }
+  .mvb-stat__k { @apply text-[0.8125rem] font-semibold text-ink-3; }
+
+  /* ---------- diff view ---------- */
+
+  .mvb-diff {
+    @apply grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit;
+  }
+
+  .mvb-diff__row {
+    @apply grid bg-deck font-mono text-[0.84375rem];
+    grid-template-columns: 34px minmax(0, 1fr);
+  }
+
+  .mvb-diff__row > span { @apply wrap-anywhere px-2.5 py-[3px] whitespace-pre-wrap; }
+
+  .mvb-diff__sign {
+    @apply border-e border-orbit text-center text-ink-3 select-none;
+  }
+
+  .mvb-diff__row--add { background: color-mix(in srgb, var(--mvb-aurora) 14%, var(--mvb-deck)); }
+  .mvb-diff__row--del { background: color-mix(in srgb, var(--mvb-danger) 12%, var(--mvb-deck)); }
+  .mvb-diff__row--add .mvb-diff__sign { @apply text-aurora; }
+  .mvb-diff__row--del .mvb-diff__sign { @apply text-danger; }
+
+  /* ---------- key/value list ---------- */
+
+  .mvb-kv {
+    @apply grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit;
+  }
+
+  .mvb-kv__row {
+    @apply grid gap-3 bg-deck px-3 py-[9px];
+    grid-template-columns: minmax(90px, 34%) minmax(0, 1fr);
+  }
+
+  .mvb-kv__k { @apply wrap-anywhere text-[0.84375rem] font-semibold text-ink-2; }
+  .mvb-kv__v { @apply wrap-anywhere font-mono text-[0.84375rem]; }
+
+  /* ---------- preview pane and highlights ---------- */
+
+  .mvb-pane {
+    @apply min-h-[120px] max-h-[380px] overflow-auto wrap-anywhere rounded-r1 border border-orbit bg-deck-2 px-4 py-3.5 leading-normal;
+  }
+
+  .mvb-pane > :first-child { @apply mt-0; }
+  .mvb-pane > :last-child { @apply mb-0; }
+  .mvb-pane h1, .mvb-pane h2, .mvb-pane h3 { @apply my-4 tracking-[-0.01em]; }
+  .mvb-pane p, .mvb-pane ul, .mvb-pane ol, .mvb-pane pre { @apply mb-2.5; }
+  .mvb-pane ul, .mvb-pane ol { @apply ps-[22px]; }
+  .mvb-pane code { @apply rounded-[5px] bg-deck px-[5px] py-px font-mono text-[0.8125rem]; }
+  .mvb-pane pre { @apply overflow-auto rounded-r1 bg-deck px-3 py-2.5; }
+  .mvb-pane pre code { @apply bg-transparent p-0; }
+  .mvb-pane a { @apply text-comet; }
+  .mvb-pane table { @apply border-collapse; }
+  .mvb-pane th, .mvb-pane td { @apply border border-orbit px-[9px] py-1.5; }
+
+  .mvb-hl { background: color-mix(in srgb, var(--mvb-star) 40%, transparent); @apply rounded-[3px]; }
+  .mvb-hl--on { @apply rounded-[3px] bg-comet text-on-comet; }
+
+  /* ---------- design previews ---------- */
+
+  .mvb-swatches {
+    @apply grid gap-2;
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  }
+
+  .mvb-swatchcard {
+    @apply grid cursor-pointer gap-1.5 rounded-r1 border border-orbit bg-deck p-2 text-start transition-colors duration-150;
+  }
+
+  .mvb-swatchcard:hover { @apply border-comet; }
+  .mvb-swatchcard__chip { @apply h-[52px] rounded-lg border border-orbit-hard; }
+  .mvb-swatchcard__code { @apply font-mono text-[0.8125rem] text-ink-2; }
+
+  .mvb-preview {
+    @apply grid min-h-40 place-items-center overflow-hidden rounded-r1 border border-orbit bg-deck-2 p-[22px];
+  }
+
+  .mvb-preview__box {
+    @apply grid h-[120px] w-[min(200px,100%)] place-items-center bg-comet text-[0.8125rem] text-on-comet;
+  }
+
+  .mvb-preview__sample {
+    @apply w-full rounded-lg border border-orbit bg-deck px-[18px] py-4;
+  }
+
+  .mvb-slider {
+    @apply grid items-center gap-2.5;
+    grid-template-columns: 88px minmax(0, 1fr) 62px;
+  }
+
+  .mvb-slider__label { @apply text-[0.84375rem] font-semibold text-ink-2; }
+  .mvb-slider__val { @apply text-end font-mono text-[0.8125rem] text-ink-2; }
+
+  /* ---------- narrow states ----------
+     A phone is its own layout, not a narrowed desktop: one column, calmer gaps,
+     full-width actions, and 16px inputs so the browser keyboard does not zoom. */
+
+  @media (max-width: 60rem) {
+    .mvb-toolcard__head,
+    .mvb-toolcard__foot { @apply px-[18px]; }
+    .mvb-toolcard__body { @apply p-[18px]; }
+
+    /* The header is the tightest row in the app: mark, four links, the search pill
+       and two buttons. Drop the search pill first, because the sheet still offers
+       Search and the tools page has its own filter. Only below 45rem, when the
+       links no longer fit either, do they move into the sheet. */
+    .mvb-searchbtn { @apply hidden; }
+  }
+
+  @media (max-width: 45rem) {
+    .mvb-nav { @apply hidden; }
+    .mvb-bar__menu { @apply inline-flex; }
+    .mvb-bar__end { @apply ms-auto; }
+
+    .mvb-hero__in { grid-template-columns: minmax(0, 1fr); }
+    .mvb-hero__orbit { @apply hidden; }
+
+    .mvb-card { @apply p-4; }
+    .mvb-card__note { @apply min-h-0; }
+
+    .mvb-filter__in { height: 48px; }
+
+    .mvb-stage { @apply justify-items-stretch text-start; }
+
+    .mvb-btn { @apply min-h-11; }
+    .mvb-chip { @apply min-h-11; }
+
+    /* The action row keeps the same right alignment as every wider width. Stretching
+       every button to fill the bar instead would wrap a longer label such as
+       "Copy Base64" onto two lines and make the footer taller than the buttons need. */
+    .mvb-toolcard__foot .mvb-actions,
+    .mvb-toolcard__head .mvb-actions { @apply gap-2; }
+
+    .mvb-slider { grid-template-columns: minmax(0, 1fr) 62px; }
+    .mvb-slider__label { @apply col-span-2; }
+
+    /* 16px on every field and readout: below that the browser zooms the page when a
+       field takes focus, and a table cell or a panel can otherwise shrink a control
+       below its own scale. Inline text stays where it is; this is about controls. */
+    .mvb-in,
+    .mvb-out,
+    .mvb-filter__in,
+    select { @apply text-base; }
+
+    /* A colour swatch and a bare icon button are still tap targets. */
+    .mvb-pick { @apply h-11; }
+    .mvb-icobtn { @apply size-11; }
+
+    /* And so are a slider, a checkbox chip and a switch: on a phone they are the
+       control, not a decoration beside a larger one. */
+    .mvb-range { @apply min-h-11; }
+    .mvb-check { @apply min-h-11; }
+    .mvb-switch { @apply min-h-11; }
+  }
+}

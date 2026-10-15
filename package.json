@@ -1,6 +1,6 @@
 {
   "name": "mevebu",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Small tools that run in your browser. No accounts, no uploads, no tracking.",
   "license": "MIT",
   "type": "module",
@@ -14,6 +14,8 @@
     "LICENSE"
   ],
   "scripts": {
+    "css": "tailwindcss -i mevebu/app/tailwind.src.css -o mevebu/app/tailwind.css",
+    "css:watch": "tailwindcss -i mevebu/app/tailwind.src.css -o mevebu/app/tailwind.css --watch",
     "icons": "node scripts/vendor-icons.mjs",
     "dev": "node bin/mevebu.js",
     "start": "node bin/mevebu.js",
@@ -42,8 +44,10 @@
     "node": ">=18"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
     "jsqr": "^1.4.0",
     "lucide": "^1.57.0",
-    "qrcode-generator": "^2.0.4"
+    "qrcode-generator": "^2.0.4",
+    "tailwindcss": "^4.3.3"
   }
 }
