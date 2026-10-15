@@ -11,11 +11,9 @@ const SETS = {
 export function mount(slot) {
   const lengthField = rangeInput({ min: "6", max: "64", value: "16", "aria-label": "Length" });
   const lengthLabel = el("span", { class: "mvb-field__label" });
-  const lengthRead = el("p", { class: "note" });
 
   function showLength() {
     lengthLabel.textContent = `Length: ${lengthField.value}`;
-    lengthRead.textContent = `${lengthField.value} characters.`;
   }
 
   const groups = toggleRow([
@@ -27,7 +25,7 @@ export function mount(slot) {
 
   const secret = textInput({ class: "mvb-in mvb-in--mono", readonly: true, "aria-label": "Password", placeholder: "Press Generate" });
   const meter = el("div", { class: "mvb-meter", role: "img", "aria-label": "Strength" }, el("div", { class: "mvb-meter__fill" }));
-  const strength = el("p", { class: "note" });
+  const strength = notice("note");
   const error = notice("error");
 
   const generateButton = button("Generate", { kind: "fill" });
@@ -37,10 +35,15 @@ export function mount(slot) {
     return groups.values().map((key) => SETS[key]).join("");
   }
 
-  function draw(count) {
+  function draw() {
     const source = pool();
+    const fill = meter.querySelector(".mvb-meter__fill");
     if (!source) {
       secret.value = "";
+      fill.style.width = "0%";
+      fill.className = "mvb-meter__fill";
+      meter.setAttribute("aria-label", "Strength");
+      strength.write("");
       error.write("Pick at least one group above.");
       return;
     }
@@ -60,10 +63,12 @@ export function mount(slot) {
     secret.value = password;
     showLength();
     const bits = Math.round(length * Math.log2(source.length));
-    const fill = meter.querySelector(".mvb-meter__fill");
+    const word = bits < 50 ? "weak" : bits < 90 ? "good" : "strong";
     fill.style.width = `${Math.min(100, (bits / 128) * 100)}%`;
     fill.className = `mvb-meter__fill ${bits < 50 ? "mvb-weak" : bits < 90 ? "mvb-ok" : "mvb-strong"}`;
-    strength.textContent = `${bits} bits, ${bits < 50 ? "weak" : bits < 90 ? "good" : "strong"}.`;
+    // The bar is colour only, so the reading it stands for also goes on the bar itself.
+    meter.setAttribute("aria-label", `Strength: ${bits} bits, ${word}`);
+    strength.write(`${bits} bits, ${word}.`);
   }
 
   lengthField.addEventListener("input", () => { showLength(); draw(); });
@@ -76,7 +81,7 @@ export function mount(slot) {
 
   const card = toolcard({
     body: bench(
-      stack(panel(lengthLabel, lengthField), lengthRead, groups, error),
+      stack(panel(lengthLabel, lengthField), groups, error),
       stack(panel("Password", secret), meter, strength)
     ),
     foot: actions(copyButton, generateButton),

@@ -1,5 +1,5 @@
 // Random tokens from the browser random source, in hex or URL-safe Base64.
-import { el, numberInput, chipRow, output, notice, button, copyButton, bench, stack, panel, actions, toolcard } from "../core.js";
+import { numberInput, chipRow, output, notice, button, copyButton, bench, stack, panel, actions, toolcard } from "../core.js";
 
 function toHex(bytes) {
   return [...bytes].map((byte) => byte.toString(16).padStart(2, "0")).join("");
@@ -44,7 +44,6 @@ export function mount(slot) {
       stack(
         panel("Bytes", bytesField),
         panel("Format", formats),
-        el("p", { class: "mvb-note" }, "The token is drawn from the browser random source in this tab. Store real tokens safely."),
         error
       ),
       stack(panel("Token", result))

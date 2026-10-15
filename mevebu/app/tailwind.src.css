@@ -238,10 +238,6 @@
 
   .mvb-searchbtn__txt { @apply flex-1 text-start text-sm; }
 
-  .mvb-searchbtn__key {
-    @apply rounded-[4px] border border-orbit bg-deck px-1.5 py-px font-sans text-[0.71875rem] font-semibold text-ink-3;
-  }
-
   /* nav sheet on a phone */
 
   .mvb-sheet {
@@ -272,8 +268,11 @@
 
   .mvb-link { @apply text-comet underline-offset-[3px]; }
 
+  /* One key chip for the whole app: the search button, the filter, the palette
+     footer and the help modal all point at the same key. It sits on a raised and a
+     recessed surface in turn, so it carries its own border instead of a fill. */
   .mvb-kbd {
-    @apply rounded-[5px] border border-orbit bg-deck-2 px-[7px] py-px font-sans text-[0.78125rem] text-ink-2;
+    @apply rounded-[5px] border border-orbit-hard px-[7px] py-px font-sans text-[0.8125rem] leading-[1.45] text-ink-3;
   }
 
   /* hero, only on the home page */
@@ -411,15 +410,9 @@
   .mvb-filter__in:focus { @apply outline-none; }
   .mvb-filter__in::placeholder { @apply text-ink-3; }
 
-  .mvb-filter__key {
-    @apply rounded-[5px] border border-orbit px-[7px] py-0.5 font-sans text-[0.75rem] text-ink-3;
-  }
-
   .mvb-filter__meta {
     @apply mt-2.5 flex min-h-[22px] items-baseline gap-3.5 text-sm text-ink-3;
   }
-
-  .mvb-tally { @apply text-danger; }
 
   /* ---------- page headings ---------- */
 
@@ -766,7 +759,7 @@
   .mvb-pal__in:focus { @apply outline-none; }
   .mvb-pal__in::placeholder { @apply text-ink-3; }
 
-  .mvb-pal__count { @apply m-0 px-[18px] pt-2 text-[0.78125rem] text-ink-3; }
+  .mvb-pal__count { @apply m-0 px-[18px] pt-2 text-[0.8125rem] text-ink-3; }
 
   .mvb-pal__list {
     @apply m-0 mt-1.5 max-h-[min(60vh,360px)] overflow-y-auto px-2 pb-2;
@@ -787,16 +780,12 @@
   .mvb-pal__text { @apply grid min-w-0 flex-1 gap-px; }
   .mvb-pal__name { @apply text-[0.9375rem] font-semibold tracking-[-0.01em]; }
   .mvb-pal__note { @apply overflow-hidden text-[0.84375rem] text-ellipsis whitespace-nowrap text-ink-2; }
-  .mvb-pal__cat { @apply whitespace-nowrap text-[0.78125rem] text-ink-3; }
+  .mvb-pal__cat { @apply whitespace-nowrap text-[0.8125rem] text-ink-3; }
 
   .mvb-pal__empty { @apply p-[18px] text-sm text-ink-3; }
 
   .mvb-pal__foot {
-    @apply m-0 flex flex-wrap items-center gap-2.5 border-t border-orbit px-[18px] py-2.5 text-[0.78125rem] text-ink-3;
-  }
-
-  .mvb-pal__key {
-    @apply rounded-[4px] border border-orbit bg-deck-2 px-1.5 py-px font-sans text-[0.6875rem] text-ink-2;
+    @apply m-0 flex flex-wrap items-center gap-2.5 border-t border-orbit px-[18px] py-2.5 text-[0.8125rem] text-ink-3;
   }
 
   /* ---------- help modal ---------- */
@@ -830,11 +819,7 @@
   .mvb-help__steps li::before {
     content: counter(mvb-step);
     counter-increment: mvb-step;
-    @apply grid size-[22px] place-items-center rounded-full bg-nebula text-[0.75rem] font-bold tabular-nums text-comet;
-  }
-
-  .mvb-help__actions {
-    @apply mt-5 flex flex-wrap justify-end gap-2;
+    @apply grid size-[22px] place-items-center rounded-full bg-nebula text-[0.8125rem] font-bold tabular-nums text-comet;
   }
 
   /* ---------- footer ---------- */
@@ -869,7 +854,7 @@
     @apply grid grid-cols-2 gap-x-[clamp(20px,4vw,40px)] gap-y-1.5;
   }
 
-  .mvb-foot__nav h4 { @apply m-0 mb-2 text-[0.75rem] font-bold tracking-normal text-ink-3 normal-case; }
+  .mvb-foot__nav h4 { @apply m-0 mb-2 text-[0.8125rem] font-bold tracking-normal text-ink-3 normal-case; }
   .mvb-foot__nav ul { @apply grid gap-1.5; }
   .mvb-foot__nav a { @apply text-[0.90625rem] text-ink-2 no-underline; }
   .mvb-foot__nav a:hover { @apply text-comet; }
@@ -944,7 +929,6 @@
   }
 
   .mvb-flip__result { @apply text-[1.1875rem] font-bold tracking-[-0.01em]; }
-  .mvb-flip__tally { @apply text-sm tabular-nums text-ink-3; }
 
   /* ---------- meter ---------- */
 

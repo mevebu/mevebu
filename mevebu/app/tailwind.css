@@ -457,20 +457,6 @@
     font-size: var(--text-sm);
     line-height: var(--tw-leading, var(--text-sm--line-height));
   }
-  .mvb-searchbtn__key {
-    border-radius: 4px;
-    border-style: var(--tw-border-style);
-    border-width: 1px;
-    border-color: var(--mvb-orbit);
-    background-color: var(--mvb-deck);
-    padding-inline: calc(var(--spacing) * 1.5);
-    padding-block: 1px;
-    font-family: var(--mvb-sans);
-    font-size: 0.71875rem;
-    --tw-font-weight: var(--font-weight-semibold);
-    font-weight: var(--font-weight-semibold);
-    color: var(--mvb-ink-3);
-  }
   .mvb-sheet {
     display: grid;
     border-top-style: var(--tw-border-style);
@@ -530,13 +516,14 @@
     border-radius: 5px;
     border-style: var(--tw-border-style);
     border-width: 1px;
-    border-color: var(--mvb-orbit);
-    background-color: var(--mvb-deck-2);
+    border-color: var(--mvb-orbit-hard);
     padding-inline: 7px;
     padding-block: 1px;
     font-family: var(--mvb-sans);
-    font-size: 0.78125rem;
-    color: var(--mvb-ink-2);
+    font-size: 0.8125rem;
+    --tw-leading: 1.45;
+    line-height: 1.45;
+    color: var(--mvb-ink-3);
   }
   .mvb-hero {
     position: relative;
@@ -875,17 +862,6 @@
   .mvb-filter__in::placeholder {
     color: var(--mvb-ink-3);
   }
-  .mvb-filter__key {
-    border-radius: 5px;
-    border-style: var(--tw-border-style);
-    border-width: 1px;
-    border-color: var(--mvb-orbit);
-    padding-inline: 7px;
-    padding-block: calc(var(--spacing) * 0.5);
-    font-family: var(--mvb-sans);
-    font-size: 0.75rem;
-    color: var(--mvb-ink-3);
-  }
   .mvb-filter__meta {
     margin-top: calc(var(--spacing) * 2.5);
     display: flex;
@@ -895,9 +871,6 @@
     font-size: var(--text-sm);
     line-height: var(--tw-leading, var(--text-sm--line-height));
     color: var(--mvb-ink-3);
-  }
-  .mvb-tally {
-    color: var(--mvb-danger);
   }
   .mvb-lead {
     margin-top: clamp(28px, 5vw, 56px);
@@ -1679,7 +1652,7 @@
     margin: 0px;
     padding-inline: 18px;
     padding-top: calc(var(--spacing) * 2);
-    font-size: 0.78125rem;
+    font-size: 0.8125rem;
     color: var(--mvb-ink-3);
   }
   .mvb-pal__list {
@@ -1751,7 +1724,7 @@
     color: var(--mvb-ink-2);
   }
   .mvb-pal__cat {
-    font-size: 0.78125rem;
+    font-size: 0.8125rem;
     white-space: nowrap;
     color: var(--mvb-ink-3);
   }
@@ -1772,20 +1745,8 @@
     border-color: var(--mvb-orbit);
     padding-inline: 18px;
     padding-block: calc(var(--spacing) * 2.5);
-    font-size: 0.78125rem;
+    font-size: 0.8125rem;
     color: var(--mvb-ink-3);
-  }
-  .mvb-pal__key {
-    border-radius: 4px;
-    border-style: var(--tw-border-style);
-    border-width: 1px;
-    border-color: var(--mvb-orbit);
-    background-color: var(--mvb-deck-2);
-    padding-inline: calc(var(--spacing) * 1.5);
-    padding-block: 1px;
-    font-family: var(--mvb-sans);
-    font-size: 0.6875rem;
-    color: var(--mvb-ink-2);
   }
   .mvb-veil--help {
     padding-top: clamp(60px, 10vh, 120px);
@@ -1858,19 +1819,12 @@
     place-items: center;
     border-radius: calc(infinity * 1px);
     background-color: var(--mvb-nebula);
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
     color: var(--mvb-comet);
     --tw-numeric-spacing: tabular-nums;
     font-variant-numeric: var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,);
-  }
-  .mvb-help__actions {
-    margin-top: calc(var(--spacing) * 5);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: calc(var(--spacing) * 2);
   }
   .mvb-foot {
     margin-top: clamp(56px, 8vw, 96px);
@@ -1932,7 +1886,7 @@
   .mvb-foot__nav h4 {
     margin: 0px;
     margin-bottom: calc(var(--spacing) * 2);
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
     --tw-tracking: var(--tracking-normal);
@@ -2116,13 +2070,6 @@
     font-weight: var(--font-weight-bold);
     --tw-tracking: -0.01em;
     letter-spacing: -0.01em;
-  }
-  .mvb-flip__tally {
-    font-size: var(--text-sm);
-    line-height: var(--tw-leading, var(--text-sm--line-height));
-    color: var(--mvb-ink-3);
-    --tw-numeric-spacing: tabular-nums;
-    font-variant-numeric: var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,);
   }
   .mvb-meter {
     height: calc(var(--spacing) * 2);

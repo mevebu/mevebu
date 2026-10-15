@@ -7,7 +7,7 @@ export function mount(slot) {
   const content = textArea({ rows: 4, value: "https://mevebu.app", "aria-label": "Text or link", placeholder: "Text or link" });
   const sizeField = numberInput({ value: "256", min: "120", max: "1024", step: "8", "aria-label": "Size in pixels" });
   const canvas = el("canvas", { class: "mvb-qrcode", role: "img", "aria-label": "QR code" });
-  const reading = el("p", { class: "note" });
+  const reading = el("p", { class: "mvb-note" });
   const error = notice("error");
   let svg = "";
 

@@ -3,9 +3,10 @@
 import { el, icon, bench, stack, panel, textArea, textInput, notice, copyButton, output, debounce, actions, toolcard } from "../core.js";
 
 const encoder = new TextEncoder();
-const decode = (segment) => JSON.parse(new TextDecoder().decode(
-  Uint8Array.from(atob(segment.replace(/-/g, "+").replace(/_/g, "/")), (char) => char.charCodeAt(0))
-));
+
+// Only claims that carry a value the JSON does not show by itself: a Unix
+// timestamp means nothing to read, the date behind it does.
+const TIME_CLAIMS = [["iat", "Issued at"], ["nbf", "Not before"], ["exp", "Expires"]];
 
 const toUrl = (bytes) => {
   let text = "";
@@ -31,8 +32,9 @@ export function mount(slot) {
   const error = notice("error");
   const tokenOut = output({ tag: "textarea", rows: 4 });
   const decoded = output({ rows: 4 });
+  const timePanel = panel("Time claims", decoded);
 
-  const copyBtn = copyButton(() => tokenOut.textContent, "Copy token", "fill");
+  const copyBtn = copyButton(() => tokenOut.value, "Copy token", "fill");
 
   showButton.addEventListener("click", () => {
     const visible = secretField.type === "text";
@@ -70,17 +72,14 @@ export function mount(slot) {
       return;
     }
     tokenOut.write(token);
-    try {
-      const body = decode(token.split(".")[1]);
-      const readable = [
-        body.sub !== undefined ? `Subject: ${body.sub}` : "",
-        body.name !== undefined ? `Name: ${body.name}` : "",
-        body.exp !== undefined ? `Expires: ${new Date(body.exp * 1000).toLocaleString()}` : "No expiry set",
-      ].filter(Boolean).join("\n");
-      decoded.write(readable);
-    } catch {
-      decoded.write("");
-    }
+    const times = TIME_CLAIMS
+      .filter(([key]) => payload[key] !== undefined)
+      .map(([key, label]) => {
+        const value = Number(payload[key]);
+        return Number.isFinite(value) ? `${label}: ${new Date(value * 1000).toLocaleString()}` : `${label}: ${payload[key]}`;
+      });
+    timePanel.hidden = !times.length;
+    decoded.write(times.join("\n"));
   }
 
   // Live signing. The textareas are the only slow field: invalid JSON while a
@@ -98,7 +97,7 @@ export function mount(slot) {
         panel("Secret", el("div", { class: "mvb-secret" }, secretField, showButton)),
         error
       ),
-      stack(panel("Token", tokenOut), panel("Payload reading", decoded))
+      stack(panel("Token", tokenOut), timePanel)
     ),
     foot: actions(copyBtn),
   });

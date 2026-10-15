@@ -14,12 +14,12 @@ const GROUPS = [
 ];
 
 const LEVELS = [
-  { name: "very weak", cls: "mvb-weak" },
-  { name: "weak", cls: "mvb-weak" },
-  { name: "fair", cls: "mvb-ok" },
-  { name: "good", cls: "mvb-ok" },
-  { name: "strong", cls: "mvb-strong" },
-  { name: "very strong", cls: "mvb-strong" },
+  { name: "Very weak", cls: "mvb-weak" },
+  { name: "Weak", cls: "mvb-weak" },
+  { name: "Fair", cls: "mvb-ok" },
+  { name: "Good", cls: "mvb-ok" },
+  { name: "Strong", cls: "mvb-strong" },
+  { name: "Very strong", cls: "mvb-strong" },
 ];
 
 function analyze(value) {
@@ -53,7 +53,7 @@ export function mount(slot) {
   const field = passwordInput({ autocomplete: "off", "aria-label": "Password", placeholder: "Type a password" });
   const showButton = button("Show", { icon: "eye" });
   const meter = el("div", { class: "mvb-meter", role: "img", "aria-label": "Strength" }, el("div", { class: "mvb-meter__fill" }));
-  const label = el("p", { class: "note" });
+  const label = el("p", { class: "mvb-note text-[1.0625rem] font-bold text-ink" });
   const lengthValue = el("span", { class: "mvb-kv__v" }, "-");
   const groupsValue = el("span", { class: "mvb-kv__v" }, "-");
   const kv = el("div", { class: "mvb-kv" }, kvRow("Length", lengthValue), kvRow("Character groups", groupsValue));
@@ -75,6 +75,7 @@ export function mount(slot) {
       fill.style.width = "0%";
       fill.className = "mvb-meter__fill";
       label.textContent = "";
+      meter.setAttribute("aria-label", "Strength");
       lengthValue.textContent = "-";
       groupsValue.textContent = "-";
       status.write("");
@@ -85,7 +86,9 @@ export function mount(slot) {
     const level = LEVELS[score];
     fill.style.width = `${(score / 5) * 100}%`;
     fill.className = `mvb-meter__fill ${level.cls}`;
-    label.textContent = `${level.name} by length and patterns.`;
+    label.textContent = level.name;
+    // The bar is colour only, so the reading it stands for also goes on the bar itself.
+    meter.setAttribute("aria-label", `Strength: ${level.name}`);
     lengthValue.textContent = `${length} characters`;
     groupsValue.textContent = `${groups} of 4`;
     for (const text of why) {
@@ -101,10 +104,7 @@ export function mount(slot) {
 
   const card = toolcard({
     body: bench(
-      stack(
-        panel("Password", el("div", { class: "mvb-secret" }, field, showButton)),
-        el("p", { class: "mvb-note" }, "The check runs in this tab. Do not type a real password into a site you do not trust.")
-      ),
+      stack(panel("Password", el("div", { class: "mvb-secret" }, field, showButton))),
       stack(meter, label, kv, hints, status)
     ),
     foot: actions(copyButton(() => report, "Copy report", "fill")),

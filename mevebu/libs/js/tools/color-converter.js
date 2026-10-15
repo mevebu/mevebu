@@ -91,7 +91,7 @@ export function mount(slot) {
   const cssField = readonly("CSS variable");
 
   const error = notice("error");
-  const reading = el("p", { class: "note" });
+  const reading = el("p", { class: "mvb-note" });
 
   function show(color, keepPicker) {
     const hex = hexOf(color);

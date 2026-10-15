@@ -40,7 +40,7 @@ export const TOOLS = [
     tutorial: {
       intro: "Add one option per line. The wheel picks one at random when you spin.",
       steps: [
-        "Type your options in the field on the left, one per line.",
+        "Type your options, one per line.",
         "Press Spin. The wheel eases to a stop on one entry.",
         "Each pick is added to the history strip below. Press Clear past picks to reset.",
       ],

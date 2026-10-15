@@ -241,9 +241,9 @@ export function openPalette({ onPick } = {}) {
     "p",
     { class: "mvb-pal__foot" },
     "↑↓ navigate  ",
-    el("kbd", { class: "mvb-pal__key" }, "↵"),
+    el("kbd", { class: "mvb-kbd" }, "↵"),
     " open  ",
-    el("kbd", { class: "mvb-pal__key" }, "esc"),
+    el("kbd", { class: "mvb-kbd" }, "esc"),
     " close"
   );
 

@@ -32,7 +32,7 @@ function searchButton() {
     },
     icon("search"),
     el("span", { class: "mvb-searchbtn__txt" }, "Search"),
-    el("kbd", { class: "mvb-searchbtn__key" }, "⌘K")
+    el("kbd", { class: "mvb-kbd" }, "⌘K")
   );
   return btn;
 }
@@ -106,9 +106,6 @@ function openHelp(tool) {
     el("p", { class: "mvb-help__note" }, tool.tutorial?.intro ?? tool.about),
     el("ol", { class: "mvb-help__steps" },
       ...(tool.tutorial?.steps ?? []).map((step) => el("li", {}, step))),
-    el("p", { class: "mvb-help__note" },
-      "Open the tool: ",
-      el("a", { class: "mvb-link", href: toolHref(tool) }, toolHref(tool).slice(1))),
   ];
   modal({
     label: `${tool.name} how to use it`,
@@ -363,7 +360,7 @@ function filterBar(placeholder = "Search tools") {
     { class: "mvb-filter", role: "search", onsubmit: (event) => event.preventDefault() },
     el("span", { class: "mvb-filter__icon" }, icon("search")),
     input,
-    el("kbd", { class: "mvb-filter__key" }, "/")
+    el("kbd", { class: "mvb-kbd" }, "/")
   );
 }
 

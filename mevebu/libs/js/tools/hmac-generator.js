@@ -47,8 +47,7 @@ export function mount(slot) {
       stack(
         panel("Message", message),
         panel("Secret key", el("div", { class: "mvb-secret" }, secret, showButton)),
-        panel("Hash", hashField),
-        el("p", { class: "mvb-note" }, "The message and key stay in this tab. Do not paste a production secret into a site you do not trust.")
+        panel("Hash", hashField)
       ),
       stack(panel("Signature", result), error)
     ),
