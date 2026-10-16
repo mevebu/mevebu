@@ -75,6 +75,12 @@
   --card-pad: clamp(20px, 3vw, 32px);
   --band-pad: clamp(12px, 2vw, 16px);
 
+  /* Where a short controls column pins while a long result scrolls past it:
+     just under the header, and never taller than the room left below it, so the
+     bottom of a long form stays reachable instead of being pushed off screen. */
+  --stick: calc(var(--bar) + 1rem);
+  --stick-max: calc(100dvh - var(--bar) - 3rem);
+
   --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 

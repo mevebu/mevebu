@@ -280,7 +280,7 @@ export function openPalette({ onPick } = {}) {
     autocomplete: "off",
     spellcheck: "false",
   });
-  const list = el("ul", { class: "m-0 mt-1.5 max-h-[min(60vh,360px)] overflow-y-auto px-2 pb-2", role: "listbox" });
+  const list = el("ul", { class: "mt-1.5 max-h-[min(60vh,360px)] overflow-y-auto px-2 pb-2", role: "listbox" });
   const count = el("p", { class: "m-0 px-[18px] pt-2 text-2xs text-ink-3" });
   const footer = el(
     "p",
@@ -415,12 +415,21 @@ export function debounce(fn, ms = 120) {
 
 // ---------- bench layout ----------
 
-/** Two column bench: controls on the left, the result on the right. */
+/** Two column bench: controls on the left, the result on the right.
+ *  Above 60rem the controls pin under the header, so a long result can be read
+ *  and scrolled without the controls leaving the screen. The cap keeps the
+ *  bottom of a tall form reachable instead of pinning it out of view.
+ *  The negative margin plus the matching padding give the focus halo room to
+ *  paint: a scroll container clips its children's ink, and the fields sit flush
+ *  with the column edges, so without the 4px gutter every ring loses its sides.
+ *  The pair cancels out, so the fields keep their width and stay on the anchor line. */
 export function bench(side, main) {
+  const sideColumn =
+    "min-w-0 min-[60rem]:sticky min-[60rem]:top-[var(--stick)] min-[60rem]:max-h-[var(--stick-max)] min-[60rem]:overflow-y-auto min-[60rem]:overscroll-contain min-[60rem]:-mx-1 min-[60rem]:px-1";
   return el(
     "div",
     { class: "grid items-start gap-5 min-[60rem]:grid-cols-[minmax(0,21rem)_minmax(0,1fr)] min-[60rem]:gap-6" },
-    el("div", { class: "min-w-0" }, side),
+    el("div", { class: sideColumn }, side),
     el("div", { class: "min-w-0" }, main)
   );
 }

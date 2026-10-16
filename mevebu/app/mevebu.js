@@ -264,7 +264,7 @@ function footer() {
     el(
       "div",
       {},
-      el("h4", { class: "m-0 mb-2.5 text-2xs font-bold tracking-[0.08em] text-ink-3 uppercase" }, title),
+      el("h4", { class: "mb-2.5 text-2xs font-bold tracking-[0.08em] text-ink-3 uppercase" }, title),
       el("ul", { class: "m-0 grid list-none gap-1.5 p-0" }, ...links.map((link) => el("li", {}, link)))
     );
 
