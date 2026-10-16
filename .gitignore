@@ -27,6 +27,10 @@ daftar-ide-open-source-web-tools.md
 scripts/ship.js
 SHIP_GUIDE.md
 
+# private release posts (Zernio API key, copy, screenshots), never commit
+zernio-app/
+info-medsos/
+
 # local debug screenshots (keep the shipped icons)
 /*.png
 
