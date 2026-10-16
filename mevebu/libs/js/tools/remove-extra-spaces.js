@@ -1,10 +1,10 @@
 // Tidies spacing in pasted text: collapses runs of spaces, trims each line and
 // optionally drops blank lines.
-import { bench, stack, panel, textArea, toggleRow, copyButton, actions, toolcard } from "../core.js";
+import { bench, stack, panel, textArea, output, toggleRow, copyButton, actions, toolcard } from "../core.js";
 
 export function mount(slot) {
-  const source = textArea({ rows: 12, "aria-label": "Text", placeholder: "Paste your text" });
-  const result = textArea({ rows: 12, readonly: true, "aria-label": "Result" });
+  const source = textArea({ rows: 12, "aria-label": "Text" });
+  const result = output({ tag: "textarea", rows: 12 });
   const options = toggleRow([
     { value: "collapse", label: "Collapse spaces", checked: true },
     { value: "trim", label: "Trim lines", checked: true },

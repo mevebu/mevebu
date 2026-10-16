@@ -608,7 +608,8 @@ export function switchControl(labelText, attrs = {}) {
 
 /* One button: one height, one padding, three weights. `fill` is the high
    emphasis action and the only button that carries the accent. There is no size
-   modifier, because a tool that needs a smaller button needs fewer buttons. */
+   modifier, because a tool that needs a smaller button needs fewer buttons.
+   `tag: "a"` lets a link wear the same skin, so no tool hand writes the class. */
 const BTN =
   "inline-flex min-h-[var(--ctl)] cursor-pointer items-center justify-center gap-2 rounded-r1 border text-sm font-semibold whitespace-nowrap no-underline transition-[background-color,border-color,color,transform] duration-150 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45";
 const BTN_KIND = {
@@ -617,10 +618,10 @@ const BTN_KIND = {
   quiet: "border-transparent bg-transparent px-2.5 text-ink-2 hover:bg-deck-2 hover:text-ink",
 };
 
-export function button(labelText, { icon: iconName, kind = "plain", class: extra, ...rest } = {}) {
+export function button(labelText, { icon: iconName, kind = "plain", class: extra, tag = "button", ...rest } = {}) {
   return el(
-    "button",
-    { class: withExtra(`${BTN} ${BTN_KIND[kind] ?? BTN_KIND.plain}`, extra), type: "button", ...rest },
+    tag,
+    { class: withExtra(`${BTN} ${BTN_KIND[kind] ?? BTN_KIND.plain}`, extra), ...(tag === "button" ? { type: "button" } : null), ...rest },
     iconName ? icon(iconName) : null,
     el("span", {}, labelText)
   );

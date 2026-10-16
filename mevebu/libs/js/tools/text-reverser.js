@@ -1,6 +1,6 @@
 // Reverses text by character, word or line. Character mode keeps emoji and
 // accented letters whole when the browser exposes grapheme segmentation.
-import { bench, stack, panel, textArea, chipRow, copyButton, actions, toolcard } from "../core.js";
+import { bench, stack, panel, textArea, output, chipRow, copyButton, actions, toolcard } from "../core.js";
 
 function reverseChars(text) {
   if (typeof Intl !== "undefined" && Intl.Segmenter) {
@@ -14,8 +14,8 @@ const reverseWords = (text) => text.trim() ? text.trim().split(/\s+/).reverse().
 const reverseLines = (text) => text ? text.split("\n").reverse().join("\n") : "";
 
 export function mount(slot) {
-  const source = textArea({ rows: 10, "aria-label": "Text", placeholder: "Type or paste text" });
-  const result = textArea({ rows: 10, readonly: true, "aria-label": "Result" });
+  const source = textArea({ rows: 10, "aria-label": "Text" });
+  const result = output({ tag: "textarea", rows: 10 });
 
   let mode = "chars";
   const chips = chipRow(

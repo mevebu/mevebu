@@ -12,8 +12,10 @@ function tile(label) {
   return node;
 }
 
+const plural = (count, word) => `${count} ${word}${count === 1 ? "" : "s"}`;
+
 export function mount(slot) {
-  const source = textArea({ rows: 10, "aria-label": "Text", placeholder: "Type or paste text" });
+  const source = textArea({ rows: 10, "aria-label": "Text" });
   const limitField = numberInput({ min: "0", placeholder: "No limit", "aria-label": "Character limit" });
 
   const totalTile = tile("Characters");
@@ -29,9 +31,9 @@ export function mount(slot) {
 
   function summary() {
     return [
-      `${counts.total} characters`,
-      `${counts.noSpace} without spaces`,
-      `${counts.words} words`].join("\n");
+      plural(counts.total, "character"),
+      plural(counts.noSpace, "character") + " without spaces",
+      plural(counts.words, "word")].join("\n");
   }
 
   function run() {
@@ -45,11 +47,13 @@ export function mount(slot) {
     wordsTile.set(String(counts.words));
 
     const limit = parseInt(limitField.value, 10) || 0;
+    // The track is only worth showing once a limit exists to fill it.
+    meter.hidden = limit <= 0;
     if (limit > 0) {
       const ratio = counts.total / limit;
       fill.style.width = `${Math.min(100, ratio * 100)}%`;
       fill.dataset.level = ratio > 1 ? "weak" : ratio > 0.8 ? "ok" : "strong";
-      limitNote.write(ratio > 1 ? `${counts.total - limit} over the limit.` : `${limit - counts.total} characters left.`);
+      limitNote.write(ratio > 1 ? `${counts.total - limit} over the limit.` : `${plural(limit - counts.total, "character")} left.`);
     } else {
       fill.style.width = "0%";
       delete fill.dataset.level;

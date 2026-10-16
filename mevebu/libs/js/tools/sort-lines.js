@@ -1,9 +1,9 @@
 // Sorts a list of lines alphabetically or numerically, either direction.
-import { bench, stack, panel, textArea, chipRow, toggleRow, copyButton, actions, toolcard } from "../core.js";
+import { bench, stack, panel, textArea, output, chipRow, toggleRow, copyButton, actions, toolcard } from "../core.js";
 
 export function mount(slot) {
   const source = textArea({ rows: 12, "aria-label": "Text", placeholder: "Paste your list, one entry per line" });
-  const result = textArea({ rows: 12, readonly: true, "aria-label": "Result" });
+  const result = output({ tag: "textarea", rows: 12 });
 
   let direction = "asc";
   const dirChips = chipRow(
@@ -39,7 +39,7 @@ export function mount(slot) {
 
   const card = toolcard({
     body: bench(
-      stack(panel("Direction", dirChips), options),
+      stack(panel("Text", source), panel("Direction", dirChips), options),
       stack(panel("Result", result))
     ),
     foot: actions(copyButton(() => result.value, "Copy result", "fill"))});

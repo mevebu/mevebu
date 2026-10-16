@@ -8,6 +8,8 @@ function tile(label) {
   return node;
 }
 
+const plural = (count, word) => `${count} ${word}${count === 1 ? "" : "s"}`;
+
 export function mount(slot) {
   const source = textArea({ rows: 14, "aria-label": "Text", placeholder: "Paste text, one entry per line" });
 
@@ -20,7 +22,7 @@ export function mount(slot) {
 
   function summary() {
     return [
-      `${counts.total} total lines`,
+      `${plural(counts.total, "line")} total`,
       `${counts.filled} filled`,
       `${counts.blank} blank`].join("\n");
   }

@@ -1,10 +1,10 @@
 // A QR code from text or a link. PNG for chat, SVG for print. The quiet zone
 // and the size cap keep the code scannable at any setting.
-import { el, toast, download, bench, stack, panel, textArea, numberInput, notice, button, actions, toolcard } from "../core.js";
+import { el, toast, download, downloadButton, bench, stack, panel, textArea, numberInput, notice, button, actions, toolcard } from "../core.js";
 import qrcode from "../vendor/qrcode-generator.mjs";
 
 export function mount(slot) {
-  const content = textArea({ rows: 4, value: "https://mevebu.app", "aria-label": "Text or link", placeholder: "Text or link" });
+  const content = textArea({ rows: 4, "aria-label": "Text or link" });
   const sizeField = numberInput({ value: "256", min: "120", max: "1024", step: "8", "aria-label": "Size in pixels" });
   const canvas = el("canvas", { class: "h-auto w-[min(300px,100%)] [image-rendering:pixelated]", role: "img", "aria-label": "QR code" });
   const reading = el("p", { class: "border-s-[3px] border-transparent ps-2 text-sm text-ink-3" });
@@ -46,7 +46,7 @@ export function mount(slot) {
         }
       }
       svg = typeof code.createSVGTag === "function" ? code.createSVGTag(cell, false) : "";
-      reading.textContent = `${modules} by ${modules} modules, medium error correction.`;
+      reading.textContent = "";
     } catch (caught) {
       error.write(caught?.message || "That text is too long for a QR code.");
     }
@@ -59,18 +59,20 @@ export function mount(slot) {
     render();
   });
 
+  // An empty field leaves a zero sized canvas, so a save would write an empty
+  // file and a copy would put nothing on the clipboard.
+  const noCode = () => !content.value.trim();
+
   const pngButton = button("Save PNG", { icon: "download", kind: "fill" });
-  const svgButton = button("Save SVG", { icon: "download" });
+  const svgButton = downloadButton(() => svg, "qr.svg", "Save SVG", "image/svg+xml");
   const copyButton = button("Copy image", { icon: "copy" });
 
   pngButton.addEventListener("click", () => {
+    if (noCode()) return toast("Nothing to save yet");
     canvas.toBlob((blob) => blob && download("qr.png", blob, "image/png"));
   });
-  svgButton.addEventListener("click", () => {
-    if (!svg) return toast("Type something first");
-    download("qr.svg", svg, "image/svg+xml");
-  });
   copyButton.addEventListener("click", () => {
+    if (noCode()) return toast("Nothing to copy yet");
     canvas.toBlob(async (blob) => {
       try {
         await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);

@@ -1,10 +1,10 @@
 // Drops repeated lines and keeps the first time each one appears.
-import { bench, stack, panel, textArea, checkbox, notice, copyButton, actions, toolcard } from "../core.js";
+import { bench, stack, panel, textArea, output, checkbox, notice, copyButton, actions, toolcard } from "../core.js";
 
 export function mount(slot) {
   const source = textArea({ rows: 12, "aria-label": "Text", placeholder: "Paste your list, one entry per line" });
   const ignoreCase = checkbox("Ignore case", { checked: false });
-  const result = textArea({ rows: 12, readonly: true, "aria-label": "Result" });
+  const result = output({ tag: "textarea", rows: 12 });
   const note = notice("note");
 
   function run() {
@@ -24,7 +24,7 @@ export function mount(slot) {
       else { seen.add(key); kept.push(line); }
     }
     result.value = kept.join("\n");
-    note.write(removed ? `${removed} lines removed.` : "No duplicate lines found.");
+    note.write(removed ? `${removed} line${removed === 1 ? "" : "s"} removed.` : "No duplicate lines found.");
   }
 
   source.addEventListener("input", run);

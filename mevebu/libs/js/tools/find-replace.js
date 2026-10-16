@@ -1,16 +1,16 @@
 // Find and replace, plain text or a regular expression, with a live match count.
-import { bench, stack, panel, textArea, textInput, toggleRow, notice, button, copyButton, actions, toolcard } from "../core.js";
+import { bench, stack, panel, textArea, textInput, output, toggleRow, notice, button, copyButton, actions, toolcard } from "../core.js";
 
 const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export function mount(slot) {
-  const source = textArea({ rows: 9, "aria-label": "Text", placeholder: "Paste your text" });
-  const findField = textInput({ placeholder: "Find", "aria-label": "Find" });
-  const replaceField = textInput({ placeholder: "Replace with", "aria-label": "Replace with" });
+  const source = textArea({ rows: 9, "aria-label": "Text" });
+  const findField = textInput({ "aria-label": "Find" });
+  const replaceField = textInput({ "aria-label": "Replace with" });
   const options = toggleRow([
     { value: "regex", label: "Regex", checked: false },
     { value: "ignore", label: "Ignore case", checked: false }]);
-  const result = textArea({ rows: 9, readonly: true, "aria-label": "Result" });
+  const result = output({ tag: "textarea", rows: 9 });
   const error = notice("error");
   const countNote = notice("note");
 
@@ -41,15 +41,21 @@ export function mount(slot) {
       return;
     }
     const matches = source.value.match(pattern) || [];
-    result.value = source.value.replace(pattern, replaceField.value);
+    result.value = source.value.replace(pattern, replacement());
     countNote.write(matches.length === 1 ? "1 match." : `${matches.length} matches.`);
+  }
+
+  // With Regex off the field is literal text, so a dollar sign in it stays one
+  // instead of reading as $& or $$.
+  function replacement() {
+    return options.values().includes("regex") ? replaceField.value : replaceField.value.replace(/\$/g, "$$$$");
   }
 
   function replaceOne() {
     const pattern = build(false);
     if (pattern === "error") return;
     if (!pattern) return;
-    source.value = source.value.replace(pattern, replaceField.value);
+    source.value = source.value.replace(pattern, replacement());
     run();
   }
 
@@ -57,7 +63,7 @@ export function mount(slot) {
     const pattern = build(true);
     if (pattern === "error") return;
     if (!pattern) return;
-    source.value = source.value.replace(pattern, replaceField.value);
+    source.value = source.value.replace(pattern, replacement());
     run();
   }
 

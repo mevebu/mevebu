@@ -403,9 +403,9 @@ export const TOOLS = [
     note: "Make a QR code from text or a link.",
     about: "Download PNG for chat or SVG for print.",
     tutorial: {
-      intro: "Generate a QR code from any text or link, with medium error correction.",
+      intro: "Generate a QR code from any text or link.",
       steps: [
-        "Type or paste your text or link on the left.",
+        "Type or paste your text or link.",
         "Set the size in pixels, between 120 and 1024.",
         "Save PNG for chat or SVG for print. Copy image puts the PNG on the clipboard.",
       ],
@@ -419,13 +419,13 @@ export const TOOLS = [
     name: "QR Scanner",
     icon: "scan-line",
     note: "Read a QR code with your camera or an image.",
-    about: "The camera feed stays in this tab. Nothing is recorded or sent.",
+    about: "Read the text inside a QR code, with the camera or an image file.",
     tutorial: {
-      intro: "Read a QR code with your camera or from an image file. Decoding happens in this tab.",
+      intro: "Point the camera at a code, or drop in an image. The decoded text is ready to copy.",
       steps: [
         "Press Start camera and point it at a code. Allow the camera permission.",
         "Or drop an image on the box, or pick one with Choose an image.",
-        "The decoded text appears below. Copy it, or open the link if it is a URL.",
+        "Copy the decoded text, or open it if it is a link.",
       ],
     },
     keywords: "read decode camera image photo scan",
@@ -443,7 +443,7 @@ export const TOOLS = [
     tutorial: {
       intro: "Type or paste text and read the counts as they change.",
       steps: [
-        "Type or paste your text on the left.",
+        "Type or paste your text.",
         "The counts and the reading time update as you type.",
         "Set a word limit to track how close you are, then Copy summary.",
       ],
@@ -480,7 +480,7 @@ export const TOOLS = [
       intro: "Count the lines in a block of text.",
       steps: [
         "Paste your text.",
-        "Total, filled and blank lines appear on the right.",
+        "Total, filled and blank counts follow as you type.",
       ],
     },
     keywords: "lines blank empty rows count",
@@ -534,7 +534,7 @@ export const TOOLS = [
       steps: [
         "Paste your text, then set the find and replace values.",
         "Toggle Regex to match a pattern, or Ignore case to match either case.",
-        "Press Replace all. The count of replacements is shown.",
+        "Press Replace all to change every match, or Replace one for the first one only.",
       ],
     },
     keywords: "search replace regex substitute text",

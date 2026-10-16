@@ -1,7 +1,7 @@
 // Reads a QR code from the camera or from an image file. The decoder loads
 // once and stays in memory. The camera stops when the page changes or a code
 // is found. Nothing leaves the tab at any point.
-import { el, icon, toast, copyText, bench, stack, panel, notice, button, output, actions, toolcard } from "../core.js";
+import { el, icon, toast, bench, stack, panel, notice, button, copyButton, output, actions, toolcard } from "../core.js";
 
 // jsQR ships as a UMD bundle, so it has to load as a classic script and be read
 // off the window. Importing it as a module yields an empty namespace.
@@ -32,9 +32,9 @@ export function mount(slot) {
   const paint = scratch.getContext("2d", { willReadFrequently: true });
 
   const startButton = button("Start camera", { icon: "camera", kind: "fill" });
-  const stopButton = el("button", { class: "inline-flex min-h-[var(--ctl)] cursor-pointer items-center justify-center gap-2 rounded-r1 border px-4 text-sm font-semibold whitespace-nowrap no-underline transition-[background-color,border-color,color,transform] duration-150 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 border-orbit bg-deck text-ink hover:border-orbit-hard hover:bg-deck-2", type: "button", hidden: true }, icon("video-off"), el("span", {}, "Stop"));
+  const stopButton = button("Stop", { icon: "video-off" });
+  stopButton.hidden = true;
   const uploadButton = button("Choose an image", { icon: "upload" });
-  const copyButton = button("Copy", { icon: "copy" });
   const openWrap = el("span", { class: "flex min-w-0 flex-wrap items-center gap-2" });
 
   const drop = el(
@@ -50,8 +50,7 @@ export function mount(slot) {
     error.write("");
     openWrap.replaceChildren();
     if (/^https?:\/\//i.test(text.trim())) {
-      openWrap.append(el("a", { class: "inline-flex min-h-[var(--ctl)] cursor-pointer items-center justify-center gap-2 rounded-r1 border px-4 text-sm font-semibold whitespace-nowrap no-underline transition-[background-color,border-color,color,transform] duration-150 active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-45 border-orbit bg-deck text-ink hover:border-orbit-hard hover:bg-deck-2", href: text.trim(), target: "_blank", rel: "noopener" },
-        icon("external-link"), el("span", {}, "Open link")));
+      openWrap.append(button("Open link", { tag: "a", href: text.trim(), target: "_blank", rel: "noopener", icon: "external-link" }));
     }
     toast("Found");
   }
@@ -74,8 +73,15 @@ export function mount(slot) {
   async function tick() {
     if (!live) return;
     if (video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth) {
-      const hit = await scan(video.videoWidth, video.videoHeight, () =>
-        paint.drawImage(video, 0, 0, video.videoWidth, video.videoHeight));
+      let hit = false;
+      try {
+        hit = await scan(video.videoWidth, video.videoHeight, () =>
+          paint.drawImage(video, 0, 0, video.videoWidth, video.videoHeight));
+      } catch {
+        stop();
+        error.write("The decoder did not load. Try again, or read an image instead.");
+        return;
+      }
       if (hit) {
         stop();
         return;
@@ -167,11 +173,6 @@ export function mount(slot) {
     delete drop.dataset.drag;
     if (event.dataTransfer.files[0]) scanFile(event.dataTransfer.files[0]);
   });
-  copyButton.addEventListener("click", async () => {
-    if (!found.textContent) return toast("Nothing to copy yet");
-    toast((await copyText(found.textContent)) ? "Copied" : "Copy failed");
-  });
-
   status.textContent = "Camera off.";
 
   const card = toolcard({
@@ -180,7 +181,7 @@ export function mount(slot) {
       stack(video, drop, fileField, status, error),
       panel("Decoded", found)
     ),
-    foot: actions(openWrap, copyButton)});
+    foot: actions(openWrap, copyButton(() => found.textContent, "Copy"))});
   slot.append(card.node);
 
   return { unmount: stop };
