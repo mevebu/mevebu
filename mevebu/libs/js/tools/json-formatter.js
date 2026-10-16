@@ -1,13 +1,12 @@
 // Pretty-prints or compacts JSON and points at the error when it is invalid.
-import { bench, stack, panel, textArea, notice, chipRow, copyButton, actions, toolcard } from "../core.js";
+import { bench, stack, panel, textArea, output, notice, chipRow, copyButton, actions, toolcard } from "../core.js";
 
 export function mount(slot) {
   const source = textArea({
     rows: 12,
     "aria-label": "JSON",
-    placeholder: "Paste JSON",
     value: '{"hello":"world","count":3,"items":[1,2,3]}'});
-  const result = textArea({ rows: 12, readonly: true, "aria-label": "Result" });
+  const result = output({ tag: "textarea", rows: 12 });
   const error = notice("error");
   let indent = "2";
 

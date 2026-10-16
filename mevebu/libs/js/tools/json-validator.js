@@ -12,7 +12,7 @@ function describe(data) {
 }
 
 export function mount(slot) {
-  const source = textArea({ rows: 12, "aria-label": "JSON", placeholder: "Paste JSON" });
+  const source = textArea({ rows: 12, "aria-label": "JSON" });
   const report = output({ rows: 4 });
   const error = notice("error");
 

@@ -12,7 +12,7 @@ function decodeSegment(segment) {
 }
 
 export function mount(slot) {
-  const source = textArea({ rows: 4, "aria-label": "Token", placeholder: "Paste a JWT" });
+  const source = textArea({ rows: 4, "aria-label": "Token" });
   const headerOut = output({ rows: 4 });
   const payloadOut = output({ rows: 8 });
   const claims = el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" });

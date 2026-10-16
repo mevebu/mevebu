@@ -1,12 +1,12 @@
 // Adds a prefix, a suffix, or automatic numbering to every line.
-import { bench, stack, panel, textArea, textInput, checkbox, copyButton, actions, toolcard } from "../core.js";
+import { bench, stack, panel, textArea, textInput, output, checkbox, copyButton, actions, toolcard } from "../core.js";
 
 export function mount(slot) {
   const source = textArea({ rows: 11, "aria-label": "Text", placeholder: "Paste your list, one entry per line" });
-  const prefixField = textInput({ placeholder: "Prefix", "aria-label": "Prefix" });
-  const suffixField = textInput({ placeholder: "Suffix", "aria-label": "Suffix" });
+  const prefixField = textInput({ "aria-label": "Prefix" });
+  const suffixField = textInput({ "aria-label": "Suffix" });
   const numbering = checkbox("Numbering", { checked: false });
-  const result = textArea({ rows: 11, readonly: true, "aria-label": "Result" });
+  const result = output({ tag: "textarea", rows: 11 });
 
   function run() {
     const text = source.value;

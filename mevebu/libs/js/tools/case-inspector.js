@@ -51,7 +51,7 @@ function detectCase(text) {
 }
 
 export function mount(slot) {
-  const source = textArea({ rows: 5, value: "helloWorld", "aria-label": "Text", placeholder: "Type or paste text" });
+  const source = textArea({ rows: 5, value: "helloWorld", "aria-label": "Text" });
   const detected = el("span", { class: "wrap-anywhere font-mono text-2xs" }, "No letters");
   const kv = el(
     "div",
@@ -76,7 +76,7 @@ export function mount(slot) {
       const on = row.dataset.case === active;
       if (on) row.dataset.on = "";
       else delete row.dataset.on;
-      row.setAttribute("aria-pressed", String(on));
+      row.setAttribute("aria-current", on ? "true" : "false");
     }
   }
 
@@ -84,7 +84,7 @@ export function mount(slot) {
     const button = el(
       "button",
       {
-        class: "group flex w-full cursor-pointer items-baseline justify-between gap-3 rounded-r1 border border-transparent bg-transparent px-3 py-[9px] text-start transition-colors duration-150 hover:bg-deck-2 data-[on]:border-jade data-[on]:bg-jade-soft", type: "button", dataset: { case: name }, "aria-pressed": "false",
+        class: "group flex w-full cursor-pointer items-baseline justify-between gap-3 rounded-r1 border border-transparent bg-transparent px-3 py-[9px] text-start transition-colors duration-150 hover:bg-deck-2 data-[on]:border-jade data-[on]:bg-jade-soft", type: "button", dataset: { case: name }, "aria-current": "false",
         onclick: async () => {
           const value = button.querySelector("[data-value]").textContent.trim();
           if (value) toast((await copyText(value)) ? "Copied" : "Copy failed");

@@ -56,7 +56,6 @@ export function mount(slot) {
   const source = textArea({
     rows: 12,
     "aria-label": "JSON",
-    placeholder: "Paste a JSON object or array",
     value: '{\n  "id": 1,\n  "name": "Ada",\n  "tags": ["dev"],\n  "address": { "city": "London" }\n}'});
   const nameInput = textInput({ value: "Root", "aria-label": "Root type name" });
   const result = output({ rows: 16 });

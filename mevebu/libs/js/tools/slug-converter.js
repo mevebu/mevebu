@@ -13,7 +13,7 @@ function slugify(text, sep) {
 }
 
 export function mount(slot) {
-  const source = textInput({ value: "Hello mevebu world", placeholder: "Title", "aria-label": "Title" });
+  const source = textInput({ value: "Hello mevebu world", "aria-label": "Title" });
   const result = textInput({ readonly: true, mono: true, "aria-label": "Slug" });
 
   let sep = "-";

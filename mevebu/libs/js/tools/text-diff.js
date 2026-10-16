@@ -4,8 +4,8 @@ import { el, bench, stack, panel, textArea, toggleRow, notice, button, copyButto
 const MAX_LINES = 800;
 
 export function mount(slot) {
-  const left = textArea({ rows: 9, "aria-label": "First text", placeholder: "First text" });
-  const right = textArea({ rows: 9, "aria-label": "Second text", placeholder: "Second text" });
+  const left = textArea({ rows: 9, "aria-label": "First text" });
+  const right = textArea({ rows: 9, "aria-label": "Second text" });
   const options = toggleRow([
     { value: "ignore", label: "Ignore case", checked: false },
     { value: "spaces", label: "Ignore spaces", checked: false }]);
@@ -52,9 +52,10 @@ export function mount(slot) {
     const aRaw = left.value === "" ? [] : left.value.split("\n");
     const bRaw = right.value === "" ? [] : right.value.split("\n");
     if (!aRaw.length && !bRaw.length) {
-      diffBox.replaceChildren();
+      // The result area explains itself while there is nothing to compare.
+      diffBox.replaceChildren(el("div", { class: "bg-deck-2 px-4 py-8 text-center text-sm text-ink-3" }, "Paste two texts to compare."));
       rows = [];
-      note.write("Paste two texts to compare.");
+      note.write("");
       return;
     }
     const truncated = aRaw.length > MAX_LINES || bRaw.length > MAX_LINES;

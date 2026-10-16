@@ -622,7 +622,7 @@ export const TOOLS = [
     tutorial: {
       intro: "Compare two versions of a text.",
       steps: [
-        "Paste the first text on the left and the second on the right.",
+        "Paste the first text and the second text.",
         "Added and removed lines are marked in the result.",
         "Toggle Ignore case or Ignore spaces to soften the comparison.",
       ],
@@ -656,7 +656,7 @@ export const TOOLS = [
     name: "JWT Decoder",
     icon: "signature",
     note: "Read a JWT header and payload.",
-    about: "Decodes in this tab. Decoding is not signature validation.",
+    about: "Reads the header and payload. Decoding is not signature validation.",
     tutorial: {
       intro: "Read the header and payload of a JSON Web Token.",
       steps: [
@@ -678,7 +678,7 @@ export const TOOLS = [
     tutorial: {
       intro: "Format or compact a JSON document.",
       steps: [
-        "Paste JSON on the left.",
+        "Paste JSON.",
         "Pick 2 or 4 spaces, or Compact.",
         "Copy the result. An invalid document shows where parsing stopped.",
       ],
@@ -714,7 +714,7 @@ export const TOOLS = [
       intro: "Compact JSON by removing needless whitespace.",
       steps: [
         "Paste JSON.",
-        "The compacted document and the size saved appear on the right.",
+        "The compacted document and the size saved are shown.",
         "Copy the result.",
       ],
     },

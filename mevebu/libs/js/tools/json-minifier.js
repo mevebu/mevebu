@@ -1,5 +1,5 @@
 // Compacts valid JSON and reports the size saved.
-import { el, bench, stack, panel, textArea, notice, copyButton, actions, toolcard } from "../core.js";
+import { el, bench, stack, panel, textArea, output, notice, copyButton, actions, toolcard } from "../core.js";
 
 const bytes = (text) => new TextEncoder().encode(text).length;
 
@@ -10,9 +10,8 @@ export function mount(slot) {
   const source = textArea({
     rows: 12,
     "aria-label": "JSON",
-    placeholder: "Paste JSON",
     value: '{\n  "hello": "world",\n  "count": 3\n}'});
-  const result = textArea({ rows: 12, readonly: true, "aria-label": "Minified JSON" });
+  const result = output({ tag: "textarea", rows: 12 });
   const stats = el("div", { class: "grid gap-2.5 [grid-template-columns:repeat(auto-fit,minmax(120px,1fr))]" });
   const error = notice("error");
 
