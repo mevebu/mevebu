@@ -1558,6 +1558,9 @@
     .max-\[45rem\]\:inline-flex {
       display: inline-flex;
     }
+    .max-\[45rem\]\:min-h-11 {
+      min-height: calc(var(--spacing) * 11);
+    }
     .max-\[45rem\]\:\[grid-template-columns\:minmax\(0\,1fr\)_62px\] {
       grid-template-columns: minmax(0,1fr) 62px;
     }

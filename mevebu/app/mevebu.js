@@ -130,7 +130,7 @@ function masthead() {
     el(
       "div",
       { class: "mx-[var(--margin)] flex h-[var(--bar)] items-center gap-[clamp(14px,3vw,32px)]" },
-      el("a", { class: "inline-flex flex-none items-center gap-2.5 text-lg font-bold tracking-[-0.01em] text-ink no-underline", href: "#/" },
+      el("a", { class: "inline-flex min-h-11 flex-none items-center gap-2.5 text-lg font-bold tracking-[-0.01em] text-ink no-underline", href: "#/" },
         el("img", { class: "block size-[30px] rounded-[9px] shadow-[0_0_0_1px_var(--orbit)]", src: "./icon.png", alt: "", width: "30", height: "30" }), "mevebu"),
       nav,
       el("div", { class: "flex items-center gap-0.5 max-[45rem]:ms-auto" }, searchButton(), themeBtn, menuBtn)
@@ -259,7 +259,9 @@ function footer() {
     },
   });
 
-  const FOOT_LINK = "text-sm text-ink-2 no-underline hover:text-jade";
+  // A finger needs 44px on a phone, so the whole list is a comfortable target
+  // there. The desktop row stays as it was, at text height.
+  const FOOT_LINK = "inline-flex items-center text-sm text-ink-2 no-underline hover:text-jade max-[45rem]:min-h-11";
   const group = (title, links) =>
     el(
       "div",
@@ -280,7 +282,7 @@ function footer() {
         el(
           "div",
           { class: "grid gap-1.5" },
-          el("a", { class: "inline-flex items-center gap-[9px] text-md font-bold tracking-[-0.01em] text-ink no-underline", href: "#/" },
+          el("a", { class: "inline-flex min-h-11 items-center gap-[9px] text-md font-bold tracking-[-0.01em] text-ink no-underline", href: "#/" },
             el("img", { class: "block size-[34px] rounded-[11px] shadow-[0_0_0_1px_var(--orbit)]", src: "./icon.png", alt: "", width: "34", height: "34" }), "mevebu"),
           el("p", { class: "m-0 max-w-[30ch] text-sm leading-[1.5] text-ink-3" }, "Small tools that run in your browser. No accounts, no uploads, no tracking.")
         ),
@@ -315,7 +317,7 @@ function footer() {
           { class: "m-0 flex items-center gap-2" },
           el("button", {
             class:
-              "inline-flex min-h-7 cursor-pointer items-center gap-1.5 rounded-full border border-orbit bg-transparent px-2.5 py-[3px] font-sans text-2xs tabular-nums text-ink-3 transition-colors duration-150 hover:border-orbit-hard hover:text-ink data-[new]:border-jade data-[new]:bg-jade-soft data-[new]:font-semibold data-[new]:text-jade data-[new]:hover:bg-jade data-[new]:hover:text-on-jade",
+              "inline-flex min-h-7 cursor-pointer items-center gap-1.5 rounded-full border border-orbit bg-transparent px-2.5 py-[3px] font-sans text-2xs tabular-nums text-ink-3 transition-colors duration-150 hover:border-orbit-hard hover:text-ink data-[new]:border-jade data-[new]:bg-jade-soft data-[new]:font-semibold data-[new]:text-jade data-[new]:hover:bg-jade data-[new]:hover:text-on-jade max-[45rem]:min-h-11",
             id: "version",
             type: "button",
             title: "Check for updates",
