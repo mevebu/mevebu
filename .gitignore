@@ -1,8 +1,6 @@
-# deps & build output — never publish these
 node_modules/
 dist/
 
-# private agent assets, do not commit/publish
 .design/
 .skills/
 .kilo/
@@ -11,29 +9,23 @@ AGENTS.md
 DESIGN.md
 antislop-ui-copy-analyzer.md
 
-# npm auth token, never commit
 .npmrc
 .npmrc.local
 *.npmrc
 
-# local reference project, not part of mevebu
 01-My-Own-AntiSlop-AI-Skills/
 z-update-info.md
 
-# private tool idea list, not published
 daftar-ide-open-source-web-tools.md
 
-# private maintainer tool, not published
 scripts/ship.js
 SHIP_GUIDE.md
 
-# private release posts (Zernio API key, copy, screenshots), never commit
+
 zernio-app/
 info-medsos/
 
-# local debug screenshots (keep the shipped icons)
 /*.png
 
-# misc
 .DS_Store
 *.log
