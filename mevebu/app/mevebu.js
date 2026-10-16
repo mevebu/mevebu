@@ -38,7 +38,9 @@ const GRID = "grid grid-cols-1 gap-[var(--gutter)] sm:grid-cols-2 lg:grid-cols-3
 const SECTION = "pt-[clamp(32px,5vw,60px)]";
 const SECTION_HEAD = "mb-4 flex items-baseline gap-3";
 const SECTION_TITLE = "flex items-center gap-2.5 text-lg font-bold tracking-[-0.02em]";
-const SECTION_MORE = "ms-auto text-sm font-semibold text-jade no-underline hover:underline";
+/* The padding grows the target to a finger while the negative margin cancels
+   the height, so a section head keeps its baseline alignment on a phone. */
+const SECTION_MORE = "ms-auto -my-3 inline-flex items-center py-3 text-sm font-semibold text-jade no-underline hover:underline";
 const SECTION_COUNT = "ms-1.5 rounded-full bg-deck-2 px-2 py-px text-2xs font-semibold text-ink-3";
 const LEAD = "mt-[clamp(28px,5vw,56px)] mb-0 max-w-[20ch] text-balance text-lead font-bold tracking-[-0.025em]";
 const LEDE = "mt-3 mb-0 max-w-[60ch] text-pretty text-md text-ink-2";
@@ -486,62 +488,122 @@ function wireFilter(root, meta) {
 
 // ---------- pages ----------
 
+/* Home furniture. The tiles are shorter than a tool card on purpose: a category
+   is a way in, not a destination, so it gets one line and its count. */
+const FAVORITE_CARDS = 6;
+const RANDOM_CARDS = 9;
+const TILE =
+  "flex items-center gap-3 rounded-r2 border border-orbit bg-deck px-4 py-3.5 no-underline transition-colors duration-150 hover:border-jade";
+const COUNT_PILL = "flex-none rounded-full bg-deck-2 px-2.5 py-1 text-2xs font-semibold text-ink-3";
+const REDIRECT_CARD =
+  "relative grid content-center justify-items-center gap-1.5 rounded-r2 border border-orbit bg-deck p-5 text-center no-underline transition-colors duration-150 hover:border-jade";
+
+function homeSection(title, iconName, aside, body) {
+  return el(
+    "section",
+    { class: SECTION },
+    el(
+      "div",
+      { class: SECTION_HEAD },
+      el("h2", { class: SECTION_TITLE }, icon(iconName, "size-[22px] flex-none text-jade"), title),
+      aside
+    ),
+    body
+  );
+}
+
+const homeMore = (href, label) => el("a", { class: SECTION_MORE, href }, label);
+
+function categoryTile(category) {
+  return el(
+    "a",
+    { class: TILE, href: `#/${category.id}` },
+    el("span", { class: "grid size-[38px] flex-none place-items-center rounded-[12px] bg-jade-soft text-jade [&_svg]:size-[19px]" }, icon(category.icon)),
+    el("span", { class: "min-w-0 flex-1 truncate text-md font-semibold tracking-[-0.01em]" }, category.name),
+    el("span", { class: COUNT_PILL }, toolsInCategory(category.id).length)
+  );
+}
+
+/* The favourites row is a shortcut, so it earns a shorter sentence than the
+   empty favourites page: the reader sees why it is empty and where to go. */
+function favoritesEmpty() {
+  return el(
+    "div",
+    { class: "flex flex-wrap items-center gap-x-4 gap-y-3 rounded-r2 border border-dashed border-orbit-hard bg-deck p-6" },
+    el("span", { class: "grid size-[42px] flex-none place-items-center rounded-[13px] bg-jade-soft text-jade [&_svg]:size-[21px]" }, icon("star")),
+    el("p", { class: "m-0 max-w-[54ch] text-pretty text-md text-ink-2" },
+      "Nothing saved yet. Tap the star on any tool and it lands on this row, so it stays one click away."),
+    el("a", { class: `${LINK_PLAIN} ms-auto`, href: "#/tools" }, "Browse tools")
+  );
+}
+
+function favoritesRest(rest) {
+  return el(
+    "a",
+    { class: REDIRECT_CARD, href: "#/favorites" },
+    el("span", { class: "grid size-[42px] place-items-center rounded-[13px] bg-jade-soft text-jade [&_svg]:size-[21px]" }, icon("star")),
+    el("span", { class: "text-md font-semibold tracking-[-0.01em]" }, rest > 0 ? `${rest} more` : "See all"),
+    el("span", { class: "text-sm text-ink-2" }, "Open your favorites")
+  );
+}
+
 function homePage() {
   const hero = el(
     "section",
     { class: "relative overflow-hidden border-b border-orbit" },
     el(
       "div",
-      { class: "mx-[var(--margin)] grid items-center gap-[clamp(24px,5vw,48px)] py-[clamp(36px,7vw,68px)] min-[60rem]:grid-cols-[minmax(0,1fr)_auto]" },
+      { class: "mx-[var(--margin)] grid items-center gap-[clamp(32px,5vw,64px)] py-[clamp(44px,8vw,88px)] min-[60rem]:grid-cols-[minmax(0,1fr)_auto]" },
       el(
         "div",
         {},
-        el("h1", { class: "max-w-[20ch] text-balance text-hero font-bold tracking-[-0.03em]" }, "Small tools, one page each."),
+        el("h1", { class: "max-w-[18ch] text-balance text-hero font-bold tracking-[-0.035em]" }, "Small tools, one page each."),
+        el("p", { class: "mt-5 mb-0 max-w-[48ch] text-pretty text-md text-ink-2" },
+          `${TOOLS.length} tools across ${CATEGORIES.length} categories, and every one of them runs in your browser.`),
         el(
           "div",
-          { class: "mt-[clamp(22px,3vw,30px)] flex flex-wrap gap-2.5" },
+          { class: "mt-[clamp(26px,3.5vw,36px)] flex flex-wrap items-center gap-2.5" },
           button("Search tools", { icon: "search", kind: "fill", onclick: () => openPalette() }),
           el("a", { class: LINK_PLAIN, href: "#/tools" }, icon("shuffle"), el("span", {}, "Browse all"))
         )
       ),
-      el("div", { class: "grid place-items-center rounded-[28px] border border-orbit bg-deck-2 p-6 max-[60rem]:hidden" },
-        el("img", { class: "block size-[220px]", src: "./icon.png", alt: "", width: "220", height: "220" }))
+      el("div", { class: "grid place-items-center rounded-[28px] border border-orbit bg-deck p-7 max-[60rem]:hidden" },
+        el("img", { class: "block size-[248px]", src: "./icon.png", alt: "", width: "248", height: "248" }))
     )
   );
 
-  const popular = [
-    "password-generator", "qr-generator", "spin-wheel",
-    "uuid-generator", "base64", "name-picker",
-  ].map((id) => TOOLS.find((tool) => tool.id === id)).filter(Boolean);
+  const favorites = getFavorites();
+  const saved = TOOLS.filter((tool) => favorites.has(tool.id));
+  const shown = saved.slice(0, FAVORITE_CARDS - 1);
+  const rest = saved.length - shown.length;
 
-  const section = (title, iconName, more, tools, group) =>
-    el(
-      "section",
-      { class: "pt-[clamp(32px,5vw,60px)]", dataset: { group } },
-      el(
-        "div",
-        { class: "mb-4 flex items-baseline gap-3" },
-        el("h2", { class: "flex items-center gap-2.5 text-lg font-bold tracking-[-0.02em]" }, icon(iconName, "size-[22px] flex-none text-jade"), title),
-        more
-      ),
-      el("div", { class: "grid grid-cols-1 gap-[var(--gutter)] sm:grid-cols-2 lg:grid-cols-3" }, ...tools.map(toolCard))
-    );
-
-  const grid = el("div", { class: "px-[var(--margin)]" },
-    section("Popular", "star", el("a", { class: "ms-auto text-sm font-semibold text-jade no-underline hover:underline", href: "#/tools" }, "All tools"), popular, "popular"),
-    ...CATEGORIES.slice(0, 4).map((category) =>
-      section(
-        category.name,
-        category.icon,
-        el("a", { class: "ms-auto text-sm font-semibold text-jade no-underline hover:underline", href: `#/${category.id}` }, `Open ${category.name.toLowerCase()}`),
-        toolsInCategory(category.id).slice(0, 3),
-        category.id
-      )
-    )
-  );
+  // Nine picks, reshuffled on demand: the point is to meet a tool you did not
+  // know was there, so the order is drawn fresh every visit.
+  const randomGrid = el("div", { class: GRID });
+  const fillRandom = () => randomGrid.replaceChildren(...shuffle(TOOLS).slice(0, RANDOM_CARDS).map(toolCard));
+  fillRandom();
 
   document.title = "mevebu · small tools that run in your browser";
-  return el("div", {}, hero, grid);
+  return el(
+    "div",
+    {},
+    hero,
+    el(
+      "div",
+      { class: `pb-[var(--margin)] ${PAGE}` },
+      homeSection("Your favorites", "star", saved.length ? homeMore("#/favorites", "See all") : null,
+        saved.length
+          ? el("div", { class: GRID }, ...shown.map(toolCard), favoritesRest(rest))
+          : favoritesEmpty()),
+      homeSection("Categories", "layout-grid", homeMore("#/categories", "All categories"),
+        el("div", { class: GRID }, ...CATEGORIES.map(categoryTile))),
+      homeSection("Random picks", "shuffle",
+        el("button", { class: `${LINK_PLAIN} ms-auto`, type: "button", onclick: fillRandom }, icon("shuffle"), el("span", {}, "Shuffle")),
+        randomGrid),
+      el("div", { class: "mt-[clamp(30px,5vw,54px)] flex justify-center" },
+        button("Search tools", { icon: "search", kind: "fill", onclick: () => openPalette() }))
+    )
+  );
 }
 
 function toolsPage() {

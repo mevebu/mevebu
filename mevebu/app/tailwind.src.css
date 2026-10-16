@@ -93,14 +93,14 @@
 }
 
 :root[data-theme="dark"] {
-  --void: #060d0a;
-  --deck: #0c1610;
-  --deck-2: #122019;
+  --void: #050b08;
+  --deck: #12211a;
+  --deck-2: #1b2f24;
   --ink: #e7f0ea;
   --ink-2: #a7bbae;
   --ink-3: #85978a;
-  --orbit: #1d2c23;
-  --orbit-hard: #2b4033;
+  --orbit: #2e4437;
+  --orbit-hard: #3f5c49;
   --jade: #4ad69a;
   --jade-deep: #6ee6b0;
   --on-jade: #04120b;
