@@ -758,34 +758,52 @@ export function compareVersions(a, b) {
   return 0;
 }
 
-/**
- * Asks the npm registry for the latest published version. Fails silently when
- * offline, so the app never blocks on the network. Resolves to
- * `{ latest, current, outdated }` or null when the check did not complete.
- */
-export async function checkForUpdate({ timeout = 5000 } = {}) {
+/** One JSON GET with its own timeout. Answers null on any failure. */
+async function getJson(url, timeout) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
   try {
-    const response = await fetch(`https://registry.npmjs.org/${PACKAGE_NAME}/latest`, {
-      signal: controller.signal,
-      headers: { accept: "application/json" },
-    });
-    clearTimeout(timer);
+    const response = await fetch(url, { signal: controller.signal, headers: { accept: "application/json" } });
     if (!response.ok) return null;
-    const data = await response.json();
-    const latest = data?.version;
-    if (!latest) return null;
-    return { latest, current: VERSION, outdated: compareVersions(latest, VERSION) > 0 };
+    return await response.json();
   } catch {
-    clearTimeout(timer);
     return null;
+  } finally {
+    clearTimeout(timer);
   }
+}
+
+async function npmVersion(timeout) {
+  const data = await getJson(`https://registry.npmjs.org/${PACKAGE_NAME}/latest`, timeout);
+  return data?.version ?? null;
+}
+
+async function githubVersion(timeout) {
+  const data = await getJson(`https://api.github.com/repos/${REPO_SLUG}/releases/latest`, timeout);
+  return (data?.tag_name ?? "").replace(/^v/, "") || null;
+}
+
+/**
+ * Reads the newest published version. npm answers first and the GitHub release
+ * is the fallback, since either one can be unreachable on its own. Resolves to
+ * `{ latest, current, outdated }`, or null when neither answered, so the app
+ * never blocks on the network and the modal can offer a retry.
+ */
+export async function checkForUpdate({ timeout = 5000 } = {}) {
+  const latest = (await npmVersion(timeout)) ?? (await githubVersion(timeout));
+  if (!latest) return null;
+  return { latest, current: VERSION, outdated: compareVersions(latest, VERSION) > 0 };
 }
 
 /** The command that updates an existing global install. */
 export function updateCommand() {
   return `npm install -g ${PACKAGE_NAME}`;
+}
+
+/** The GitHub page listing what changed, for one version or for every release. */
+export function releaseUrl(version) {
+  const base = `https://github.com/${REPO_SLUG}/releases`;
+  return version ? `${base}/tag/v${version}` : base;
 }
 
 export { hasIcon };

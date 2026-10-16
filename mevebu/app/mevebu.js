@@ -6,7 +6,7 @@ import { route, start, match, currentPath, go } from "../libs/js/router.js";
 import {
   $, $$, el, icon, getFavorites, isFavorite, toggleFavorite, setTheme,
   modal, modalHead, button, copyButton, openPalette, shuffle, toolcard, blank,
-  VERSION, PACKAGE_NAME, checkForUpdate, updateCommand, compareVersions,
+  VERSION, PACKAGE_NAME, checkForUpdate, updateCommand, compareVersions, releaseUrl,
 } from "../libs/js/core.js";
 
 const DONATE_URL = "https://buymeacoffee.com/fastro";
@@ -174,17 +174,18 @@ function openDonate() {
   });
 }
 
-// `latest` is the published version, or null when the check could not run.
+// The footer chip opens this. `latest` is the published version, or null when the
+// check has not answered; opening the modal retries it, so a registry hiccup on
+// the first load is not a dead end. The body and the actions repaint in place
+// while that retry runs.
 function openUpdate(latest) {
-  const updatable = latest && compareVersions(latest, VERSION) > 0;
-  const command = updateCommand();
+  let resolved = latest;
+  let busy = false;
 
-  const commandBox = el(
-    "div",
-    { class: "mt-2.5 flex flex-wrap items-center gap-2 rounded-r2 border border-orbit bg-deck-2 py-2.5 pe-2.5 ps-4" },
-    el("code", { class: "min-w-0 flex-1 font-mono text-sm [overflow-wrap:anywhere]" }, command),
-    copyButton(() => command, "Copy command", "fill")
-  );
+  const bodyBox = el("div", { class: "grid gap-2.5" });
+  const actionBox = el("div", { class: "flex flex-wrap items-center justify-end gap-2" });
+  const command = updateCommand();
+  const updatable = () => Boolean(resolved) && compareVersions(resolved, VERSION) > 0;
 
   const versionRow = (label, value, isNew) =>
     el(
@@ -194,22 +195,57 @@ function openUpdate(latest) {
       el("span", { class: `font-mono text-sm font-semibold ${isNew ? "text-jade" : ""}` }, value)
     );
 
-  modal({
-    label: "Update mevebu",
-    body: [
-      modalHead("circle-arrow-up", updatable ? `mevebu ${latest} is out` : "mevebu is up to date"),
-      updatable
-        ? el("p", {}, "A newer version is published. Update your global install, then run ", el("code", { class: "rounded-[4px] bg-deck-2 px-[5px] py-px font-mono text-[0.92em]" }, PACKAGE_NAME), " again.")
-        : el("p", {}, "You are on the latest version. Nothing to do."),
+  function paint() {
+    const newer = updatable();
+    bodyBox.replaceChildren(...[
+      modalHead(
+        busy || !resolved ? "refresh-cw" : "circle-arrow-up",
+        busy
+          ? "Checking for updates"
+          : newer
+            ? `mevebu ${resolved} is out`
+            : resolved
+              ? "mevebu is up to date"
+              : "Could not check for updates"
+      ),
+      newer
+        ? el("p", {}, "A newer version is published. Update your global install, then run ", el("code", { class: CODE }, PACKAGE_NAME), " again.")
+        : null,
       el("div", { class: "mt-[18px] overflow-hidden rounded-r2 border border-orbit" },
         versionRow("Installed", VERSION, false),
-        versionRow("Latest", latest ?? "-", Boolean(updatable))),
-      updatable ? el("p", { class: "mt-3.5 text-sm" }, "Copy the command below and run it in your terminal.") : null,
-      updatable ? commandBox : null,
-    ],
-    actions: updatable
-      ? [el("a", { class: LINK_PLAIN, href: `${REPO_URL}/releases/tag/v${latest}`, target: "_blank", rel: "noopener" }, "What changed")]
-      : [],
+        versionRow("Latest", busy ? "Checking" : resolved ?? "Unknown", newer)),
+      newer ? el("p", { class: "mt-3.5 text-sm" }, "Copy the command below and run it in your terminal.") : null,
+      newer
+        ? el("div", { class: "mt-2.5 flex flex-wrap items-center gap-2 rounded-r2 border border-orbit bg-deck-2 py-2.5 pe-2.5 ps-4" },
+            el("code", { class: "min-w-0 flex-1 font-mono text-sm [overflow-wrap:anywhere]" }, command),
+            copyButton(() => command, "Copy command", "fill"))
+        : null,
+    ].filter(Boolean));
+
+    actionBox.replaceChildren(...[
+      !resolved && !busy ? button("Check again", { icon: "refresh-cw", onclick: () => check() }) : null,
+      el("a", { class: LINK_PLAIN, href: releaseUrl(resolved), target: "_blank", rel: "noopener" }, "What changed"),
+    ].filter(Boolean));
+  }
+
+  async function check() {
+    if (busy) return;
+    busy = true;
+    paint();
+    const result = await checkForUpdate();
+    busy = false;
+    if (result?.latest) resolved = result.latest;
+    paint();
+  }
+
+  paint();
+  modal({
+    label: "Update mevebu",
+    body: [bodyBox],
+    actions: [actionBox],
+    onOpen: () => {
+      if (!resolved) check();
+    },
   });
 }
 
