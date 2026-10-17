@@ -133,7 +133,7 @@ function masthead() {
       "div",
       { class: "mx-[var(--margin)] flex h-[var(--bar)] items-center gap-[clamp(14px,3vw,32px)]" },
       el("a", { class: "inline-flex min-h-11 flex-none items-center gap-2.5 text-lg font-bold tracking-[-0.01em] text-ink no-underline", href: "#/" },
-        el("img", { class: "block size-[30px] rounded-[9px] shadow-[0_0_0_1px_var(--orbit)]", src: "./icon.png", alt: "", width: "30", height: "30" }), "mevebu"),
+        el("img", { class: "block size-[30px]", src: "./assets/logo.png", alt: "", width: "30", height: "30" }), "mevebu"),
       nav,
       el("div", { class: "flex items-center gap-0.5 max-[45rem]:ms-auto" }, searchButton(), themeBtn, menuBtn)
     ),
@@ -326,7 +326,7 @@ function footer() {
           "div",
           { class: "grid gap-1.5" },
           el("a", { class: "inline-flex min-h-11 items-center gap-[9px] text-md font-bold tracking-[-0.01em] text-ink no-underline", href: "#/" },
-            el("img", { class: "block size-[34px] rounded-[11px] shadow-[0_0_0_1px_var(--orbit)]", src: "./icon.png", alt: "", width: "34", height: "34" }), "mevebu"),
+            el("img", { class: "block size-[34px]", src: "./assets/logo.png", alt: "", width: "34", height: "34" }), "mevebu"),
           el("p", { class: "m-0 max-w-[30ch] text-sm leading-[1.5] text-ink-3" }, "Small tools that run in your browser. No accounts, no uploads, no tracking.")
         ),
         el(
@@ -573,7 +573,7 @@ function homePage() {
         )
       ),
       el("div", { class: "grid place-items-center rounded-[28px] border border-orbit bg-deck p-7 max-[60rem]:hidden" },
-        el("img", { class: "block size-[248px]", src: "./icon.png", alt: "", width: "248", height: "248" }))
+        el("img", { class: "block size-[248px]", src: "./assets/logo.png", alt: "", width: "248", height: "248" }))
     )
   );
 
