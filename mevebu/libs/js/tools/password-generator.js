@@ -15,11 +15,12 @@ export function mount(slot) {
     lengthLabel.textContent = `Length: ${lengthField.value}`;
   }
 
+  // Two columns, so the four groups read as a block instead of ragging.
   const groups = toggleRow([
     { value: "lower", label: "a to z" },
     { value: "upper", label: "A to Z" },
     { value: "digits", label: "0 to 9" },
-    { value: "symbols", label: "Symbols" }]);
+    { value: "symbols", label: "Symbols" }], { columns: 2 });
 
   const secret = textInput({ mono: true, readonly: true, "aria-label": "Password", placeholder: "Press Generate" });
   const meter = el("div", { class: "h-2 overflow-hidden rounded-full bg-deck-2", role: "img", "aria-label": "Strength" }, el("div", { class: "h-full w-0 rounded-full bg-orbit-hard transition-[width,background-color] duration-150 data-[level=weak]:bg-danger data-[level=ok]:bg-star data-[level=strong]:bg-jade" }));
