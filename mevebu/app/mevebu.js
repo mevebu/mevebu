@@ -128,7 +128,7 @@ function masthead() {
 
   return el(
     "header",
-    { class: "sticky top-0 z-30 border-b border-orbit bg-deck" },
+    { id: "masthead", class: "z-30 border-b border-orbit bg-deck data-[pin]:sticky data-[pin]:top-0 data-[pin]:transition-shadow" },
     el(
       "div",
       { class: "mx-[var(--margin)] flex h-[var(--bar)] items-center gap-[clamp(14px,3vw,32px)]" },
@@ -754,6 +754,30 @@ function moreFromMev(tool) {
   );
 }
 
+function reportLink(tool) {
+  const title = `Bug in ${tool.name}`;
+  const body = [
+    "### What I was doing",
+    "<!-- one line is enough -->",
+    "",
+    "### What happened",
+    "",
+    "### What I expected",
+    "",
+    `### Tool`,
+    `mevebu ${VERSION}`,
+    `Page: #/${tool.category}/${tool.id}`,
+    "",
+    "### Browser",
+  ].join("\n");
+  return el("a", {
+    class: "mt-3 flex items-center gap-1.5 self-start text-2xs font-semibold text-ink-3 no-underline hover:text-ink-2",
+    href: `https://github.com/mevebu/mevebu/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`,
+    target: "_blank",
+    rel: "noopener",
+  }, icon("bug"), el("span", {}, "Report a problem"));
+}
+
 async function toolPage(tool, category) {
   const token = ++navToken;
   const slot = el("div", {});
@@ -764,6 +788,7 @@ async function toolPage(tool, category) {
     { class: PAGE_NARROW },
     benchHead(tool, category),
     slot,
+    el("div", { class: "flex flex-col items-stretch" }, reportLink(tool)),
     more
   );
 
@@ -900,6 +925,20 @@ const scrollMemory = new Map();
 let activePath = null;
 let historyMove = false;
 
+
+// Sticky everywhere except the tools index and a single tool page, where
+// the page owns the whole frame and the navbar would steal vertical space.
+function pinMasthead(path) {
+  const head = document.getElementById("masthead");
+  if (!head) return;
+  const pinned = !(
+    path === "/tools" ||
+    /^\/[^/]+\/[^/]+$/.test(path)
+  );
+  if (pinned) head.dataset.pin = "";
+  else delete head.dataset.pin;
+}
+
 async function render(path) {
   const restoring = historyMove;
   historyMove = false;
@@ -909,6 +948,7 @@ async function render(path) {
   if (!node) return;
   $("#view").replaceChildren(node);
   markActiveNav(["/", "/tools", "/categories", "/about"].includes(path) ? path : "");
+  pinMasthead(path);
   activePath = path;
   window.scrollTo({ top: restoring ? scrollMemory.get(path) ?? 0 : 0 });
   if (!history.state?.mevebu) history.replaceState({ mevebu: true }, "", location.href);

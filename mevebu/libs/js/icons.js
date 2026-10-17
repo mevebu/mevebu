@@ -1,5 +1,5 @@
 // GENERATED FILE, DO NOT EDIT.
-// Source: lucide v1.57.0 (ISC), icons/168 names from scripts/vendor-icons.mjs
+// Source: lucide v1.59.0 (ISC), icons/169 names from scripts/vendor-icons.mjs
 // Regenerate with: npm run icons
 
 const D = {
@@ -16,6 +16,7 @@ const D = {
   "info": [ ["circle", { cx: "12", cy: "12", r: "10" }], ["path", { d: "M12 16v-4" }], ["path", { d: "M12 8h.01" }] ],
   "circle-question-mark": [ ["circle", { cx: "12", cy: "12", r: "10" }], ["path", { d: "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" }], ["path", { d: "M12 17h.01" }] ],
   "circle-arrow-up": [ ["circle", { cx: "12", cy: "12", r: "10" }], ["path", { d: "m16 12-4-4-4 4" }], ["path", { d: "M12 16V8" }] ],
+  "bug": [ ["path", { d: "M12 20v-9" }], ["path", { d: "M14 7a4 4 0 0 1 4 4v3a6 6 0 0 1-12 0v-3a4 4 0 0 1 4-4z" }], ["path", { d: "M14.12 3.88 16 2" }], ["path", { d: "M21 21a4 4 0 0 0-3.81-4" }], ["path", { d: "M21 5a4 4 0 0 1-3.55 3.97" }], ["path", { d: "M22 13h-4" }], ["path", { d: "M3 21a4 4 0 0 1 3.81-4" }], ["path", { d: "M3 5a4 4 0 0 0 3.55 3.97" }], ["path", { d: "M6 13H2" }], ["path", { d: "m8 2 1.88 1.88" }], ["path", { d: "M9 7.13V6a3 3 0 1 1 6 0v1.13" }] ],
   "shuffle": [ ["path", { d: "m18 14 4 4-4 4" }], ["path", { d: "m18 2 4 4-4 4" }], ["path", { d: "M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" }], ["path", { d: "M2 6h1.972a4 4 0 0 1 3.6 2.2" }], ["path", { d: "M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" }] ],
   "shield-check": [ [ "path", { d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" } ], ["path", { d: "m9 12 2 2 4-4" }] ],
   "terminal": [ ["path", { d: "M12 19h8" }], ["path", { d: "m4 17 6-6-6-6" }] ],

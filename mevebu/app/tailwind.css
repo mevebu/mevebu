@@ -208,17 +208,11 @@
   .static {
     position: static;
   }
-  .sticky {
-    position: sticky;
-  }
   .inset-0 {
     inset: 0px;
   }
   .end-3 {
     inset-inline-end: calc(var(--spacing) * 3);
-  }
-  .top-0 {
-    top: 0px;
   }
   .top-0\.5 {
     top: calc(var(--spacing) * 0.5);
@@ -264,6 +258,9 @@
   }
   .m-0 {
     margin: 0px;
+  }
+  .m-auto {
+    margin: auto;
   }
   .mx-\[var\(--margin\)\] {
     margin-inline: var(--margin);
@@ -661,6 +658,9 @@
   .items-start {
     align-items: flex-start;
   }
+  .items-stretch {
+    align-items: stretch;
+  }
   .justify-between {
     justify-content: space-between;
   }
@@ -735,6 +735,9 @@
   }
   .gap-y-3 {
     row-gap: calc(var(--spacing) * 3);
+  }
+  .self-start {
+    align-self: flex-start;
   }
   .truncate {
     overflow: hidden;
@@ -1016,6 +1019,9 @@
   .py-\[13px\] {
     padding-block: 13px;
   }
+  .py-\[clamp\(20px\,5vh\,40px\)\] {
+    padding-block: clamp(20px, 5vh, 40px);
+  }
   .py-\[clamp\(28px\,6vw\,56px\)\] {
     padding-block: clamp(28px, 6vw, 56px);
   }
@@ -1082,9 +1088,6 @@
   .pt-\[clamp\(32px\,5vw\,60px\)\] {
     padding-top: clamp(32px, 5vw, 60px);
   }
-  .pt-\[clamp\(60px\,9vh\,110px\)\] {
-    padding-top: clamp(60px, 9vh, 110px);
-  }
   .pb-2 {
     padding-bottom: calc(var(--spacing) * 2);
   }
@@ -1093,9 +1096,6 @@
   }
   .pb-7 {
     padding-bottom: calc(var(--spacing) * 7);
-  }
-  .pb-10 {
-    padding-bottom: calc(var(--spacing) * 10);
   }
   .pb-\[var\(--margin\)\] {
     padding-bottom: var(--margin);
@@ -1581,6 +1581,17 @@
   .data-\[on\]\:shadow-\[0_0_0_1px_var\(--orbit\)\][data-on] {
     --tw-shadow: 0 0 0 1px var(--tw-shadow-color, var(--orbit));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .data-\[pin\]\:sticky[data-pin] {
+    position: sticky;
+  }
+  .data-\[pin\]\:top-0[data-pin] {
+    top: 0px;
+  }
+  .data-\[pin\]\:transition-shadow[data-pin] {
+    transition-property: box-shadow;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
   .data-\[state\=open\]\:opacity-100[data-state="open"] {
     opacity: 100%;

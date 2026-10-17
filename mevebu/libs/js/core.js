@@ -197,14 +197,14 @@ export function modalHead(iconName, title) {
 export function modal({ label, body, actions = [], onOpen, onClose, panelClass } = {}) {
   lastFocus = document.activeElement;
   const veil = el("div", {
-    class: "group fixed inset-0 z-80 grid items-start justify-items-center overflow-y-auto bg-[var(--scrim)] px-5 pt-[clamp(60px,9vh,110px)] pb-10 opacity-0 transition-opacity duration-200 data-[state=open]:opacity-100",
+    class: "group fixed inset-0 z-80 grid place-items-center overflow-y-auto bg-[var(--scrim)] px-5 py-[clamp(20px,5vh,40px)] opacity-0 transition-opacity duration-200 data-[state=open]:opacity-100",
   });
   const panel = el(
     "div",
     {
       class:
         "relative grid gap-4 rounded-r3 border border-orbit bg-deck shadow-[var(--shadow)] transition-transform duration-200 ease-[var(--ease)] translate-y-3.5 scale-[0.97] group-data-[state=open]:translate-y-0 group-data-[state=open]:scale-100 " +
-        (panelClass ?? "w-[min(480px,100%)] p-[clamp(22px,3vw,28px)]"),
+        (panelClass ?? "m-auto w-[min(480px,100%)] p-[clamp(22px,3vw,28px)]"),
       role: "dialog",
       "aria-modal": "true",
       "aria-label": label,
@@ -750,7 +750,7 @@ export function blank(iconName, text) {
 // ---------- version ----------
 
 // Kept in one place. The CLI reads the same value from package.json.
-export const VERSION = "1.7.1";
+export const VERSION = "1.7.2";
 export const PACKAGE_NAME = "mevebu";
 export const REPO_SLUG = "mevebu/mevebu";
 

@@ -11,6 +11,7 @@ const ICONS = [
   // shell
   "search", "menu", "x", "sun", "moon", "star", "arrow-left", "coffee",
   "external-link", "corner-down-left", "info", "circle-question-mark", "circle-arrow-up",
+  "bug",
   // categories
   "shuffle", "shield-check", "terminal", "repeat", "file-text", "qr-code",
   // tools
