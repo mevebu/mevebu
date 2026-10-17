@@ -616,6 +616,7 @@ const BTN_KIND = {
   fill: "border-jade bg-jade px-4 text-on-jade hover:border-jade-deep hover:bg-jade-deep",
   plain: "border-orbit bg-deck px-4 text-ink hover:border-orbit-hard hover:bg-deck-2",
   quiet: "border-transparent bg-transparent px-2.5 text-ink-2 hover:bg-deck-2 hover:text-ink",
+  danger: "border-danger bg-danger px-4 text-on-danger hover:border-danger-deep hover:bg-danger-deep",
 };
 
 export function button(labelText, { icon: iconName, kind = "plain", class: extra, tag = "button", ...rest } = {}) {
@@ -623,7 +624,9 @@ export function button(labelText, { icon: iconName, kind = "plain", class: extra
     tag,
     { class: withExtra(`${BTN} ${BTN_KIND[kind] ?? BTN_KIND.plain}`, extra), ...(tag === "button" ? { type: "button" } : null), ...rest },
     iconName ? icon(iconName) : null,
-    el("span", {}, labelText)
+    // An icon-only button skips the label span: an empty one still spends the
+    // row's gap, which pushes the icon off centre.
+    labelText ? el("span", {}, labelText) : null
   );
 }
 
@@ -681,10 +684,14 @@ export function chipRow(items, { value, onChange, label } = {}) {
   return wrap;
 }
 
-/** Independent toggles. Returns the wrapper with `.values()` reading the boxes. */
-export function toggleRow(items) {
+/**
+ * Independent toggles. Returns the wrapper with `.values()` reading the boxes.
+ * `columns: 2` lays them out on an even grid, so a set of related boxes lines up
+ * instead of ragging across the row.
+ */
+export function toggleRow(items, { columns } = {}) {
   const boxes = new Map();
-  const wrap = el("div", { class: "flex flex-wrap gap-1.5" });
+  const wrap = el("div", { class: columns === 2 ? "grid grid-cols-2 gap-1.5" : "flex flex-wrap gap-1.5" });
   for (const item of items) {
     const node = checkbox(item.label, { checked: item.checked !== false });
     boxes.set(item.value, node.input);

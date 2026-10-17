@@ -50,6 +50,8 @@
   --on-jade: #ffffff;
   --jade-soft: #e0f0e7;
   --danger: #b0231d;
+  --danger-deep: #8e1b16;
+  --on-danger: #ffffff;
   --star: #b37700;
   --track: #bfcac1;
   --scrim: rgb(8 14 11 / 0.5);
@@ -106,8 +108,10 @@
   --on-jade: #04120b;
   --jade-soft: #10291f;
   --danger: #ff8a80;
+  --danger-deep: #ffb3ab;
+  --on-danger: #2a0b08;
   --star: #ffcf4d;
-  --track: #2b4033;
+  --track: #3f5c49;
   --scrim: rgb(2 6 4 / 0.68);
   --shadow: 0 22px 50px -20px rgb(0 0 0 / 0.7);
   --caret: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2385978a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
@@ -136,6 +140,8 @@
   --color-on-jade: var(--on-jade);
   --color-jade-soft: var(--jade-soft);
   --color-danger: var(--danger);
+  --color-danger-deep: var(--danger-deep);
+  --color-on-danger: var(--on-danger);
   --color-star: var(--star);
   --color-track: var(--track);
 
@@ -201,7 +207,13 @@
     border-radius: 6px;
   }
 
-  ::selection { background: var(--jade-soft); }
+  /* A selection has to read on both grounds. The browser default nearly vanishes
+     on the dark deck, and `--jade-soft` is darker still there, so the highlight
+     is the accent mixed down instead, which stays visible over a field, a
+     readout and the page alike. */
+  ::selection {
+    background: color-mix(in srgb, var(--jade) 34%, transparent);
+  }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
