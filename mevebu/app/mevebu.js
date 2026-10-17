@@ -188,6 +188,9 @@ function openUpdate(latest) {
   const actionBox = el("div", { class: "flex flex-wrap items-center justify-end gap-2" });
   const command = updateCommand();
   const updatable = () => Boolean(resolved) && compareVersions(resolved, VERSION) > 0;
+  // A local build can sit above the published one, and saying "up to date" next
+  // to a lower number reads as a bug, so that case names itself.
+  const ahead = () => Boolean(resolved) && compareVersions(resolved, VERSION) < 0;
 
   const versionRow = (label, value, isNew) =>
     el(
@@ -206,9 +209,11 @@ function openUpdate(latest) {
           ? "Checking for updates"
           : newer
             ? `mevebu ${resolved} is out`
-            : resolved
-              ? "mevebu is up to date"
-              : "Could not check for updates"
+            : !resolved
+              ? "Could not check for updates"
+              : ahead()
+                ? "This build is ahead of the published version"
+                : "mevebu is up to date"
       ),
       newer
         ? el("p", {}, "A newer version is published. Update your global install, then run ", el("code", { class: CODE }, PACKAGE_NAME), " again.")

@@ -763,7 +763,14 @@ async function getJson(url, timeout) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
   try {
-    const response = await fetch(url, { signal: controller.signal, headers: { accept: "application/json" } });
+    // The registry answers `/latest` with `max-age=300`, so a cached reply would
+    // keep reporting the version from before a publish for five minutes. A
+    // version check is worthless when it is stale, so it never reads the cache.
+    const response = await fetch(url, {
+      signal: controller.signal,
+      cache: "no-store",
+      headers: { accept: "application/json" },
+    });
     if (!response.ok) return null;
     return await response.json();
   } catch {
