@@ -1,6 +1,6 @@
 {
   "name": "mevebu",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Small tools that run in your browser. No accounts, no uploads, no tracking.",
   "license": "MIT",
   "type": "module",
