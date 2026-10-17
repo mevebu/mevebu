@@ -7,6 +7,7 @@ import {
   $, $$, el, icon, getFavorites, isFavorite, toggleFavorite, setTheme,
   modal, modalHead, button, copyButton, openPalette, shuffle, toolcard, blank,
   VERSION, PACKAGE_NAME, checkForUpdate, updateCommand, compareVersions, releaseUrl,
+  textInput, textArea, panel,
 } from "../libs/js/core.js";
 
 const DONATE_URL = "https://buymeacoffee.com/fastro";
@@ -754,28 +755,115 @@ function moreFromMev(tool) {
   );
 }
 
-function reportLink(tool) {
-  const title = `Bug in ${tool.name}`;
-  const body = [
-    "### What I was doing",
-    "<!-- one line is enough -->",
-    "",
-    "### What happened",
-    "",
-    "### What I expected",
-    "",
-    `### Tool`,
-    `mevebu ${VERSION}`,
-    `Page: #/${tool.category}/${tool.id}`,
-    "",
-    "### Browser",
-  ].join("\n");
-  return el("a", {
-    class: "mt-3 flex items-center gap-1.5 self-start text-2xs font-semibold text-ink-3 no-underline hover:text-ink-2",
-    href: `https://github.com/mevebu/mevebu/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`,
-    target: "_blank",
-    rel: "noopener",
-  }, icon("bug"), el("span", {}, "Report a problem"));
+// What the browser tells us about itself, without asking the user to retype it.
+// Every field can come back empty (a hardened browser, a private mode), so the
+// form still works when it does.
+function browserFacts() {
+  const ua = navigator.userAgent;
+  const browser = /Edg\//.test(ua) ? "Edge"
+    : /OPR\//.test(ua) ? "Opera"
+    : /Firefox\//.test(ua) ? "Firefox"
+    : /Chrome\//.test(ua) ? "Chrome"
+    : /Safari\//.test(ua) ? "Safari"
+    : "Unknown";
+  const version = (ua.match(new RegExp(browser + "\\/([\\d.]+)")) ?? [])[1] ?? "";
+  const platform = navigator.userAgentData?.platform
+    ?? (/Windows/.test(ua) ? "Windows" : /Mac OS X/.test(ua) ? "macOS"
+      : /Android/.test(ua) ? "Android" : /iPhone|iPad/.test(ua) ? "iOS"
+      : /Linux/.test(ua) ? "Linux" : "");
+  const screen = `${window.screen.width}x${window.screen.height} @${window.devicePixelRatio}x`;
+  return { browser: `${browser} ${version}`.trim(), platform, screen };
+}
+
+function openReport(tool) {
+  const facts = browserFacts();
+  const doing = textArea({ rows: 3, placeholder: "I was building a daily expression for a backup job." });
+  const happened = textArea({ rows: 3, placeholder: "The preview stayed empty when I typed 0 3." });
+  const expected = textArea({ rows: 3, placeholder: "I expected it to read \"03:00 every day\"." });
+  const browserField = textInput({ value: facts.browser });
+  const platformField = textInput({ value: [facts.platform, facts.screen].filter(Boolean).join(" · ") });
+  let opened = false;
+
+  const submit = button("Open GitHub issue", { icon: "external-link", kind: "fill" });
+  // The actions row renders outside the form, so the button names it explicitly.
+  submit.type = "submit";
+  submit.setAttribute("form", "report-form");
+  submit.disabled = true;
+  submit.setAttribute("aria-disabled", "true");
+  const validate = () => {
+    const ready = happened.value.trim().length > 0 && doing.value.trim().length > 0;
+    submit.disabled = !ready;
+    if (ready) submit.removeAttribute("aria-disabled");
+    else submit.setAttribute("aria-disabled", "true");
+  };
+  for (const area of [doing, happened]) area.addEventListener("input", validate);
+
+  const form = el(
+    "form",
+    {
+      id: "report-form",
+      class: "grid gap-3.5",
+      onsubmit: (event) => {
+        event.preventDefault();
+        if (opened || submit.disabled) return;
+        opened = true;
+        const body = [
+          "### What I was doing",
+          doing.value.trim() || "_not given_",
+          "",
+          "### What happened",
+          happened.value.trim() || "_not given_",
+          "",
+          "### What I expected",
+          expected.value.trim() || "_not given_",
+          "",
+          "### Where",
+          `- Tool: ${tool.name} (\`${tool.id}\`)`,
+          `- Page: #/${tool.category}/${tool.id}`,
+          `- mevebu: ${VERSION}`,
+          "",
+          "### Browser",
+          `- ${browserField.value || "unknown"}`,
+          `- ${platformField.value || "unknown"}`,
+        ].join("\n");
+        const title = `Bug in ${tool.name}`;
+        const href = `https://github.com/mevebu/mevebu/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+        window.open(href, "_blank", "noopener");
+      },
+    },
+    panel("What were you doing?", doing),
+    panel("What happened?", happened),
+    panel("What did you expect?", expected, "Optional"),
+    el(
+      "div",
+      { class: "grid gap-3 rounded-r2 border border-orbit bg-deck-2 p-3.5" },
+      el("p", { class: "m-0 text-2xs text-ink-3" },
+        "Already filled in from this tab. Edit it if something is off."),
+      panel("Browser", browserField),
+      panel("Screen", platformField),
+    ),
+    submit
+  );
+
+  modal({
+    label: `Report a problem with ${tool.name}`,
+    panelClass: "m-auto w-[min(560px,100%)] p-[clamp(22px,3vw,28px)] max-h-[calc(100dvh-40px)] overflow-y-auto",
+    body: [
+      modalHead("flag", `Report a problem with ${tool.name}`),
+      el("p", { class: "m-0 text-sm text-ink-2" },
+        "Tell us what went wrong and the issue opens on GitHub with this page and browser already filled in."),
+      form,
+    ],
+    actions: [submit],
+  });
+}
+
+function reportButton(tool) {
+  return button("Report a problem", {
+    icon: "flag",
+    class: "mt-4",
+    onclick: () => openReport(tool),
+  });
 }
 
 async function toolPage(tool, category) {
@@ -788,7 +876,7 @@ async function toolPage(tool, category) {
     { class: PAGE_NARROW },
     benchHead(tool, category),
     slot,
-    el("div", { class: "flex flex-col items-stretch" }, reportLink(tool)),
+    el("div", { class: "flex flex-col items-start" }, reportButton(tool)),
     more
   );
 
