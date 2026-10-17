@@ -34,7 +34,7 @@ export function mount(slot) {
     JSON.stringify(cards.map(({ question: q, answer: a }) => ({ question: q, answer: a })), null, 2);
 
   function removeButton(card) {
-    const node = button("", { icon: "trash", "aria-label": `Remove ${card.question}` });
+    const node = button("", { icon: "trash", kind: "danger", "aria-label": `Remove ${card.question}` });
     node.addEventListener("click", () => {
       cards = cards.filter((entry) => entry.id !== card.id);
       if (index >= cards.length) index = Math.max(0, cards.length - 1);
@@ -52,10 +52,22 @@ export function mount(slot) {
       const card = cards[index];
       faceLabel.textContent = flipped ? "Answer" : "Question";
       face.textContent = flipped ? card.answer : card.question;
-      listWrap.replaceChildren(el("table", { class: "w-full border-collapse font-mono text-sm [&_th]:wrap-anywhere [&_td]:wrap-anywhere [&_th]:border-b [&_td]:border-b [&_th]:border-orbit [&_td]:border-orbit [&_th]:px-2.5 [&_td]:px-2.5 [&_th]:py-2 [&_td]:py-2 [&_th]:text-start [&_td]:text-start [&_th]:font-sans [&_th]:text-2xs [&_th]:font-semibold [&_th]:text-ink-2 [&_tbody>tr:last-child>th]:border-b-0 [&_tbody>tr:last-child>td]:border-b-0" },
-        el("tbody", {}, ...cards.map((entry, i) => el("tr", {},
-          el("th", {}, `${i + 1}. ${entry.question}`),
-          el("td", {}, removeButton(entry)))))));
+      // A row per card, not a table: the question takes the width it needs and
+      // the remove button stays on the centre line of every row.
+      listWrap.replaceChildren(
+        el(
+          "ol",
+          { class: "m-0 grid list-none gap-1.5 p-0" },
+          ...cards.map((entry, i) =>
+            el(
+              "li",
+              { class: "flex items-center gap-3 rounded-r1 border border-orbit bg-deck-2 px-3.5 py-2.5" },
+              el("span", { class: "min-w-0 flex-1 wrap-anywhere font-mono text-sm" }, `${i + 1}. ${entry.question}`),
+              removeButton(entry)
+            )
+          )
+        )
+      );
     }
     stats.replaceChildren(tile("Cards", cards.length), tile("Card", cards.length ? `${index + 1} / ${cards.length}` : "-"));
     flipButton.disabled = !cards.length;
