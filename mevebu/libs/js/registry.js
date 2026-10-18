@@ -357,6 +357,25 @@ export const TOOLS = [
     keywords: "uppercase lowercase camel snake kebab pascal title",
     load: () => import("./tools/case-converter.js"),
   },
+  {
+    id: "image-converter",
+    category: "convert",
+    name: "Image Converter",
+    icon: "image-up",
+    note: "Convert images to another format, in batch.",
+    about: "JPEG, PNG, WebP, TIFF and BMP, written on this device.",
+    tutorial: {
+      intro: "Drop one image or a whole set, pick the format, and every file converts on this device.",
+      steps: [
+        "Drop images on the box or choose files. Add as many as you like.",
+        "Pick the format. Quality applies to JPEG and WebP; PNG, TIFF and BMP are lossless.",
+        "Drag the quality slider or type a number. Every file updates as you change it.",
+        "Save one file, or Download all for a ZIP. The x on a thumbnail removes that image.",
+      ],
+    },
+    keywords: "convert jpeg jpg png webp tiff bmp image batch compress quality",
+    load: () => import("./tools/image-converter.js"),
+  },
 
   {
     id: "lorem-ipsum",

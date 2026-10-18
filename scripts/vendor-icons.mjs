@@ -55,7 +55,7 @@ const ICONS = [
   "text-quote", "library", "notebook-pen", "shapes", "receipt", "banknote",
   "package", "film", "video", "git-pull-request", "weight", "thermometer",
   "hard-drive", "square-function", "clipboard-check", "circle-check-big",
-  "square",
+  "square", "chevron-right",
 ];
 
 const src = join(root, "node_modules", "lucide", "dist", "esm", "icons");

@@ -1,5 +1,5 @@
 // GENERATED FILE, DO NOT EDIT.
-// Source: lucide v1.59.0 (ISC), icons/173 names from scripts/vendor-icons.mjs
+// Source: lucide v1.59.0 (ISC), icons/174 names from scripts/vendor-icons.mjs
 // Regenerate with: npm run icons
 
 const D = {
@@ -176,6 +176,7 @@ const D = {
   "clipboard-check": [ ["rect", { width: "8", height: "4", x: "8", y: "2", rx: "1", ry: "1" }], ["path", { d: "M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" }], ["path", { d: "m9 14 2 2 4-4" }] ],
   "circle-check-big": [ ["path", { d: "M21.801 10A10 10 0 1 1 17 3.335" }], ["path", { d: "m9 11 3 3L22 4" }] ],
   "square": [["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2" }]],
+  "chevron-right": [["path", { d: "m9 18 6-6-6-6" }]],
 };
 
 const SVG_NS = "http://www.w3.org/2000/svg";
