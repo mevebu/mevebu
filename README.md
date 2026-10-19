@@ -2,7 +2,7 @@
 
 # mevebu
 
-**187 free browser tools, one page each. No sign up. No uploads. Everything runs in your tab.**
+**188 free browser tools, one page each. No sign up. No uploads. Everything runs in your tab.**
 
 A private toolbox for the small jobs that do not deserve a whole app: format JSON, decode a JWT, make a password, build a cron line, pick a color, scan a QR code, and a lot more.
 
@@ -10,7 +10,7 @@ A private toolbox for the small jobs that do not deserve a whole app: format JSO
 [![npm downloads](https://img.shields.io/npm/dm/mevebu?color=2ea44f)](https://www.npmjs.com/package/mevebu)
 [![License: MIT](https://img.shields.io/github/license/mevebu/mevebu?color=blue)](./LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/mevebu/mevebu?style=flat&color=yellow)](https://github.com/mevebu/mevebu/stargazers)
-![Tools](https://img.shields.io/badge/tools-187-brightgreen)
+![Tools](https://img.shields.io/badge/tools-188-brightgreen)
 ![Privacy](https://img.shields.io/badge/privacy-100%25%20in--browser-blue)
 
 [Quick start](#quick-start) · [What's inside](#whats-inside) · [Privacy](#privacy-by-design) · [Host it yourself](#host-it-yourself) · [Development](#development) · [FAQ](#faq)
@@ -23,7 +23,7 @@ A private toolbox for the small jobs that do not deserve a whole app: format JSO
 
 ## What is mevebu?
 
-mevebu is a collection of **187 small online tools** that all run **inside your browser**. Each tool lives on its own page, does one job, and does it fast. Most of them update as you type, so there is no submit button and no waiting.
+mevebu is a collection of **188 small online tools** that all run **inside your browser**. Each tool lives on its own page, does one job, and does it fast. Most of them update as you type, so there is no submit button and no waiting.
 
 Think of it as a clean, private alternative to the usual "free online tools" websites. There are no accounts, no ads in your way, no uploads, and no tracking. Your text, passwords, tokens, and files stay on your device.
 
@@ -65,14 +65,14 @@ mevebu tries port `5555` first, then `5678`, then `5432`, and finally any free p
 
 ## What's inside
 
-mevebu has **187 tools in 20 categories**. Here is the full breakdown:
+mevebu has **188 tools in 20 categories**. Here is the full breakdown:
 
 | Category           | Tools |
 | ------------------ | ----: |
 | Random             |     3 |
 | Passwords and keys |    10 |
 | Developer          |    21 |
-| Convert            |     4 |
+| Convert            |     5 |
 | Text and data      |    14 |
 | Daily use          |     8 |
 | Math               |    17 |
@@ -89,7 +89,7 @@ mevebu has **187 tools in 20 categories**. Here is the full breakdown:
 | GitHub             |     8 |
 | Units              |     8 |
 | QR codes           |     2 |
-| **Total**          | **187** |
+| **Total**          | **188** |
 
 The counts come straight from the tool registry, so this table and the app never drift apart.
 
@@ -179,7 +179,7 @@ That is all. The catalog, search, breadcrumbs, and category pages pick it up aut
 ## FAQ
 
 **What is mevebu?**
-mevebu is a free, open source collection of 187 browser based tools for developers, students, creators, and everyday use. Every tool runs locally in your browser.
+mevebu is a free, open source collection of 188 browser based tools for developers, students, creators, and everyday use. Every tool runs locally in your browser.
 
 **Is mevebu really free?**
 Yes. It is MIT licensed, with no paid tier, no account, and no usage limits.

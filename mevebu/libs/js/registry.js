@@ -376,6 +376,25 @@ export const TOOLS = [
     keywords: "convert jpeg jpg png webp tiff bmp image batch compress quality",
     load: () => import("./tools/image-converter.js"),
   },
+  {
+    id: "favicon-converter",
+    category: "convert",
+    name: "Favicon Converter",
+    icon: "layout-grid",
+    note: "Turn one image into a full favicon set.",
+    about: "One image becomes an ICO, the PNG sizes, a manifest, and the tags.",
+    tutorial: {
+      intro: "Drop one image and get every icon file, a web manifest, and the link tags.",
+      steps: [
+        "Drop an image or choose a file. A square PNG or SVG gives the cleanest result.",
+        "Set a background if the artwork needs one. Transparent keeps the alpha channel.",
+        "Press Download .zip for the ICO, the PNG sizes, and the manifest.",
+        "Copy the tags into the head of your page.",
+      ],
+    },
+    keywords: "favicon ico png apple touch icon android manifest icon generator",
+    load: () => import("./tools/favicon-converter.js"),
+  },
 
   {
     id: "lorem-ipsum",

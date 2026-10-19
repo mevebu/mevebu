@@ -402,6 +402,10 @@
     width: calc(var(--spacing) * 11);
     height: calc(var(--spacing) * 11);
   }
+  .size-16 {
+    width: calc(var(--spacing) * 16);
+    height: calc(var(--spacing) * 16);
+  }
   .size-32 {
     width: calc(var(--spacing) * 32);
     height: calc(var(--spacing) * 32);
@@ -643,6 +647,9 @@
   }
   .\[grid-template-columns\:minmax\(90px\,34\%\)_minmax\(0\,1fr\)\] {
     grid-template-columns: minmax(90px,34%) minmax(0,1fr);
+  }
+  .\[grid-template-columns\:repeat\(auto-fill\,minmax\(92px\,1fr\)\)\] {
+    grid-template-columns: repeat(auto-fill,minmax(92px,1fr));
   }
   .\[grid-template-columns\:repeat\(auto-fill\,minmax\(160px\,1fr\)\)\] {
     grid-template-columns: repeat(auto-fill,minmax(160px,1fr));
