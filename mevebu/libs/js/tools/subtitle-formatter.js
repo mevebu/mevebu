@@ -39,7 +39,7 @@ export function mount(slot) {
     note.write(long.length ? `${long.length} lines run past ${cap} characters.` : "");
 
     if (!long.length) {
-      longWrap.replaceChildren(blank("film", "No line runs past the limit."));
+      longWrap.replaceChildren(blank("video", "No line runs past the limit."));
     } else {
       longWrap.replaceChildren(el("div", { class: "grid gap-px overflow-hidden rounded-r1 border border-orbit bg-orbit" },
         ...long.map((line) => el("div", { class: "grid gap-3 bg-deck px-3 py-[9px] [grid-template-columns:minmax(90px,34%)_minmax(0,1fr)]" },

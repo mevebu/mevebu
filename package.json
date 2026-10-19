@@ -1,6 +1,6 @@
 {
   "name": "mevebu",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Small tools that run in your browser. No accounts, no uploads, no tracking.",
   "license": "MIT",
   "type": "module",
@@ -19,7 +19,8 @@
     "icons": "node scripts/vendor-icons.mjs",
     "dev": "node bin/mevebu.js",
     "start": "node bin/mevebu.js",
-    "ship": "node scripts/ship.js"
+    "ship": "node scripts/ship.js",
+    "social": "node scripts/vendor-social.mjs"
   },
   "keywords": [
     "tools",
@@ -47,7 +48,11 @@
     "@tailwindcss/cli": "^4.3.3",
     "jsqr": "^1.4.0",
     "lucide": "^1.57.0",
+    "mathjs": "^15.2.0",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.10.38",
     "qrcode-generator": "^2.0.4",
+    "simple-icons": "^16.35.0",
     "tailwindcss": "^4.3.3"
   }
 }

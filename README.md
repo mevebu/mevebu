@@ -109,7 +109,7 @@ Browse everything from the home page or by category, or just press `Ctrl+K` and 
 
 ## Privacy by design
 
-mevebu is built so that your data has nowhere to go. Every tool is a static HTML file, a tiny JavaScript module, and a Lucide icon. There is no server side code, no analytics, and no API key.
+mevebu is built so that your data has nowhere to go. Every tool is a static HTML file and a small JavaScript module. Icons are Lucide, brand marks are Simple Icons, and the libraries that do real work (mathjs, pdf-lib, pdf.js, jsQR) are vendored into the folder rather than fetched from a CDN. There is no server side code, no analytics, and no API key.
 
 When you paste a password, a token, or a CSV into a tool:
 
@@ -148,6 +148,7 @@ cd mevebu
 npm install
 npm run css      # build the stylesheet from tailwind.src.css
 npm run icons    # regenerate the vendored Lucide icon set
+npm run social   # regenerate the vendored Simple Icons brand marks
 npm start        # serve the static folder on http://localhost:5555
 ```
 

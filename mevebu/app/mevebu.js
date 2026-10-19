@@ -2,6 +2,7 @@
 // wiring, the home page, the tool index, and the bench a tool mounts into.
 
 import { CATEGORIES, TOOLS, getTool, getCategory, toolsInCategory, toolHref } from "../libs/js/registry.js";
+import { socialIcon } from "../libs/js/social-icons.js";
 import { route, start, match, currentPath, go } from "../libs/js/router.js";
 import {
   $, $$, el, icon, getFavorites, isFavorite, toggleFavorite, setTheme,
@@ -11,6 +12,28 @@ import {
 } from "../libs/js/core.js";
 
 const REPO_URL = "https://github.com/mevebu/mevebu";
+const WAITSEC_URL = "https://github.com/mevebu/waitsec";
+const ORG_URL = "https://github.com/mevebu";
+const CREATOR = {
+  name: "Ilyas Mukhlisin",
+  instagram: "https://www.instagram.com/ilyas.mukhlisin",
+  threads: "https://www.threads.com/@ilyas.mukhlisin",
+};
+
+/* One list drives the footer modal and the about page, so an account is added
+   in one place and both surfaces follow. */
+const MEVEBU_SOCIALS = [
+  { name: "GitHub", handle: "@mevebu", href: ORG_URL, icon: "github" },
+  { name: "Instagram", handle: "@mevebu01", href: "https://www.instagram.com/mevebu01", icon: "instagram" },
+  { name: "Threads", handle: "@mevebu01", href: "https://www.threads.net/@mevebu01", icon: "threads" },
+  { name: "TikTok", handle: "@mevebu01", href: "https://www.tiktok.com/@mevebu01", icon: "tiktok" },
+  { name: "Facebook", handle: "mevebu", href: "https://www.facebook.com/mevebu", icon: "facebook" },
+  { name: "YouTube", handle: "@mevebu", href: "https://www.youtube.com/@mevebu", icon: "youtube" },
+];
+const CREATOR_SOCIALS = [
+  { name: "Instagram", handle: "@ilyas.mukhlisin", href: CREATOR.instagram, icon: "instagram" },
+  { name: "Threads", handle: "@ilyas.mukhlisin", href: CREATOR.threads, icon: "threads" },
+];
 
 const NAV = [
   { path: "/", label: "Home" },
@@ -276,6 +299,46 @@ async function startVersionChip() {
   });
 }
 
+function followRow(item) {
+  return el(
+    "a",
+    {
+      class:
+        "flex items-center gap-3 rounded-r1 border border-orbit bg-deck-2 p-2.5 text-ink no-underline transition-colors duration-150 hover:border-orbit-hard hover:bg-deck",
+      href: item.href,
+      target: "_blank",
+      rel: "noopener",
+    },
+    el("span", { class: "grid size-9 flex-none place-items-center rounded-lg bg-jade-soft text-jade" }, socialIcon(item.icon, "size-[18px]")),
+    el("span", { class: "grid min-w-0 gap-0.5" },
+      el("span", { class: "text-sm font-semibold" }, item.name),
+      el("span", { class: "truncate text-2xs text-ink-3" }, item.handle)),
+    icon("external-link", "ms-auto size-4 flex-none text-ink-3")
+  );
+}
+
+function followGroup(title, items) {
+  return el(
+    "section",
+    { class: "grid gap-2" },
+    el("h3", { class: "m-0 text-2xs font-bold tracking-[0.08em] text-ink-3 uppercase" }, title),
+    el("div", { class: "grid gap-1.5" }, ...items.map(followRow))
+  );
+}
+
+function openFollow() {
+  modal({
+    label: "Follow mevebu",
+    body: [
+      modalHead("users-round", "Follow mevebu"),
+      el("p", { class: "m-0 text-sm leading-[1.6] text-ink-2" },
+        "Release notes, new tools, and the small updates in between. Pick a network."),
+      followGroup("mevebu", MEVEBU_SOCIALS),
+      followGroup(`${CREATOR.name}, creator`, CREATOR_SOCIALS),
+    ],
+  });
+}
+
 function footer() {
   // A finger needs 44px on a phone, so the whole list is a comfortable target
   // there. The desktop row stays as it was, at text height.
@@ -322,6 +385,17 @@ function footer() {
         "div",
         { class: "mt-[clamp(26px,4vw,44px)] flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-orbit pt-5 text-2xs text-ink-3" },
         el("p", { class: "m-0 flex items-center gap-2" }, "MIT licensed."),
+        el(
+          "button",
+          {
+            class:
+              "inline-flex min-h-7 cursor-pointer items-center gap-1.5 rounded-full border border-orbit bg-transparent px-2.5 py-[3px] font-sans text-2xs font-semibold text-ink-2 transition-colors duration-150 hover:border-jade hover:bg-jade-soft hover:text-jade max-[45rem]:min-h-11",
+            type: "button",
+            onclick: () => openFollow(),
+          },
+          icon("users-round", "size-3.5"),
+          "Follow us"
+        ),
         el(
           "p",
           { class: "m-0 flex items-center gap-2" },
@@ -872,16 +946,69 @@ async function toolPage(tool, category) {
 }
 
 function aboutPage() {
+  const H1 = "m-0 text-[clamp(34px,6vw,52px)] font-bold tracking-[-0.03em]";
+  const SUB = "mt-3 mb-0 max-w-[64ch] text-pretty text-md leading-[1.6] text-ink-2";
   const block = (title, ...nodes) =>
     el("section", { class: ABOUT_BLOCK }, el("h2", { class: "text-lg font-bold tracking-[-0.01em]" }, title), ...nodes);
+
+  const stat = (value, label) =>
+    el("div", { class: "grid gap-0.5 rounded-r2 border border-orbit bg-deck-2 px-4 py-3" },
+      el("span", { class: "text-2xl font-bold tracking-[-0.02em] text-ink tabular-nums" }, value),
+      el("span", { class: "text-2xs font-semibold tracking-[0.06em] text-ink-3 uppercase" }, label));
+
+  const repoCard = (name, body, href) =>
+    el("a", {
+      class: "grid content-start gap-1.5 rounded-r2 border border-orbit bg-deck p-4 no-underline transition-colors duration-150 hover:border-orbit-hard hover:bg-deck-2",
+      href,
+      target: "_blank",
+      rel: "noopener",
+    },
+      el("span", { class: "flex items-center gap-2 text-md font-bold text-ink" },
+        icon("git-branch", "size-4 flex-none text-jade"), name),
+      el("span", { class: "text-sm leading-[1.55] text-ink-2" }, body),
+      el("span", { class: "mt-1 inline-flex items-center gap-1.5 font-mono text-2xs font-semibold text-jade" },
+        href.replace("https://", ""), icon("external-link", "size-3")));
+
+  const creatorLink = (item) =>
+    el("a", {
+      class: "inline-flex min-h-11 items-center gap-2 rounded-r1 border border-orbit bg-deck px-3 text-sm font-semibold text-ink no-underline transition-colors duration-150 hover:border-orbit-hard hover:bg-deck-2",
+      href: item.href,
+      target: "_blank",
+      rel: "noopener",
+    }, socialIcon(item.icon, "size-[17px] text-jade"), item.name);
 
   document.title = "About · mevebu";
   return el(
     "div",
     { class: PAGE_NARROW },
-    el("h1", { class: LEAD }, "About mevebu"),
-    el("p", { class: LEDE },
-      `mevebu is ${TOOLS.length} small tools that run in your browser. Each one has its own page and does a single job.`),
+    el("div", { class: "flex items-start gap-4" },
+      el("img", { class: "mt-1 block size-14 flex-none", src: "./assets/logo.png", alt: "", width: "56", height: "56" }),
+      el("div", { class: "min-w-0" },
+        el("h1", { class: H1 }, "About mevebu"),
+        el("p", { class: SUB },
+          "mevebu is a GitHub organization that builds small tools for the browser. Every tool runs on your device, with no account and nothing to upload."))),
+
+    el("div", { class: "mt-7 grid grid-cols-2 gap-2.5 sm:grid-cols-4" },
+      stat(String(TOOLS.length), "Tools"),
+      stat(String(CATEGORIES.length), "Categories"),
+      stat("2", "Repositories"),
+      stat("MIT", "License")),
+
+    block("The organization",
+      el("p", { class: "m-0 leading-[1.65] text-ink-2" },
+        "Everything sits under ", el("a", { class: TEXT_LINK, href: ORG_URL, target: "_blank", rel: "noopener" }, "github.com/mevebu"),
+        ". The organization holds two repositories: Mevebu, the toolbox you are using right now, and Waitsec, a set of guardrails for coding agents.")),
+
+    block("The repositories",
+      el("div", { class: "grid gap-2.5 sm:grid-cols-2" },
+        repoCard("Mevebu", `${TOOLS.length} browser tools in one static folder. No build step on your machine, no server behind it.`, REPO_URL),
+        repoCard("Waitsec", "Guardrails for coding agents: stop first, think first, and write less code.", WAITSEC_URL))),
+
+    block("The creator",
+      el("p", { class: "m-0 leading-[1.65] text-ink-2" },
+        el("strong", { class: "font-semibold text-ink" }, CREATOR.name),
+        " designs, builds and maintains both repositories. Follow the work on Instagram or Threads."),
+      el("div", { class: "flex flex-wrap gap-2" }, ...CREATOR_SOCIALS.map(creatorLink))),
 
     block("Running it",
       el("p", {}, "Install it once from npm. The command starts a local server and opens your browser at the address it prints."),
@@ -892,7 +1019,7 @@ function aboutPage() {
       el("p", {}, "Add one object to ", el("code", { class: CODE }, "mevebu/libs/js/registry.js"), " and one file in ", el("code", { class: CODE }, "mevebu/libs/js/tools/"), ". The home page, the index, the categories, search and the route all come from that entry.")),
 
     block("Built with",
-      el("p", {}, "Hand written HTML, CSS and JavaScript, with Tailwind for the stylesheet. Icons are Lucide and the QR decoder is jsQR."),
+      el("p", {}, "Hand written HTML, CSS and JavaScript, with Tailwind for the stylesheet. The scientific calculator runs on mathjs, icons are Lucide, brand marks are Simple Icons, and the QR decoder is jsQR."),
       el("p", {}, "Source and issues: ",
         el("a", { class: TEXT_LINK, href: REPO_URL, target: "_blank", rel: "noopener" }, "github.com/mevebu/mevebu")),
       el("p", {}, copyButton(() => location.href, "Copy this page link")))

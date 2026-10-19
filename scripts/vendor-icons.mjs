@@ -19,7 +19,7 @@ const ICONS = [
   "hash", "fingerprint-pattern", "binary", "link", "palette",
   "case-sensitive", "pilcrow", "database", "scan-line",
   // shared tool controls
-  "copy", "check", "refresh-cw", "rotate-cw", "download", "upload",
+  "copy", "check", "refresh-cw", "rotate-cw", "download", "upload", "delete",
   "arrow-left-right", "trash", "plus", "minus", "camera", "video-off",
   "image-up", "clipboard", "eye", "eye-off", "circle-alert", "triangle-alert",
   "loader", "play", "lock", "wrench", "gauge", "monitor",
@@ -53,7 +53,7 @@ const ICONS = [
   "shield-alert", "gauge", "clock-alert", "scan-eye", "activity",
   // academic, business, content, units
   "text-quote", "library", "notebook-pen", "shapes", "receipt", "banknote",
-  "package", "film", "video", "git-pull-request", "weight", "thermometer",
+  "package", "video", "git-pull-request", "weight", "thermometer",
   "hard-drive", "square-function", "clipboard-check", "circle-check-big",
   "square", "chevron-right",
 ];

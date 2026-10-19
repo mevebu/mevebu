@@ -1355,17 +1355,18 @@ export const TOOLS = [
     category: "math",
     name: "Scientific Calculator",
     icon: "calculator",
-    note: "Do scientific math with a keypad.",
-    about: "Trigonometry, logs, powers and roots, in degrees or radians.",
+    note: "Do scientific math with a live keypad.",
+    about: "Variables, fractions, constants and a full function set, in degrees or radians.",
     tutorial: {
-      intro: "Do scientific math with a keypad.",
+      intro: "A scientific calculator that evaluates as you type.",
       steps: [
-        "Type an expression or use the keys.",
-        "Pick degrees or radians for the trig functions.",
-        "Press = to evaluate. The history keeps recent results.",
+        "Type an expression or press the keys. The result updates while you type.",
+        "Press = or Enter to commit it to the history.",
+        "Keep values with a = 5, then use a in the next line. ans holds the last result.",
+        "Switch Degrees or Radians, and Decimal or Fraction for the result.",
       ],
     },
-    keywords: "scientific calculator trigonometry log sin cos tan",
+    keywords: "scientific calculator trigonometry log sin cos tan variables fractions ans desmos",
     load: () => import("./tools/scientific-calculator.js"),
   },
   {
@@ -3091,7 +3092,7 @@ export const TOOLS = [
     id: "script-planner",
     category: "content",
     name: "Script Planner",
-    icon: "film",
+    icon: "video",
     note: "Lay out a video script.",
     about: "Hook, intro, body and outro, with word and time estimates.",
     tutorial: {
@@ -3127,7 +3128,7 @@ export const TOOLS = [
     id: "subtitle-formatter",
     category: "content",
     name: "Subtitle Formatter",
-    icon: "film",
+    icon: "video",
     note: "Check subtitle line lengths.",
     about: "Flags lines that run too long and tidies blank lines.",
     tutorial: {
