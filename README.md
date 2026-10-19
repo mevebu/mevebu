@@ -205,11 +205,7 @@ Every tool page has a small **Report a problem** link at the bottom. It opens a 
 
 You can also [open an issue](https://github.com/mevebu/mevebu/issues) directly, or send a pull request.
 
-## Support and follow
-
-If a tool here saved you time, you can help keep the next one coming:
-
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/fastro)
+## Follow
 
 Star the repo if you like it, and follow mevebu for updates:
 

@@ -3,6 +3,9 @@ dist/
 
 .design/
 .skills/
+.skills/hyperframes-skills/
+.skills/marketingskills/
+.skills/bang-motion/
 .kilo/
 skills/
 AGENTS.md
@@ -23,6 +26,7 @@ SHIP_GUIDE.md
 
 
 zernio-app/
+zernio-app/videos/exported/
 info-medsos/
 dropzone/
 

@@ -10,7 +10,6 @@ import {
   textInput, textArea, panel,
 } from "../libs/js/core.js";
 
-const DONATE_URL = "https://buymeacoffee.com/fastro";
 const REPO_URL = "https://github.com/mevebu/mevebu";
 
 const NAV = [
@@ -161,22 +160,6 @@ function openHelp(tool) {
   });
 }
 
-function openDonate() {
-  const close = modal({
-    label: "Support mevebu",
-    body: [
-      modalHead("coffee", "Keep mevebu flying"),
-      el("p", {}, "mevebu is free and runs entirely in your browser. No accounts, no ads, nothing to sell."),
-      el("p", {}, "If a tool here saved you time, a coffee keeps the next one coming."),
-    ],
-    actions: [
-      button("Not now", { onclick: () => close() }),
-      el("a", { class: LINK_FILL, href: DONATE_URL, target: "_blank", rel: "noopener" },
-        icon("coffee"), el("span", {}, "Buy me a coffee")),
-    ],
-  });
-}
-
 // The footer chip opens this. `latest` is the published version, or null when the
 // check has not answered; opening the modal retries it, so a registry hiccup on
 // the first load is not a dead end. The body and the actions repaint in place
@@ -294,15 +277,6 @@ async function startVersionChip() {
 }
 
 function footer() {
-  const donate = button("Donate", {
-    icon: "coffee",
-    kind: "quiet",
-    onclick: (event) => {
-      event.preventDefault();
-      openDonate();
-    },
-  });
-
   // A finger needs 44px on a phone, so the whole list is a comfortable target
   // there. The desktop row stays as it was, at text height.
   const FOOT_LINK = "inline-flex items-center text-sm text-ink-2 no-underline hover:text-jade max-[45rem]:min-h-11";
@@ -341,7 +315,6 @@ function footer() {
           group("Project", [
             el("a", { class: FOOT_LINK, href: "#/about" }, "About"),
             el("a", { class: FOOT_LINK, href: REPO_URL, target: "_blank", rel: "noopener" }, "GitHub"),
-            donate,
           ])
         )
       ),
