@@ -1,5 +1,5 @@
 // GENERATED FILE, DO NOT EDIT.
-// Source: lucide v1.57.0 (ISC), icons/174 names from scripts/vendor-icons.mjs
+// Source: lucide v1.57.0 (ISC), icons/175 names from scripts/vendor-icons.mjs
 // Regenerate with: npm run icons
 
 const D = {
@@ -45,6 +45,7 @@ const D = {
   "download": [ ["path", { d: "M12 15V3" }], ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }], ["path", { d: "m7 10 5 5 5-5" }] ],
   "upload": [ ["path", { d: "M12 3v12" }], ["path", { d: "m17 8-5-5-5 5" }], ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" }] ],
   "delete": [ [ "path", { d: "M10 5a2 2 0 0 0-1.344.519l-6.328 5.74a1 1 0 0 0 0 1.481l6.328 5.741A2 2 0 0 0 10 19h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z" } ], ["path", { d: "m12 9 6 6" }], ["path", { d: "m18 9-6 6" }] ],
+  "scissors": [ ["circle", { cx: "6", cy: "6", r: "3" }], ["path", { d: "M8.12 8.12 12 12" }], ["path", { d: "M20 4 8.12 15.88" }], ["circle", { cx: "6", cy: "18", r: "3" }], ["path", { d: "M14.8 14.8 20 20" }] ],
   "arrow-left-right": [ ["path", { d: "M8 3 4 7l4 4" }], ["path", { d: "M4 7h16" }], ["path", { d: "m16 21 4-4-4-4" }], ["path", { d: "M20 17H4" }] ],
   "trash": [ ["path", { d: "M10 11v6" }], ["path", { d: "M14 11v6" }], ["path", { d: "M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" }], ["path", { d: "M3 6h18" }], ["path", { d: "M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" }] ],
   "plus": [ ["path", { d: "M5 12h14" }], ["path", { d: "M12 5v14" }] ],

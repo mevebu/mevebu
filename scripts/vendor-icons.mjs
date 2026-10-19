@@ -19,7 +19,7 @@ const ICONS = [
   "hash", "fingerprint-pattern", "binary", "link", "palette",
   "case-sensitive", "pilcrow", "database", "scan-line",
   // shared tool controls
-  "copy", "check", "refresh-cw", "rotate-cw", "download", "upload", "delete",
+  "copy", "check", "refresh-cw", "rotate-cw", "download", "upload", "delete", "scissors",
   "arrow-left-right", "trash", "plus", "minus", "camera", "video-off",
   "image-up", "clipboard", "eye", "eye-off", "circle-alert", "triangle-alert",
   "loader", "play", "lock", "wrench", "gauge", "monitor",
