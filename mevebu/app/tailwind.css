@@ -578,6 +578,12 @@
   .min-h-24 {
     min-height: calc(var(--spacing) * 24);
   }
+  .min-h-28 {
+    min-height: calc(var(--spacing) * 28);
+  }
+  .min-h-32 {
+    min-height: calc(var(--spacing) * 32);
+  }
   .min-h-40 {
     min-height: calc(var(--spacing) * 40);
   }
@@ -1039,6 +1045,12 @@
     background-color: var(--danger);
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--danger) 10%, transparent);
+    }
+  }
+  .bg-danger\/15 {
+    background-color: var(--danger);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--danger) 15%, transparent);
     }
   }
   .bg-deck {

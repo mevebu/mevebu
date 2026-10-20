@@ -1,6 +1,6 @@
 {
   "name": "mevebu",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Small tools that run in your browser. No accounts, no uploads, no tracking.",
   "license": "MIT",
   "type": "module",
@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",
+    "bcryptjs": "^3.0.3",
     "jsqr": "^1.4.0",
     "lucide": "^1.57.0",
     "mathjs": "^15.2.0",
