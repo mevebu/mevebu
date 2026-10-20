@@ -1,56 +1,6 @@
 // Reads CSV or delimited text as a table, with row and column counts.
 import { el, bench, stack, panel, textArea, selectInput, fileInput, notice, copyButton, button, actions, toolcard } from "../core.js";
-
-function parseDelimited(text, delimiter) {
-  const rows = [];
-  let row = [];
-  let field = "";
-  let quoted = false;
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    if (quoted) {
-      if (char === '"') {
-        if (text[i + 1] === '"') { field += '"'; i++; }
-        else quoted = false;
-      } else field += char;
-    } else if (char === '"') {
-      quoted = true;
-    } else if (char === delimiter) {
-      row.push(field);
-      field = "";
-    } else if (char === "\n") {
-      row.push(field);
-      rows.push(row);
-      row = [];
-      field = "";
-    } else if (char !== "\r") {
-      field += char;
-    }
-  }
-  if (field !== "" || row.length) {
-    row.push(field);
-    rows.push(row);
-  }
-  return rows;
-}
-
-function detectDelimiter(text) {
-  const candidates = [",", ";", "\t", "|"];
-  const first = text.split(/\r?\n/)[0] ?? "";
-  const counts = { ",": 0, ";": 0, "\t": 0, "|": 0 };
-  let quoted = false;
-  for (let i = 0; i < first.length; i++) {
-    const char = first[i];
-    if (char === '"') quoted = !quoted;
-    else if (!quoted && char in counts) counts[char]++;
-  }
-  let best = ",";
-  let bestCount = 0;
-  for (const candidate of candidates) {
-    if (counts[candidate] > bestCount) { bestCount = counts[candidate]; best = candidate; }
-  }
-  return best;
-}
+import { parseDelimited, detectDelimiter } from "../csv.js";
 
 function tile(label) {
   const value = el("span", { class: "wrap-anywhere text-xl font-bold tracking-[-0.02em] tabular-nums" }, "0");

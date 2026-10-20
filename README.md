@@ -2,7 +2,7 @@
 
 # mevebu
 
-**198 free browser tools, one page each. No sign up. No uploads. Everything runs in your tab.**
+**200 free browser tools, one page each. No sign up. No uploads. Everything runs in your tab.**
 
 A private toolbox for the small jobs that do not deserve a whole app: format JSON, decode a JWT, make a password, build a cron line, pick a color, scan a QR code, and a lot more.
 
@@ -10,10 +10,10 @@ A private toolbox for the small jobs that do not deserve a whole app: format JSO
 [![npm downloads](https://img.shields.io/npm/dm/mevebu?color=2ea44f)](https://www.npmjs.com/package/mevebu)
 [![License: MIT](https://img.shields.io/github/license/mevebu/mevebu?color=blue)](./LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/mevebu/mevebu?style=flat&color=yellow)](https://github.com/mevebu/mevebu/stargazers)
-![Tools](https://img.shields.io/badge/tools-198-brightgreen)
+![Tools](https://img.shields.io/badge/tools-200-brightgreen)
 ![Privacy](https://img.shields.io/badge/privacy-100%25%20in--browser-blue)
 
-[Quick start](#quick-start) · [What's inside](#whats-inside) · [Privacy](#privacy-by-design) · [Host it yourself](#host-it-yourself) · [Development](#development) · [FAQ](#faq)
+[Quick start](#quick-start) · [What's inside](#whats-inside) · [Privacy](#privacy-by-design) · [Credit](#credit) · [Development](#development) · [FAQ](#faq)
 
 </div>
 
@@ -23,11 +23,11 @@ A private toolbox for the small jobs that do not deserve a whole app: format JSO
 
 ## What is mevebu?
 
-mevebu is a collection of **198 small online tools** that all run **inside your browser**. Each tool lives on its own page, does one job, and does it fast. Most of them update as you type, so there is no submit button and no waiting.
+mevebu is a collection of **200 small online tools** that all run **inside your browser**. Each tool lives on its own page, does one job, and does it fast. Most of them update as you type, so there is no submit button and no waiting.
 
 Think of it as a clean, private alternative to the usual "free online tools" websites. There are no accounts, no ads in your way, no uploads, and no tracking. Your text, passwords, tokens, and files stay on your device.
 
-You can run it on your own computer with one command, or copy the folder to any static host and use it from anywhere.
+Install it once with one command and it runs on your machine, with no server behind it and no account to create.
 
 ## Why you will like it
 
@@ -37,7 +37,6 @@ You can run it on your own computer with one command, or copy the folder to any 
 - **One tool, one page.** Every tool has its own clean page you can bookmark.
 - **Instant search.** Press `Ctrl+K` and find any tool by name, keyword, or what it does.
 - **Works offline.** Once installed, it runs fully on your machine.
-- **Easy to host.** It is a plain static site. Drop it on any file host.
 - **Free and open source.** MIT licensed.
 
 ## Quick start
@@ -65,11 +64,11 @@ mevebu tries port `5555` first, then `5678`, then `5432`, and finally any free p
 
 ## What's inside
 
-mevebu has **198 tools in 20 categories**. Here is the full breakdown:
+mevebu has **200 tools in 20 categories**. Here is the full breakdown:
 
 | Category           | Tools |
 | ------------------ | ----: |
-| Random             |     3 |
+| Data Generator     |     5 |
 | Passwords and keys |    10 |
 | Developer          |    21 |
 | Convert            |    15 |
@@ -89,7 +88,7 @@ mevebu has **198 tools in 20 categories**. Here is the full breakdown:
 | GitHub             |     8 |
 | Units              |     8 |
 | QR codes           |     2 |
-| **Total**          | **198** |
+| **Total**          | **200** |
 
 The counts come straight from the tool registry, so this table and the app never drift apart.
 
@@ -126,21 +125,18 @@ Do not just take our word for it. Open the Network tab in your browser dev tools
 | Your data uploaded | Never | Sometimes |
 | Works offline | Yes | Rarely |
 | Open source | Yes (MIT) | Rarely |
-| Self-hostable | Yes | Rarely |
 
-## Host it yourself
+## Credit
 
-Prefer not to use the CLI? mevebu is a plain static site, so you can host it anywhere files can be served: a static site host, a CDN, an object store, or even a USB drive.
+mevebu is built and maintained by the [mevebu](https://github.com/mevebu) organization, created by [Ilyas Mukhlisin](https://www.instagram.com/ilyas.mukhlisin). Two repositories live there: **Mevebu**, this toolbox, and **Waitsec**, a set of guardrails for coding agents.
 
-1. Copy the `mevebu/` folder from this repo (or from the npm package).
-2. Upload it to your host.
-3. Open `index.html`.
+The code is MIT licensed. If you learn from it, borrow a helper, or ship something inspired by it, keep the copyright notice and say where it came from. A link back to [github.com/mevebu/mevebu](https://github.com/mevebu/mevebu) is enough.
 
-Routes are hash routes, like `#/security/password-generator`, so you do not need any server rewrites. The CSS is one committed stylesheet built by Tailwind, and there is no extra build step. Your host never has to run code.
+Bug reports and tool ideas are welcome in the issues. The best way to support the project is to use it, share it, and tell us what is missing.
 
 ## Development
 
-Want to hack on mevebu or add your own tool? Here is how to get started:
+Contributions are welcome. Here is how to run the project locally while you work on it:
 
 ```bash
 git clone https://github.com/mevebu/mevebu
@@ -180,7 +176,7 @@ That is all. The catalog, search, breadcrumbs, and category pages pick it up aut
 ## FAQ
 
 **What is mevebu?**
-mevebu is a free, open source collection of 198 browser based tools for developers, students, creators, and everyday use. Every tool runs locally in your browser.
+mevebu is a free, open source collection of 200 browser based tools for developers, students, creators, and everyday use. Every tool runs locally in your browser.
 
 **Is mevebu really free?**
 Yes. It is MIT licensed, with no paid tier, no account, and no usage limits.
@@ -191,8 +187,8 @@ No. Your input is processed in your browser tab and never sent to a server.
 **Can I use mevebu offline?**
 Yes. After you install it with npm, it runs on your own machine without needing the internet.
 
-**Can I host mevebu on my own site?**
-Yes. Copy the `mevebu/` folder to any static host. No server side setup is needed.
+**Can I reuse the code?**
+Yes. It is MIT licensed, so keep the copyright notice and the license text, and credit [mevebu](https://github.com/mevebu/mevebu) where you use it.
 
 **How do I find a tool quickly?**
 Press `Ctrl+K` and search by tool name, keyword, or what the tool does.

@@ -1013,7 +1013,7 @@ function aboutPage() {
     block("Running it",
       el("p", {}, "Install it once from npm. The command starts a local server and opens your browser at the address it prints."),
       el("pre", { class: "m-0 overflow-x-auto rounded-r1 border border-orbit bg-deck-2 px-3.5 py-3 font-mono text-sm" }, "npm install -g mevebu\nmevebu"),
-      el("p", {}, "Serve the ", el("code", { class: CODE }, "mevebu/"), " folder from any static host. Routes are hash routes, so no rewrite rules are needed.")),
+      el("p", {}, "The command serves the tools that ship with the package, so there is nothing to configure and no server to run.")),
 
     block("Adding a tool",
       el("p", {}, "Add one object to ", el("code", { class: CODE }, "mevebu/libs/js/registry.js"), " and one file in ", el("code", { class: CODE }, "mevebu/libs/js/tools/"), ". The home page, the index, the categories, search and the route all come from that entry.")),
