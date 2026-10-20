@@ -2,7 +2,7 @@
 
 # mevebu
 
-**220 free browser tools, one page each. No sign up. No uploads. Everything runs in your tab.**
+**225 free browser tools, one page each. No sign up. No uploads. Everything runs in your tab.**
 
 A private toolbox for the small jobs that do not deserve a whole app: format JSON, decode a JWT, make a password, build a cron line, pick a color, scan a QR code, and a lot more.
 
@@ -10,7 +10,7 @@ A private toolbox for the small jobs that do not deserve a whole app: format JSO
 [![npm downloads](https://img.shields.io/npm/dm/mevebu?color=2ea44f)](https://www.npmjs.com/package/mevebu)
 [![License: MIT](https://img.shields.io/github/license/mevebu/mevebu?color=blue)](./LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/mevebu/mevebu?style=flat&color=yellow)](https://github.com/mevebu/mevebu/stargazers)
-![Tools](https://img.shields.io/badge/tools-220-brightgreen)
+![Tools](https://img.shields.io/badge/tools-225-brightgreen)
 ![Privacy](https://img.shields.io/badge/privacy-100%25%20in--browser-blue)
 
 [Quick start](#quick-start) · [What's inside](#whats-inside) · [Privacy](#privacy-by-design) · [Credit](#credit) · [Development](#development) · [FAQ](#faq)
@@ -23,7 +23,7 @@ A private toolbox for the small jobs that do not deserve a whole app: format JSO
 
 ## What is mevebu?
 
-mevebu is a collection of **220 small online tools** that all run **inside your browser**. Each tool lives on its own page, does one job, and does it fast. Most of them update as you type, so there is no submit button and no waiting.
+mevebu is a collection of **225 small online tools** that all run **inside your browser**. Each tool lives on its own page, does one job, and does it fast. Most of them update as you type, so there is no submit button and no waiting.
 
 Think of it as a clean, private alternative to the usual "free online tools" websites. There are no accounts, no ads in your way, no uploads, and no tracking. Your text, passwords, tokens, and files stay on your device.
 
@@ -66,31 +66,31 @@ mevebu tries port `5555` first, then `5678`, then `5432`, and finally any free p
 
 mevebu has **225 tools in 20 categories**. Here is the full breakdown:
 
-| Category           | Tools |
-| ------------------ | ----: |
-| Data Generator     |    10 |
-| Passwords and keys |    20 |
-| Developer          |    31 |
-| Convert            |    15 |
-| Text and data      |    14 |
-| Daily use          |     8 |
-| Math               |    17 |
-| Date and time      |     7 |
-| Data and lists     |     8 |
-| Design             |    10 |
-| Web and SEO        |    12 |
-| Encoding           |     8 |
-| Academic           |    15 |
-| Study              |     7 |
-| Business           |    10 |
-| Locale             |     7 |
-| Content            |     8 |
-| GitHub             |     8 |
-| Units              |     8 |
-| QR codes           |     2 |
-| **Total**          | **225** |
+| Category | A few tools | Count |
+| --- | --- | ---: |
+| [Data Generator](https://github.com/mevebu/mevebu/blob/main/docs/tools/data-gen.md) | Team Generator, Roster Rotation, Sample CSV |   10 |
+| [Passwords and keys](https://github.com/mevebu/mevebu/blob/main/docs/tools/security.md) | Password Generator, JWT Generator, Hash Generator |   20 |
+| [Developer](https://github.com/mevebu/mevebu/blob/main/docs/tools/developer.md) | JavaScript Formatter, JavaScript Minifier, YAML to JSON |   31 |
+| [Convert](https://github.com/mevebu/mevebu/blob/main/docs/tools/convert.md) | Base64, URL Encoder, Case Converter |   15 |
+| [Text and data](https://github.com/mevebu/mevebu/blob/main/docs/tools/text.md) | Lorem Ipsum, Test Data, Word Counter |   14 |
+| [Daily use](https://github.com/mevebu/mevebu/blob/main/docs/tools/daily.md) | Countdown Timer, Stopwatch, Checklist |    8 |
+| [Math](https://github.com/mevebu/mevebu/blob/main/docs/tools/math.md) | Percentage Calculator, Percentage Change, Discount Calculator |   17 |
+| [Date and time](https://github.com/mevebu/mevebu/blob/main/docs/tools/datetime.md) | Date Difference, Add or Subtract Days, Business Days |    7 |
+| [Data and lists](https://github.com/mevebu/mevebu/blob/main/docs/tools/data.md) | CSV Viewer, CSV to JSON, JSON to CSV |    8 |
+| [Design](https://github.com/mevebu/mevebu/blob/main/docs/tools/design.md) | Color Picker, Color Palette, Gradient Generator |   10 |
+| [Web and SEO](https://github.com/mevebu/mevebu/blob/main/docs/tools/seo.md) | Meta Tags, Open Graph Tags, Robots.txt |   12 |
+| [Academic](https://github.com/mevebu/mevebu/blob/main/docs/tools/academic.md) | APA 7 Reference, MLA Citation, IEEE Reference |   15 |
+| [Study](https://github.com/mevebu/mevebu/blob/main/docs/tools/education.md) | Flashcard Creator, Quiz Formatter, Grade Calculator |    7 |
+| [Business](https://github.com/mevebu/mevebu/blob/main/docs/tools/business.md) | Cost per Unit, Selling Price, Break-Even Point |   10 |
+| [Encoding](https://github.com/mevebu/mevebu/blob/main/docs/tools/encoding.md) | Unicode Inspector, UTF-8 Byte Counter, HTML to Text |    8 |
+| [Locale](https://github.com/mevebu/mevebu/blob/main/docs/tools/locale.md) | Reading Time, Readability, Sentence Length |    7 |
+| [Content](https://github.com/mevebu/mevebu/blob/main/docs/tools/content.md) | Caption Counter, Hashtag Formatter, Line Break Formatter |    8 |
+| [GitHub](https://github.com/mevebu/mevebu/blob/main/docs/tools/git.md) | README Generator, Gitignore Generator, Semantic Version |    8 |
+| [Units](https://github.com/mevebu/mevebu/blob/main/docs/tools/measure.md) | Length Converter, Weight Converter, Temperature Converter |    8 |
+| [QR codes](https://github.com/mevebu/mevebu/blob/main/docs/tools/qr.md) | QR Generator, QR Scanner |    2 |
+| **Total** | **20 categories** | **225** |
 
-The counts come straight from the tool registry, so this table and the app never drift apart.
+The counts and the category pages come straight from the tool registry. Run `npm run docs` after adding a tool, so this table, the pages under `docs/tools/`, and the app never drift apart.
 
 ### Popular tools
 
@@ -128,7 +128,7 @@ Do not just take our word for it. Open the Network tab in your browser dev tools
 
 ## Credit
 
-mevebu is built and maintained by the [mevebu](https://github.com/mevebu) organization, created by [Ilyas Mukhlisin](https://www.instagram.com/ilyas.mukhlisin). Two repositories live there: **Mevebu**, this toolbox, and **Waitsec**, a set of guardrails for coding agents.
+mevebu is built and maintained by the [mevebu](https://github.com/mevebu) organization, created by [Ilyas Mukhlisin](https://github.com/ilyasmukhlisin). Two repositories live there: **Mevebu**, this toolbox, and **Waitsec**, a set of guardrails for coding agents.
 
 The code is MIT licensed. If you learn from it, borrow a helper, or ship something inspired by it, keep the copyright notice and say where it came from. A link back to [github.com/mevebu/mevebu](https://github.com/mevebu/mevebu) is enough.
 
@@ -176,7 +176,7 @@ That is all. The catalog, search, breadcrumbs, and category pages pick it up aut
 ## FAQ
 
 **What is mevebu?**
-mevebu is a free, open source collection of 220 browser based tools for developers, students, creators, and everyday use. Every tool runs locally in your browser.
+mevebu is a free, open source collection of 225 browser based tools for developers, students, creators, and everyday use. Every tool runs locally in your browser.
 
 **Is mevebu really free?**
 Yes. It is MIT licensed, with no paid tier, no account, and no usage limits.
