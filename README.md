@@ -64,13 +64,13 @@ mevebu tries port `5555` first, then `5678`, then `5432`, and finally any free p
 
 ## What's inside
 
-mevebu has **220 tools in 20 categories**. Here is the full breakdown:
+mevebu has **225 tools in 20 categories**. Here is the full breakdown:
 
 | Category           | Tools |
 | ------------------ | ----: |
 | Data Generator     |    10 |
 | Passwords and keys |    20 |
-| Developer          |    26 |
+| Developer          |    31 |
 | Convert            |    15 |
 | Text and data      |    14 |
 | Daily use          |     8 |
@@ -88,7 +88,7 @@ mevebu has **220 tools in 20 categories**. Here is the full breakdown:
 | GitHub             |     8 |
 | Units              |     8 |
 | QR codes           |     2 |
-| **Total**          | **220** |
+| **Total**          | **225** |
 
 The counts come straight from the tool registry, so this table and the app never drift apart.
 
