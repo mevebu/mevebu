@@ -750,7 +750,7 @@ export function blank(iconName, text) {
 // ---------- version ----------
 
 // Kept in one place. The CLI reads the same value from package.json.
-export const VERSION = "2.0.0";
+export const VERSION = "2.1.0";
 export const PACKAGE_NAME = "mevebu";
 export const REPO_SLUG = "mevebu/mevebu";
 

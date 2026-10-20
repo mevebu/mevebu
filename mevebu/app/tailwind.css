@@ -37,9 +37,6 @@
     --text-lead--line-height: 1.06;
     --text-hero: clamp(34px, 6vw, 58px);
     --text-hero--line-height: 1.03;
-    --text-display: 44px;
-    --text-display--line-height: 1;
-    --animate-toss: toss 450ms ease;
   }
 }
 @layer base {
@@ -512,6 +509,9 @@
   .h-24 {
     height: calc(var(--spacing) * 24);
   }
+  .h-40 {
+    height: calc(var(--spacing) * 40);
+  }
   .h-\[22px\] {
     height: 22px;
   }
@@ -538,6 +538,9 @@
   }
   .h-px {
     height: 1px;
+  }
+  .max-h-56 {
+    max-height: calc(var(--spacing) * 56);
   }
   .max-h-80 {
     max-height: calc(var(--spacing) * 80);
@@ -772,6 +775,9 @@
   }
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));

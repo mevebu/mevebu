@@ -5,6 +5,7 @@ import {
   numberInput, button, actions, toolcard, blank, notice,
 } from "../core.js";
 import { toCsv } from "../csv.js";
+import { seeded, pick, uuid } from "../random.js";
 
 const TYPES = [
   { value: "text", label: "Text" },
@@ -23,32 +24,6 @@ const WORDS = [
   "kelp", "lumen", "meadow", "north", "orbit", "pine", "quartz", "ridge", "summit", "tide",
   "umber", "vale", "willow", "xenon", "yarrow", "zephyr",
 ];
-
-/** Mulberry32: a small deterministic generator, so a seed is worth writing down. */
-function seeded(seed) {
-  let state = seed >>> 0;
-  return () => {
-    state = (state + 0x6d2b79f5) >>> 0;
-    let t = state;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-function pick(random, list) {
-  return list[Math.floor(random() * list.length)];
-}
-
-function uuid(random) {
-  const hex = "0123456789abcdef";
-  let out = "";
-  for (let i = 0; i < 32; i++) {
-    if (i === 8 || i === 12 || i === 16 || i === 20) out += "-";
-    out += i === 12 ? "4" : hex[Math.floor(random() * 16)];
-  }
-  return out;
-}
 
 function value(type, choices, random, rowIndex) {
   switch (type) {
@@ -153,15 +128,6 @@ export function mount(slot) {
     );
   }
 
-  function hashSeed(text) {
-    let hash = 2166136261;
-    for (let i = 0; i < text.length; i++) {
-      hash ^= text.charCodeAt(i);
-      hash = Math.imul(hash, 16777619);
-    }
-    return hash >>> 0;
-  }
-
   function renderPreview() {
     empty.hidden = table.length > 0;
     preview.hidden = table.length === 0;
@@ -191,7 +157,7 @@ export function mount(slot) {
     const names = columns.map((column, index) => column.name.trim() || `column_${index + 1}`);
     if (new Set(names).size !== names.length) error.write("Two columns share a name, so the CSV will have duplicates.");
 
-    const random = seeded(hashSeed(seed.value || "mevebu"));
+    const random = seeded(seed.value || "mevebu");
     header = names;
     table = Array.from({ length: count }, (_, rowIndex) =>
       columns.map((column) =>
