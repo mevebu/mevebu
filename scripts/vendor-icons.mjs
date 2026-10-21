@@ -33,7 +33,7 @@ const ICONS = [
   "text-align-start", "square-check", "type", "text-cursor",
   // developer
   "braces", "circle-check", "badge-check", "minimize-2", "shrink",
-  "file-code", "regex", "code-xml", "calendar-clock", "paintbrush",
+  "file-code", "regex", "code-xml", "calendar-clock", "paintbrush", "audio-lines",
   "settings-2", "file-key", "send", "webhook", "scan-text",
   // daily use
   "timer", "list-checks", "calendar-plus", "calendar-range", "grid-2x2",

@@ -1352,6 +1352,96 @@ export const TOOLS = [
     keywords: "case detect camel snake title inspect",
     load: () => import("./tools/case-inspector.js"),
   },
+  {
+    id: "word-frequency",
+    category: "text",
+    name: "Word Frequency",
+    icon: "chart-line",
+    note: "See which words and phrases a text repeats.",
+    about: "Counts and percentages, with an optional stop word filter.",
+    tutorial: {
+      intro: "Find the words a text uses most.",
+      steps: [
+        "Paste the text.",
+        "Pick one, two or three word phrases.",
+        "Read the counts, then copy the table or save it as CSV.",
+      ],
+    },
+    keywords: "frequency word count repeats distribution keyword density",
+    load: () => import("./tools/word-frequency.js"),
+  },
+  {
+    id: "palindrome-checker",
+    category: "text",
+    name: "Palindrome Checker",
+    icon: "arrow-left-right",
+    note: "Check whether text reads the same backwards.",
+    about: "Ignores case, spaces and punctuation unless you turn on strict mode.",
+    tutorial: {
+      intro: "Test a word or a sentence for a palindrome.",
+      steps: [
+        "Type or paste the text.",
+        "The verdict and the normalized text appear.",
+        "Turn on Strict mode to compare every character.",
+      ],
+    },
+    keywords: "palindrome reverse sentence word check",
+    load: () => import("./tools/palindrome-checker.js"),
+  },
+  {
+    id: "invisible-characters",
+    category: "text",
+    name: "Invisible Characters",
+    icon: "eye-off",
+    note: "Find and remove characters that draw nothing.",
+    about: "Zero width spaces, unusual spaces and direction marks, with their positions.",
+    tutorial: {
+      intro: "See the invisible characters in pasted text and strip them.",
+      steps: [
+        "Paste the text that is misbehaving.",
+        "Each invisible character is listed with its code and position.",
+        "Untick a kind to keep it, then copy the cleaned text.",
+      ],
+    },
+    keywords: "zero width space nbsp invisible unicode hidden clean",
+    load: () => import("./tools/invisible-characters.js"),
+  },
+  {
+    id: "text-to-binary",
+    category: "text",
+    name: "Text to Binary",
+    icon: "binary",
+    note: "Convert text to UTF-8 binary and back.",
+    about: "Eight bit groups, with or without spaces between bytes.",
+    tutorial: {
+      intro: "Turn text into binary bytes, or the bytes back into text.",
+      steps: [
+        "Type on either side.",
+        "The other side updates as you type.",
+        "Copy the binary or the text.",
+      ],
+    },
+    keywords: "binary bits utf8 encode decode text bytes",
+    load: () => import("./tools/text-to-binary.js"),
+  },
+  {
+    id: "morse-code",
+    category: "text",
+    name: "Morse Code",
+    icon: "audio-lines",
+    note: "Translate text to Morse code and back.",
+    about: "Latin letters, digits and common punctuation, with playback in the tab.",
+    tutorial: {
+      intro: "Translate between text and Morse code.",
+      steps: [
+        "Type on either side, or paste dots and dashes.",
+        "Words are separated by a slash.",
+        "Press Play to hear the code as beeps.",
+      ],
+    },
+    keywords: "morse code translate dots dashes telegraph audio",
+    load: () => import("./tools/morse-code.js"),
+  },
 
   // ---------- developer ----------
   {

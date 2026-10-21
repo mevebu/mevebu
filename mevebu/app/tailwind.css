@@ -255,6 +255,9 @@
   .left-1\/2 {
     left: calc(1 / 2 * 100%);
   }
+  .isolate {
+    isolation: isolate;
+  }
   .z-30 {
     z-index: 30;
   }
@@ -512,6 +515,9 @@
   .size-\[var\(--ctl\)\] {
     width: var(--ctl);
     height: var(--ctl);
+  }
+  .h-1 {
+    height: var(--spacing);
   }
   .h-1\.5 {
     height: calc(var(--spacing) * 1.5);
@@ -1045,6 +1051,12 @@
   .border-jade {
     border-color: var(--jade);
   }
+  .border-jade\/40 {
+    border-color: var(--jade);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--jade) 40%, transparent);
+    }
+  }
   .border-orbit {
     border-color: var(--orbit);
   }
@@ -1055,6 +1067,12 @@
     border-color: color-mix(in srgb, oklch(64.5% 0.246 16.439) 40%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       border-color: color-mix(in oklab, var(--color-rose-500) 40%, transparent);
+    }
+  }
+  .border-star\/40 {
+    border-color: var(--star);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--star) 40%, transparent);
     }
   }
   .border-transparent {

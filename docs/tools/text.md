@@ -1,6 +1,6 @@
 # Text and data tools
 
-14 tools in this category, all running in the browser with no upload and no account.
+19 tools in this category, all running in the browser with no upload and no account.
 Back to [all categories](../../README.md#whats-inside).
 
 | Tool | What it does | Route |
@@ -19,3 +19,8 @@ Back to [all categories](../../README.md#whats-inside).
 | Prefix and Suffix | Add text to the start or end of lines. | `#/text/prefix-suffix` |
 | Text Diff | Compare two texts line by line. | `#/text/text-diff` |
 | Case Inspector | Detect the letter case of text. | `#/text/case-inspector` |
+| Word Frequency | See which words and phrases a text repeats. | `#/text/word-frequency` |
+| Palindrome Checker | Check whether text reads the same backwards. | `#/text/palindrome-checker` |
+| Invisible Characters | Find and remove characters that draw nothing. | `#/text/invisible-characters` |
+| Text to Binary | Convert text to UTF-8 binary and back. | `#/text/text-to-binary` |
+| Morse Code | Translate text to Morse code and back. | `#/text/morse-code` |

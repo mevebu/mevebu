@@ -2,7 +2,7 @@
 
 # mevebu
 
-**225 free browser tools, one page each. No sign up. No uploads. Everything runs in your tab.**
+**230 free browser tools, one page each. No sign up. No uploads. Everything runs in your tab.**
 
 A private toolbox for the small jobs that do not deserve a whole app: format JSON, decode a JWT, make a password, build a cron line, pick a color, scan a QR code, and a lot more.
 
@@ -10,7 +10,7 @@ A private toolbox for the small jobs that do not deserve a whole app: format JSO
 [![npm downloads](https://img.shields.io/npm/dm/mevebu?color=2ea44f)](https://www.npmjs.com/package/mevebu)
 [![License: MIT](https://img.shields.io/github/license/mevebu/mevebu?color=blue)](./LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/mevebu/mevebu?style=flat&color=yellow)](https://github.com/mevebu/mevebu/stargazers)
-![Tools](https://img.shields.io/badge/tools-225-brightgreen)
+![Tools](https://img.shields.io/badge/tools-230-brightgreen)
 ![Privacy](https://img.shields.io/badge/privacy-100%25%20in--browser-blue)
 
 [Quick start](#quick-start) · [What's inside](#whats-inside) · [Privacy](#privacy-by-design) · [Credit](#credit) · [Development](#development) · [FAQ](#faq)
@@ -23,7 +23,7 @@ A private toolbox for the small jobs that do not deserve a whole app: format JSO
 
 ## What is mevebu?
 
-mevebu is a collection of **225 small online tools** that all run **inside your browser**. Each tool lives on its own page, does one job, and does it fast. Most of them update as you type, so there is no submit button and no waiting.
+mevebu is a collection of **230 small online tools** that all run **inside your browser**. Each tool lives on its own page, does one job, and does it fast. Most of them update as you type, so there is no submit button and no waiting.
 
 Think of it as a clean, private alternative to the usual "free online tools" websites. There are no accounts, no ads in your way, no uploads, and no tracking. Your text, passwords, tokens, and files stay on your device.
 
@@ -64,15 +64,16 @@ mevebu tries port `5555` first, then `5678`, then `5432`, and finally any free p
 
 ## What's inside
 
-mevebu has **225 tools in 20 categories**. Here is the full breakdown:
+mevebu has **230 tools in 20 categories**. Here is the full breakdown:
 
+<!-- tools:start -->
 | Category | A few tools | Count |
 | --- | --- | ---: |
 | [Data Generator](https://github.com/mevebu/mevebu/blob/main/docs/tools/data-gen.md) | Team Generator, Roster Rotation, Sample CSV |   10 |
 | [Passwords and keys](https://github.com/mevebu/mevebu/blob/main/docs/tools/security.md) | Password Generator, JWT Generator, Hash Generator |   20 |
 | [Developer](https://github.com/mevebu/mevebu/blob/main/docs/tools/developer.md) | JavaScript Formatter, JavaScript Minifier, YAML to JSON |   31 |
 | [Convert](https://github.com/mevebu/mevebu/blob/main/docs/tools/convert.md) | Base64, URL Encoder, Case Converter |   15 |
-| [Text and data](https://github.com/mevebu/mevebu/blob/main/docs/tools/text.md) | Lorem Ipsum, Test Data, Word Counter |   14 |
+| [Text and data](https://github.com/mevebu/mevebu/blob/main/docs/tools/text.md) | Lorem Ipsum, Test Data, Word Counter |   19 |
 | [Daily use](https://github.com/mevebu/mevebu/blob/main/docs/tools/daily.md) | Countdown Timer, Stopwatch, Checklist |    8 |
 | [Math](https://github.com/mevebu/mevebu/blob/main/docs/tools/math.md) | Percentage Calculator, Percentage Change, Discount Calculator |   17 |
 | [Date and time](https://github.com/mevebu/mevebu/blob/main/docs/tools/datetime.md) | Date Difference, Add or Subtract Days, Business Days |    7 |
@@ -88,7 +89,8 @@ mevebu has **225 tools in 20 categories**. Here is the full breakdown:
 | [GitHub](https://github.com/mevebu/mevebu/blob/main/docs/tools/git.md) | README Generator, Gitignore Generator, Semantic Version |    8 |
 | [Units](https://github.com/mevebu/mevebu/blob/main/docs/tools/measure.md) | Length Converter, Weight Converter, Temperature Converter |    8 |
 | [QR codes](https://github.com/mevebu/mevebu/blob/main/docs/tools/qr.md) | QR Generator, QR Scanner |    2 |
-| **Total** | **20 categories** | **225** |
+| **Total** | **20 categories** | **230** |
+<!-- tools:end -->
 
 The counts and the category pages come straight from the tool registry. Run `npm run docs` after adding a tool, so this table, the pages under `docs/tools/`, and the app never drift apart.
 
@@ -176,7 +178,7 @@ That is all. The catalog, search, breadcrumbs, and category pages pick it up aut
 ## FAQ
 
 **What is mevebu?**
-mevebu is a free, open source collection of 225 browser based tools for developers, students, creators, and everyday use. Every tool runs locally in your browser.
+mevebu is a free, open source collection of 230 browser based tools for developers, students, creators, and everyday use. Every tool runs locally in your browser.
 
 **Is mevebu really free?**
 Yes. It is MIT licensed, with no paid tier, no account, and no usage limits.
